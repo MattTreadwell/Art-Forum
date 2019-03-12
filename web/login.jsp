@@ -1,18 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<%
-    // Display success message upon user login
-    String success = (String) request.getAttribute("success");
-    if (success == null) {
-        success = "";
-    }
-    // Session to check if user is logged in
-    HttpSession session1 = request.getSession();
-%>
-
 <html>
 <head>
-    <title>NotReddit</title>
+    <title>Login</title>
+
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densityDpi=device-dpi"/>
     <meta name="description"
@@ -20,7 +11,7 @@
 
     <!-- Load fonts, libraries, and css -->
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css?family=EB+Garamond|Roboto:300" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.3.1.js"
             integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
             crossorigin="anonymous"></script>
@@ -35,6 +26,17 @@
 
 </head>
 <body>
+<div id="particles-js"></div>
+
+
+<!-- Load JS particles -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+<script>
+    particlesJS.load('particles-js', 'particles.json', function () {
+        console.log('particles.json loaded...')
+    })
+</script>
 
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -48,9 +50,6 @@
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
                 <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Profile</a>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
@@ -72,43 +71,29 @@
     </div>
 </nav>
 
-<div class="postBox container-fluid">
+<div class="loginBox container-fluid">
     <div class="row">
-<%--        <div class="col-sm-0 col-md-2 col-lg-3">
-            <div class="jumbotron">
 
-            </div>
-        </div>--%>
-        <!-- Main div with posts -->
-        <div class="col-sm-12 col-md-12 col-lg-5 offset-md-0 offset-sm-0 offset-lg-2">
-            <div class="jumbotron">
-
-            </div>
-            <div class="jumbotron">
-
-            </div>
-            <div class="jumbotron">
-
-            </div>
-            <div class="jumbotron">
-
+        <div class="col-sm-12 col-md-12 col-lg-4 offset-md-0 offset-sm-0 offset-lg-1">
+            <div class="jumbotron" style="background-color: rgba(255,255,255,0.9) !important">
+                <h1>Login</h1>
+                <form action="/Login" method="post">
+                    <div class="form-group">
+                        <label for="exampleInputUsername1">Username</label>
+                        <input name="username" type="text" class="form-control" id="exampleInputUsername1" aria-describedby="usernameHelp" placeholder="Enter Username">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Password</label>
+                        <input name="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
             </div>
         </div>
 
-        <!-- "Right" div for showing calendar, weathers, other APIs -->
-        <div class="col-sm-0 col-md-0 col-lg-3">
-            <div class="jumbotron">
-                <h3>NotReddit is the Front Page of CSCI201</h3>
-
-                <div class="text-center">
-                    <a class="btn btn-primary" href="login.jsp" role="button"><strong>CREATE POST</strong></a>
-                </div>
-            </div>
-        </div>
 
     </div>
 </div>
-
 
 </body>
 </html>
