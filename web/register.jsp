@@ -43,7 +43,7 @@
 
 <!-- Navbar -->
 <nav class="navbar navbar-expand-md navbar-light bg-light justify-content-center">
-    <a href="index.jsp" class="navbar-brand d-flex w-50 mr-auto">NotReddit</a>
+    <a href="index.jsp" class="navbar-brand d-flex w-50 mr-auto"><strong>NotReddit</strong></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -55,16 +55,15 @@
 
         <ul class="navbar-nav w-100 justify-content-center">
             <li>
-                <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                    <div class="input-group-btn">
-                        <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
-                    </div>                </form>
-                <form class="navbar-form" role="search">
-                    <div class="search">
-                        <span class="fa fa-search"></span>
-                        <input placeholder="Search term">
+                <!-- TODO potentially make this nicer looking -->
+                <form class="navbar-form" role="search" style="margin: 0px 0px">
+                    <div class="input-group">
+                        <input type="search" name="searchQuery" value="" class="form-control"
+                               id="searchForm"
+                               aria-describedby="searchHelp" placeholder="Search">
+                        <button type="submit" class="btn btn-secondary"><i class="fa fa-search"></i></button>
                     </div>
+
                 </form>
             </li>
         </ul>
