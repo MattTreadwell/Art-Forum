@@ -20,7 +20,9 @@
 
     <!-- Load fonts, libraries, and css -->
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css?family=EB+Garamond|Roboto:300" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"
+          integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.3.1.js"
             integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
             crossorigin="anonymous"></script>
@@ -37,38 +39,37 @@
 <body>
 
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">NotReddit</a>
+<nav class="navbar navbar-expand-md navbar-light bg-light justify-content-center">
+    <a href="index.jsp" class="navbar-brand d-flex w-50 mr-auto"><strong>NotReddit</strong></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Profile</a>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-                   aria-haspopup="true" aria-expanded="false">
-                    Dropdown
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Something else here</a>
-                </div>
+    <div class="collapse navbar-collapse w-100" id="navbarSupportedContent">
+
+        <ul class="navbar-nav w-100 justify-content-center">
+            <li>
+                <!-- TODO potentially make this nicer looking -->
+                <form class="navbar-form" role="search" style="margin: 0px 0px">
+                    <div class="input-group">
+                        <input type="search" name="searchQuery" value="" class="form-control"
+                               id="searchForm"
+                               aria-describedby="searchHelp" placeholder="Search">
+                        <button type="submit" class="btn btn-secondary"><i class="fa fa-search"></i></button>
+                    </div>
+
+                </form>
             </li>
         </ul>
-        <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form>
+
+        <ul class="nav navbar-nav ml-auto w-100 justify-content-end">
+            <li>
+                <a class="btn btn-primary" href="login.jsp" role="button">Login</a>
+                <a class="btn btn-outline-primary" href="register.jsp" role="button">Sign Up</a>
+            </li>
+        </ul>
+
     </div>
 </nav>
 
