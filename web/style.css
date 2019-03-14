@@ -121,6 +121,16 @@
 
 }
 
+.comment {
+    min-height: 65px;
+}
+
+
+.commentContent {
+    display: block;
+    padding-left: 50px;
+}
+
 
 /* Voting Buttons */
 /* https://stackoverflow.com/questions/4274489/how-can-i-make-an-upvote-downvote-button */
