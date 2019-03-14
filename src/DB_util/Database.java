@@ -51,6 +51,7 @@ public class Database {
             return Register_unameTaken;
         }
         Document mUser = new Document("Username",u.username);
+        mUser.append("IsBanned",false);
         mUser.append("Password", u.password);
         ArrayList<ObjectId> postIdList = u.mPostIds;
         ArrayList<ObjectId> commentIdList = new ArrayList<ObjectId>();
@@ -158,10 +159,9 @@ public class Database {
         System.out.println(u.profile.age);
         u.profile.postScore = UserProfile.getInteger("PostScore");
         u.profile.registerDate = UserProfile.getDate("RegisterDate");
-
+        u.IsBanned = User.getBoolean("IsBanned");
         u.mPostIds = (ArrayList<ObjectId>)User.get("PostIDs");
         u.mCommentIds = (ArrayList<ObjectId>)User.get("CommentIDs");
-
         u.userPosts = new ArrayList<post>();
         u.userComments = new ArrayList<comment>();
         /*
@@ -205,6 +205,7 @@ public class Database {
 
 
     }
+
     public void addComment(comment cm)
     {
         /****retrieve collections from MongoDB******/
@@ -234,6 +235,106 @@ public class Database {
 
 
     }
+    public void deleteCommentById(ObjectId commentId)
+    {
+        //prerequisite: get all collections.
+        MongoCollection userCollection = database.getCollection("users");
+        MongoCollection postCollection = database.getCollection("posts");
+        MongoCollection commentCollection = database.getCollection("comments");
+
+        Document comment = (Document)commentCollection.find(eq("_id", commentId)).first();
+
+        ObjectId userId = comment.getObjectId("UserId");
+        ObjectId postId = comment.getObjectId("PostId");
+        // now, pull this comment from user's comment data.
+
+        Document findQuery1 = new Document("_id",userId);
+        Document updateQuery1 = new Document ("$pull",new Document("CommentIDs",commentId));
+        userCollection.updateOne(findQuery1,updateQuery1);
+
+        // then, pull this comment from post's comment data.
+
+        Document findQuery2 = new Document("_id",postId);
+        Document updateQuery2 = new Document("$pull", new Document("CommentIDs",commentId));
+        postCollection.updateOne(findQuery2,updateQuery2);
+
+        Document deleteQuery = new Document("_id",commentId);
+        commentCollection.deleteOne(deleteQuery);
+
+    }
+    public void deletePostById(ObjectId postId)
+    {
+        MongoCollection userCollection = database.getCollection("users");
+        MongoCollection postCollection = database.getCollection("posts");
+        MongoCollection commentCollection = database.getCollection("comments");
+
+        Document thisPost = (Document)postCollection.find(eq("_id", postId)).first();
+        ArrayList<ObjectId> CommIds = (ArrayList<ObjectId>)thisPost.get("CommentIDs");
+        for (int i=0; i<CommIds.size(); i++)
+        {
+            deleteCommentById(CommIds.get(i));
+        }
+        Document PostBody = (Document)thisPost.get("PostBody");
+        ObjectId userId = PostBody.getObjectId("UserId");
+        // now, pull this post from user's PostId array.
+        Document findQuery1 = new Document("_id",userId);
+        Document updateQuery1 = new Document ("$pull",new Document("PostIDs", postId));
+        userCollection.updateOne(findQuery1,updateQuery1);
+
+        Document deleteQuery2 = new Document("_id",postId);
+        postCollection.deleteOne(deleteQuery2);
+
+    }
+    public void changeUserCountry(String username, String newCountry)
+    {
+        MongoCollection userCollection = database.getCollection("users");
+        Document findQuery = new Document("Username",username);
+        Document updateQuery = new Document("$set", new Document("Profile.Country", newCountry));
+        userCollection.updateOne(findQuery,updateQuery);
+    }
+    public void changeUserBanState(String username, boolean newBanState)
+    {
+        MongoCollection userCollection = database.getCollection("users");
+        Document findQuery = new Document("Username",username);
+        Document updateQuery = new Document("$set", new Document("IsBanned", newBanState));
+        userCollection.updateOne(findQuery,updateQuery);
+    }
+
+    public void changeUserPassword(String username, int newPassWord)
+    {
+        MongoCollection userCollection = database.getCollection("users");
+        Document findQuery = new Document("Username",username);
+        Document updateQuery = new Document("$set", new Document("Password", newPassWord));
+        userCollection.updateOne(findQuery,updateQuery);
+    }
+    public void changeUserAge(String username, int newAge)
+    {
+        MongoCollection userCollection = database.getCollection("users");
+        Document findQuery = new Document("Username",username);
+        Document updateQuery = new Document("$set", new Document("Profile.Age", newAge));
+        userCollection.updateOne(findQuery,updateQuery);
+    }
+    public void changeUserScore(String username, int newScore)
+    {
+        MongoCollection userCollection = database.getCollection("users");
+        Document findQuery = new Document("Username",username);
+        Document updateQuery = new Document("$set", new Document("Profile.PostScore", newScore));
+        userCollection.updateOne(findQuery,updateQuery);
+    }
+    public void changePostById(ObjectId postId, String newContent)
+    {
+        MongoCollection postCollection = database.getCollection("posts");
+        Document findQuery = new Document("_id",postId);
+        Document updateQuery = new Document("$set", new Document("PostBody.PostContent", newContent));
+        postCollection.updateOne(findQuery,updateQuery);
+    }
+    public void updateUserScore(String username, int amount)
+    {
+        MongoCollection userCollection = database.getCollection("users");
+        Document findQuery = new Document("Username",username);
+        Document updateQuery = new Document("$inc", new Document("Profile.PostScore",amount ));
+        userCollection.updateOne(findQuery,updateQuery);
+    }
     public ArrayList<post> getPostChunk(int postIndex)
     {
 
@@ -245,7 +346,9 @@ public class Database {
             return null;
         }
         MongoCollection postCollection = database.getCollection("posts");
-        FindIterable<Document> findIterable = (FindIterable<Document>)postCollection.find().skip(lastEndPlace).limit(displayNum);
+        Document SortingDoc = new Document("_id",-1);
+        FindIterable<Document> findIterable = (FindIterable<Document>)postCollection.find().sort(SortingDoc)
+                .skip(lastEndPlace).limit(displayNum);
         ArrayList<post> PostChunk = new ArrayList<post>();
         for (Document doc : findIterable)
         {
@@ -267,6 +370,7 @@ public class Database {
         Database db = new Database();
         System.out.println("Hello, World!");
 
+
         user u = new user("Lisa",123456,"China",21,0);
         System.out.println(db.addUser(u));
         System.out.println(db.addUser(u));
@@ -274,9 +378,7 @@ public class Database {
         post p = new post("CS201 FP" ,"Lisa","This is my first post for CSCI 201 Project"
         , "www.google.com", false);
         db.addPost(p);
-        post p1 = new post("CS104 Scrabble" ,"Lisa","Scrabble takes me 40 hours to finish"
-                , "www.google.com", false);
-        db.addPost(p1);
+
         comment c = new comment("ve...", "Lisa" , lastPost);
         db.addComment(c);
         comment d = new comment("va...", "Lisa", lastPost);
@@ -289,8 +391,19 @@ public class Database {
         int b = 3;
         System.out.println("post size is:"+db.getPostSize());
 
-        ArrayList<post> Chunk = db.getPostChunk(0);
+        ArrayList<post> Chunk = db.getPostChunk(1);
         int c1 = 4;
+
+        db.changeUserPassword("Lisa", 999000);
+        int c2 = 5;
+        db.changeUserAge("Lisa",19);
+       // db.updateUserScore("Lisa",100);
+        db.changeUserScore("Lisa",101);
+        db.changeUserCountry("Lisa","United States");
+        db.changePostById(lastPost,"JEEEEEEEEE");
+        db.changeUserBanState("Lisa",true);
+
+        db.deletePostById(lastPost);
 
     }
 
