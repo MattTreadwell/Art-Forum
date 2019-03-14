@@ -1,15 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<%
-    // Display success message upon user login
-    String success = (String) request.getAttribute("success");
-    if (success == null) {
-        success = "";
-    }
-    // Session to check if user is logged in
-    HttpSession session1 = request.getSession();
-%>
-
 <html>
 <head>
     <title>NotReddit</title>
@@ -88,7 +78,19 @@
 
 <div class="container-fluid postBox">
     <div class="row">
-        <div class="col-sm-12 col-md-12 col-lg-7 col-xl-5 offset-md-0 offset-sm-0 offset-lg-1 offset-xl-3">
+        <!-- "Left" div for showing User info, location, score -->
+        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-3 offset-md-0 offset-sm-0 offset-lg-1 offset-xl-1">
+            <div class="jumbotron">
+                <div class="text-center">
+                    <h4><strong>Patrick Star</strong></h4>
+                    <h5>Post Score: 570</h5>
+                    <h5>Location: Los Angeles, CA</h5>
+                </div>
+            </div>
+        </div>
+
+        <!-- Display User Posts or Comments -->
+        <div class="col-sm-12 col-md-12 col-lg-6 col-xl-5">
             <!-- Text post template -->
             <div class="jumbotron post">
                 <div class="voteButtons">
@@ -99,7 +101,9 @@
                 <div class="postPreview">
                     <h5 class="postTitle">This is a text post!</h5>
                     <!-- THIS IS WHAT WILL DIFFER BETWEEN POST TYPES (the preview) -->
-                    <p class="postTextPreview">What the fuck did you just fucking say about me, you little bitch? I'll have you know I graduated top of my class in the Navy Seals, and I've been involved in numerous secret raids on Al-Quaeda,</p>
+                    <p class="postTextPreview">What the fuck did you just fucking say about me, you little bitch? I'll
+                        have you know I graduated top of my class in the Navy Seals, and I've been involved in numerous
+                        secret raids on Al-Quaeda,</p>
                     <div class="btn-group-xs">
                         <button class="btn btn-secondary btn-xs">420 Comments</button>
                     </div>
@@ -131,9 +135,7 @@
                 </div>
                 <div class="postPreview">
                     <h5 class="postTitle">This is a normal 16:9 image post!</h5>
-                    <div class="text-center">
-                        <img class="postImagePreview" src="img/normalimage.jpg" />
-                    </div>
+                    <img class="postImagePreview" src="img/normalimage.jpg"/>
 
                     <div class="btn-group-xs">
                         <button class="btn btn-secondary btn-xs">7.7k Comments</button>
@@ -150,7 +152,7 @@
                 <div class="postPreview">
                     <h5 class="postTitle">This is a (fairly) square 1:1 image post!</h5>
                     <div class="text-center">
-                        <img class="postImagePreview" src="img/squareimage.jpg" />
+                        <img class="postImagePreview" src="img/squareimage.jpg"/>
                     </div>
 
                     <div class="btn-group-xs">
@@ -167,7 +169,7 @@
                 <div class="postPreview">
                     <h5 class="postTitle">This is a tall image post!</h5>
                     <div class="text-center">
-                        <img class="postImagePreview" src="img/tallimage.png" />
+                        <img class="postImagePreview" src="img/tallimage.png"/>
                     </div>
 
                     <div class="btn-group-xs">
@@ -184,7 +186,7 @@
                 <div class="postPreview">
                     <h5 class="postTitle">This is a GIF post!</h5>
                     <div class="text-center">
-                        <img class="postImagePreview" src="img/giftest.gif" />
+                        <img class="postImagePreview" src="img/giftest.gif"/>
                     </div>
 
                     <div class="btn-group-xs">
@@ -201,7 +203,8 @@
                 <div class="postPreview">
                     <h5 class="postTitle">This is a broken image post!</h5>
                     <div class="text-center">
-                        <img class="postImagePreview" src="invalid" alt="image not found" onerror="this.src='img/notfound.png'" />
+                        <img class="postImagePreview" src="invalid" alt="image not found"
+                             onerror="this.src='img/notfound.png'"/>
                     </div>
 
                     <div class="btn-group-xs">
@@ -212,28 +215,7 @@
 
         </div>
 
-        <!-- "Right" div for showing calendar, weathers, other APIs -->
-        <div class="col-sm-0 col-md-0 col-lg-3 col-xl-2  d-none d-lg-block">
-            <div class="jumbotron">
-                <h5>NotReddit is the Front Page of CSCI201</h5>
-
-                <div class="text-center">
-                    <a class="btn btn-primary" href="post.jsp" role="button"><strong>CREATE POST</strong></a>
-                </div>
-            </div>
-        </div>
-
     </div>
 </div>
-
-<!-- script for upvote buttons -->
-<script>
-    for (const btn of document.querySelectorAll('.upvote, .downvote')) {
-        btn.addEventListener('click', event = > {
-            event.target.classList.toggle('on');
-    })
-        ;
-    }
-</script>
 </body>
 </html>
