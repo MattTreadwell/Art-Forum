@@ -36,7 +36,7 @@
             crossorigin="anonymous"></script>
 
 </head>
-<body class="imgBackground">
+<body>
 
 <div id="particles-js-main"></div>
 
@@ -218,7 +218,7 @@
                 <h5>NotReddit is the Front Page of CSCI201</h5>
 
                 <div class="text-center">
-                    <a class="btn btn-primary" href="post.jsp" role="button"><strong>CREATE POST</strong></a>
+                    <a class="btn btn-primary" href="newPost.jsp" role="button"><strong>CREATE POST</strong></a>
                 </div>
             </div>
         </div>

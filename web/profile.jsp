@@ -26,7 +26,7 @@
             crossorigin="anonymous"></script>
 
 </head>
-<body class="imgBackground">
+<body>
 
 <div id="particles-js-main"></div>
 
