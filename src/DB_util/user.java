@@ -9,6 +9,7 @@ import java.util.Date;
 
 
 public class user {
+    public boolean IsBanned;
     private ObjectId _userId;
     public String username;
     public int password;
@@ -29,6 +30,7 @@ public class user {
         Date _registerDate = new Date();
         profile = new userProfile(_country,_age,_registerDate,_postscore);
         mPostIds = new ArrayList<ObjectId>();
+        IsBanned = false;
     }
     public user()
     {
