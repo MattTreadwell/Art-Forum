@@ -36,6 +36,7 @@ public class Database {
         mongoClient = new MongoClient(uri);
         database = mongoClient.getDatabase("CSCI201");
     }
+    //jewk
     public String Validate(String Username, int Password)
     {
         MongoCollection collection = database.getCollection("users");
