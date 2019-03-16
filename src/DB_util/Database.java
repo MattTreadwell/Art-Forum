@@ -22,7 +22,7 @@ public class Database {
     public static final String Success = "Success!";
     public static final String Register_unameTaken = "The user name has been taken. Try an new one.";
     public static final String Signin_nouname = "The username doesn't exist";
-    public static final String Signin_pwerrorr = "Password is not correct.";
+    public static final String Signin_pwerror = "Password is not correct.";
 
     // connection required variables
     public MongoClientURI uri;
@@ -35,6 +35,27 @@ public class Database {
                 "mongodb+srv://csci201project:csci201project@cluster0-tprgw.mongodb.net/dummy?retryWrites=true");
         mongoClient = new MongoClient(uri);
         database = mongoClient.getDatabase("CSCI201");
+    }
+    public String Validate(String Username, int Password)
+    {
+        MongoCollection collection = database.getCollection("users");
+        FindIterable<Document> findIterable = collection.find(eq("Username", Username));
+        ArrayList<Document> checker = new ArrayList<Document>();
+        for (Document doc : findIterable)
+        {
+            checker.add(doc);
+        }
+        if (checker.size() == 0)
+        {
+            return Signin_nouname;
+        }
+        Document ve = checker.get(0);
+        int correctPass = ve.getInteger("Password");
+        if (correctPass != Password)
+        {
+            return Signin_pwerror;
+        }
+        return Success;
     }
     public String addUser(user u)
     {
@@ -404,6 +425,10 @@ public class Database {
         db.changeUserBanState("Lisa",true);
 
         db.deletePostById(lastPost);
+
+        System.out.println("Testing Validation:"+db.Validate("Lisas",999000));
+
+
 
     }
 
