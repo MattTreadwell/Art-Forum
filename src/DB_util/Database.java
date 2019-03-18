@@ -36,7 +36,7 @@ public class Database {
         mongoClient = new MongoClient(uri);
         database = mongoClient.getDatabase("CSCI201");
     }
-    //jewfdnhjskadhfksahdfkdshdfkhasdf
+
     public String Validate(String Username, int Password)
     {
         MongoCollection collection = database.getCollection("users");
@@ -387,6 +387,7 @@ public class Database {
         return stats.getInteger("count");
     }
 
+    // Driver/Test code
     public static void main(String [] args)
     {
         Database db = new Database();
