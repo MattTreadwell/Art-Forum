@@ -23,6 +23,11 @@ public class Database {
     public static final String Register_unameTaken = "The user name has been taken. Try an new one.";
     public static final String Signin_nouname = "The username doesn't exist";
     public static final String Signin_pwerror = "Password is not correct.";
+    public static final int POST = 1;
+    public static final int LINK = 1;
+    public static final int IMAGE = 1;
+
+
 
     // connection required variables
     public MongoClientURI uri;
@@ -103,7 +108,7 @@ public class Database {
         postBody.append("UserId",thisuserId);
         postBody.append("PostContent",p.postContent);
         postBody.append("Link",p.link);
-        postBody.append("IsImage",p.mLinkImage);
+        postBody.append("PostType",p.mPostType);
 
         newPost.append("PostBody",postBody);
 
@@ -141,7 +146,7 @@ public class Database {
         np.OwnerName = PostUser.getString("Username");
         np.postContent = PostBody.getString("PostContent");
         np.link = PostBody.getString("Link");
-        np.mLinkImage = PostBody.getBoolean("IsImage");
+        np.mPostType = PostBody.getInteger("PostType");
         //now, begin handling comments.
         np.mCommentIds = (ArrayList<ObjectId>)Post.get("CommentIDs");
         for( int i=0; i<np.mCommentIds.size(); i++)
@@ -217,7 +222,7 @@ public class Database {
             np.OwnerName = uname;
             np.postContent = PostBody.getString("PostContent");
             np.link = PostBody.getString("Link");
-            np.mLinkImage = PostBody.getBoolean("IsImage");
+            np.mPostType = PostBody.getInteger("PostType");
             u.userPosts.add(np);
         }
 
@@ -397,7 +402,7 @@ public class Database {
         System.out.println(db.addUser(u));
 
         post p = new post("CS201 FP" ,"Lisa","This is my first post for CSCI 201 Project"
-        , "www.google.com", false);
+        , "", POST);
         db.addPost(p);
 
         comment c = new comment("ve...", "Lisa" , lastPost);
@@ -424,7 +429,7 @@ public class Database {
         db.changePostById(lastPost,"JEEEEEEEEE");
         db.changeUserBanState("Lisa",true);
 
-        db.deletePostById(lastPost);
+      //  db.deletePostById(lastPost);
 
         System.out.println("Testing Validation:"+db.Validate("Lisas",999000));
 
