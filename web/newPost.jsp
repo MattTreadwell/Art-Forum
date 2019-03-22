@@ -92,6 +92,7 @@
                     <div class="form-group">
                         <label for="exampleFormControlSelect1">Post Type</label>
                         <select class="form-control" id="exampleFormControlSelect1" name="SelectBox">
+                            <option>Select your option</option>
                             <option value="textForm">Text</option>
                             <option value="linkForm">Link</option>
                             <option value="imageForm">Image</option>
@@ -125,11 +126,12 @@
 
 <!-- https://stackoverflow.com/questions/5692135/show-visible-hidden-not-show-hide-html-element-based-on-form-select-box-select -->
 <script>
-    $(document).ready(function(){
-        $('input[name="SelectBox"]').change(function(){
-            $('.toggle').hide();//Hide all
-            $("#" + $(this).show());
-        });
+    $('.toggle').hide();//Hide all by default
+
+
+    $('select').on('change', function() {
+        $('.toggle').hide();//Hide all
+        $("#" + $(this).children("option:selected").val()).show();
     });
 </script>
 
