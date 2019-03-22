@@ -11,7 +11,7 @@ public class post {
     public String OwnerName = null;
     public String postContent;
     public Date postDate;
-    boolean mLinkImage;
+    int mPostType;
     public String link;
     public ArrayList<comment> mComments;
     /*******the following variables are for internal use****/
@@ -22,7 +22,7 @@ public class post {
     /*****for front-end Use Only******/
     // Note: if there is no link, please pass in an empty _link String.
     public post(String _Title, String _OwnerName, String _postContent, String _link,
-                boolean isImage)
+                int postType)
     {
         Title = _Title;
         OwnerName = _OwnerName;
@@ -39,7 +39,7 @@ public class post {
         {
             link = _link;
         }
-        mLinkImage = isImage;
+        mPostType = postType;
 
     }
     /******for internal use***************/
