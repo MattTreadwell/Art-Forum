@@ -24,8 +24,8 @@ public class Database {
     public static final String Signin_nouname = "The username doesn't exist";
     public static final String Signin_pwerror = "Password is not correct.";
     public static final int POST = 1;
-    public static final int LINK = 1;
-    public static final int IMAGE = 1;
+    public static final int LINK = 2;
+    public static final int IMAGE = 3;
 
 
 
