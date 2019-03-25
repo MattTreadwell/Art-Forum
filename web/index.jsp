@@ -98,10 +98,10 @@
                 </div>
                 <div class="postPreview">
                     <h5 class="postTitle">This is a text post!</h5>
-                    <!-- THIS IS WHAT WILL DIFFER BETWEEN POST TYPES (the preview) -->
-                    <p class="postTextPreview">What the fuck did you just fucking say about me, you little bitch? I'll
-                        have you know I graduated top of my class in the Navy Seals, and I've been involved in numerous
-                        secret raids on Al-Quaeda,</p>
+                    <!-- THIS IS WHAT WILL DIFFER BETWEEN TEXT TYPES (the preview) -->
+                    <p class="postTextPreview">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vitae
+                        consectetur sapien. Sed vitae pellentesque ex. Aenean et dignissim justo. Duis maximus risus nec
+                        purus ullamcorper, non sollicitudin odio molestie.</p>
                     <div class="btn-group-xs">
                         <button class="btn btn-secondary btn-xs">420 Comments</button>
                     </div>
@@ -237,14 +237,15 @@
     // Upvote button code
     for (const btn of document.querySelectorAll('.upvote')) {
         btn.addEventListener('click', event = > {
-            if(event.target.classList.contains("on"))
+            if(event.target.classList.contains("on")
+    )
         {
             // Button is already activated; make this un-upvote
             console.log("class on toggled off");
             event.target.classList.toggle('on');
 
         }
-            else
+    else
         {
             // Button isn't activated; upvote post and undo downvote if it's downvoted
             event.target.classList.toggle('on');
@@ -256,7 +257,8 @@
     // Downvote button code (should be an inverse of the previous)
     for (const btn of document.querySelectorAll('.downvote')) {
         btn.addEventListener('click', event = > {
-            if(event.target.classList.contains("on"))
+            if(event.target.classList.contains("on")
+    )
         {
             // Button is already activated; make this un-upvote
             console.log("class on toggled off");

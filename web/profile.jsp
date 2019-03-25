@@ -100,7 +100,7 @@
                 </div>
                 <div class="postPreview">
                     <h5 class="postTitle">This is a text post!</h5>
-                    <!-- THIS IS WHAT WILL DIFFER BETWEEN POST TYPES (the preview) -->
+                    <!-- THIS IS WHAT WILL DIFFER BETWEEN TEXT TYPES (the preview) -->
                     <p class="postTextPreview">What the fuck did you just fucking say about me, you little bitch? I'll
                         have you know I graduated top of my class in the Navy Seals, and I've been involved in numerous
                         secret raids on Al-Quaeda,</p>

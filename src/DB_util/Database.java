@@ -1,6 +1,5 @@
 package DB_util;
 
-import com.mongodb.CommandResult;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.FindIterable;
@@ -23,7 +22,7 @@ public class Database {
     public static final String Register_unameTaken = "The user name has been taken. Try an new one.";
     public static final String Signin_nouname = "The username doesn't exist";
     public static final String Signin_pwerror = "Password is not correct.";
-    public static final int POST = 1;
+    public static final int TEXT = 1;
     public static final int LINK = 2;
     public static final int IMAGE = 3;
 
@@ -404,7 +403,7 @@ public class Database {
         System.out.println(db.addUser(u));
 
         post p = new post("CS201 FP" ,"Lisa","This is my first post for CSCI 201 Project"
-        , "", POST);
+        , "", TEXT);
         db.addPost(p);
 
         comment c = new comment("ve...", "Lisa" , lastPost);
