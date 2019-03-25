@@ -88,8 +88,9 @@
                 </div>
                 <div class="postPreview">
                     <h5 class="postTitle">This is a text post!</h5>
-                    <!-- THIS IS WHAT WILL DIFFER BETWEEN POST TYPES (the preview) -->
-                    <p>What the fuck did you just fucking say about me, you little bitch? I'll have you know I graduated top of my class in the Navy Seals, and I've been involved in numerous secret raids on Al-Quaeda,</p>
+                    <!-- THIS IS WHAT WILL DIFFER BETWEEN TEXT TYPES (the preview) -->
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vitae consectetur sapien. Sed
+                        vitae pellentesque ex. Aenean et dignissim justo.</p>
                     <div class="btn-group-xs">
                         <button class="btn btn-secondary btn-xs">420 Comments</button>
                     </div>
@@ -120,7 +121,11 @@
 
                     <div class="commentContent">
                         <a href="profile.jsp">Spongebobu</a>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vitae euismod lorem. Vestibulum iaculis finibus augue laoreet imperdiet. Interdum et malesuada fames ac ante ipsum primis in faucibus. Etiam eu diam risus. Pellentesque nibh orci, efficitur eu dignissim eget, elementum non sapien. Nam tempor diam id nisl rutrum hendrerit. Nunc sagittis sit amet mauris elementum aliquet. Donec fermentum molestie leo ut sodales.</p>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vitae euismod lorem. Vestibulum
+                            iaculis finibus augue laoreet imperdiet. Interdum et malesuada fames ac ante ipsum primis in
+                            faucibus. Etiam eu diam risus. Pellentesque nibh orci, efficitur eu dignissim eget,
+                            elementum non sapien. Nam tempor diam id nisl rutrum hendrerit. Nunc sagittis sit amet
+                            mauris elementum aliquet. Donec fermentum molestie leo ut sodales.</p>
                     </div>
                 </div>
             </div>

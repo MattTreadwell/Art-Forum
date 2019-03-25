@@ -1,4 +1,4 @@
-<%@ page import="DB_util" %>
+<%@ page import="DB_util.Database" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -10,11 +10,28 @@
     if (success == null) {
         success = "";
     }
+
+    String retrieveNum = (String) request.getAttribute("index");
+    int index = 1;
+    if(retrieveNum != null) {
+        index = Integer.parseInt(retrieveNum);
+    }
     // Session to check if user is logged in
     HttpSession session1 = request.getSession();
 
+    // Make a new Database class
+    Database db = new Database();
+
     // Get ArrayList of Posts from db by index #
-    java.util.ArrayList<DB_util.post> postChunk = null;
+    java.util.ArrayList<DB_util.post> postChunk = db.getPostChunk(index);
+
+    // Check if the postChunk is null and return an error if it is
+    if(postChunk == null) {
+        request.setAttribute("error", "No more posts on page " + index);
+        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/error.jsp");
+        dispatcher.forward(request, response);
+        return;
+    }
 %>
 
 <!-- THIS IS ONLY FOR TESTING DATABASE INTEGRATION -->
@@ -111,9 +128,10 @@
                 </div>
                 <div class="postPreview">
                     <h5 class="postTitle"><%=p.Title%> <p><%=p.OwnerName%></p></h5>
-                    <!-- THIS IS WHAT WILL DIFFER BETWEEN POST TYPES (the preview) -->
+                    <!-- THIS IS WHAT WILL DIFFER BETWEEN TEXT TYPES (the preview) -->
                     <%
-                        switch () {
+                        switch (p.mPostType) {
+                            //
                             case 1 :
                                 %>
                                 <!-- TODO need shortener function -->
@@ -167,7 +185,7 @@
                 </div>
                 <div class="postPreview">
                     <h5 class="postTitle">This is a text post!</h5>
-                    <!-- THIS IS WHAT WILL DIFFER BETWEEN POST TYPES (the preview) -->
+                    <!-- THIS IS WHAT WILL DIFFER BETWEEN TEXT TYPES (the preview) -->
                     <p class="postTextPreview">What the fuck did you just fucking say about me, you little bitch? I'll
                         have you know I graduated top of my class in the Navy Seals, and I've been involved in numerous
                         secret raids on Al-Quaeda,</p>
@@ -281,6 +299,7 @@
                     </div>
                 </div>
             </div>
+            <!-- TODO add next page and page back buttons -->
 
         </div>
 

@@ -11,7 +11,7 @@ public class post {
     public String OwnerName = null;
     public String postContent;
     public Date postDate;
-    int mPostType;
+    public int mPostType;
     public String link;
     public ArrayList<comment> mComments;
     /*******the following variables are for internal use****/
