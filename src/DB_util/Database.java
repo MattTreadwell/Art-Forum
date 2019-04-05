@@ -36,7 +36,7 @@ public class Database {
     public Database()
     {
         uri = new MongoClientURI(
-                "mongodb+srv://csci201project:csci201project@cluster0-tprgw.mongodb.net/dummy?retryWrites=true");
+                "mongodb+srv://csci201project:csci201project@cluster0-tprgw.mongodb.net/CSCI201?retryWrites=true");
         mongoClient = new MongoClient(uri);
         database = mongoClient.getDatabase("CSCI201");
     }
@@ -364,7 +364,7 @@ public class Database {
     public ArrayList<post> getPostChunk(int postIndex)
     {
 
-        int displayNum = 20;
+        int displayNum = 8;
         int postSize = getPostSize();
         int lastEndPlace = (postIndex-1)*displayNum;
         if (lastEndPlace >= postSize)
@@ -430,6 +430,7 @@ public class Database {
         db.changePostById(lastPost,"JEEEEEEEEE");
         db.changeUserBanState("Lisa",true);
 
+        db.getPostChunk(1);
       //  db.deletePostById(lastPost);
 
         System.out.println("Testing Validation:"+db.Validate("Lisas",999000));
