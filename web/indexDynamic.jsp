@@ -16,6 +16,7 @@
     if(retrieveNum != null) {
         index = Integer.parseInt(retrieveNum);
     }
+    index = 3;
     // Session to check if user is logged in
     HttpSession session1 = request.getSession();
 
