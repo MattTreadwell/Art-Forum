@@ -372,7 +372,7 @@ public class Database {
             return null;
         }
         MongoCollection postCollection = database.getCollection("posts");
-        Document SortingDoc = new Document("_id",-1);
+        Document SortingDoc = new Document("_id",1);
         FindIterable<Document> findIterable = (FindIterable<Document>)postCollection.find().sort(SortingDoc)
                 .skip(lastEndPlace).limit(displayNum);
         ArrayList<post> PostChunk = new ArrayList<post>();
