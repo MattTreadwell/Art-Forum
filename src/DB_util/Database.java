@@ -359,6 +359,27 @@ public class Database {
         Document updateQuery = new Document("$set", new Document("PostBody.PostContent", newContent));
         postCollection.updateOne(findQuery,updateQuery);
     }
+    public post getLatestPost()
+    {
+        MongoCollection postCollection = database.getCollection("posts");
+        Document SortingDoc = new Document("_id",-1);
+        FindIterable<Document> findIterable = (FindIterable<Document>)postCollection.find().sort(SortingDoc)
+                .limit(1);
+        ArrayList<post> onlyOne = new ArrayList<post>();
+        for (Document doc : findIterable)
+        {
+            ObjectId mId= doc.getObjectId("_id");
+            post p = getPostById(mId);
+            onlyOne.add(p);
+        }
+
+        return onlyOne.get(0);
+    }
+
+    public ArrayList<post> searchPost(String searchString)
+    {
+        return null;
+    }
     public void updateUserScore(String username, int amount)
     {
         MongoCollection userCollection = database.getCollection("users");
@@ -440,7 +461,8 @@ public class Database {
 
         System.out.println("Testing Validation:"+db.Validate("Lisas",999000));
 
-
+        p = db.getLatestPost();
+        b = 5;
 
     }
 
