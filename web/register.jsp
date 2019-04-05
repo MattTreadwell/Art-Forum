@@ -100,7 +100,7 @@
                     </div>
                     <div class="form-group">
                         <label for="exampleInputPassword1">Confirm Password</label>
-                        <input name="password" type="password" class="form-control" id="exampleInputPassword2"
+                        <input name="checkpassword" type="password" class="form-control" id="exampleInputPassword2"
                                placeholder="Confirm Password">
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
