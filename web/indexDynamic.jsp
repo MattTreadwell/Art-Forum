@@ -164,9 +164,6 @@
                                 break;
                         }
                     %>
-                    <p class="postTextPreview">What the fuck did you just fucking say about me, you little bitch? I'll
-                        have you know I graduated top of my class in the Navy Seals, and I've been involved in numerous
-                        secret raids on Al-Quaeda,</p>
                     <div class="btn-group-xs">
                         <button class="btn btn-secondary btn-xs">420 Comments</button>
                     </div>
