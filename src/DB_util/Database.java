@@ -170,8 +170,13 @@ public class Database {
         MongoCollection userCollection = database.getCollection("users");
         MongoCollection postCollection = database.getCollection("posts");
         MongoCollection commentCollection = database.getCollection("comments");
-
-        Document User = (Document)userCollection.find(eq("Username",uname)).first();
+        Document User;
+        try {
+            User = (Document) userCollection.find(eq("Username", uname)).first();
+        } catch (Exception e)
+        {
+            return null;
+        }
         user u = new user();
         // first, fill out the basic information excluding arrays;
         u.username = uname;
