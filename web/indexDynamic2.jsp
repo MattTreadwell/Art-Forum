@@ -16,7 +16,6 @@
     if(retrieveNum != null) {
         index = Integer.parseInt(retrieveNum);
     }
-    index = 3;
     // Session to check if user is logged in
     HttpSession session1 = request.getSession();
 
@@ -24,7 +23,7 @@
     Database db = new Database();
 
     // Get ArrayList of Posts from db by index #
-    java.util.ArrayList<DB_util.post> postChunk = db.getPostChunk(index);
+/*    java.util.ArrayList<DB_util.post> postChunk = db.getPostChunk(index);
 
     // Check if the postChunk is null and return an error if it is
     if(postChunk == null) {
@@ -32,7 +31,7 @@
         RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/error.jsp");
         dispatcher.forward(request, response);
         return;
-    }
+    }*/
 %>
 
 <!-- THIS IS ONLY FOR TESTING DATABASE INTEGRATION -->
@@ -130,7 +129,7 @@
                 <div class="postPreview">
                     <h5 class="postTitle"><%=p.Title%> <p><%=p.OwnerName%></p></h5>
                     <!-- THIS IS WHAT WILL DIFFER BETWEEN TEXT TYPES (the preview) -->
-                    <%
+               <%--     <%
                         switch (p.mPostType) {
                             //
                             case 1 :
@@ -164,7 +163,10 @@
                                 <%
                                 break;
                         }
-                    %>
+                    %>--%>
+                    <p class="postTextPreview">What the fuck did you just fucking say about me, you little bitch? I'll
+                        have you know I graduated top of my class in the Navy Seals, and I've been involved in numerous
+                        secret raids on Al-Quaeda,</p>
                     <div class="btn-group-xs">
                         <button class="btn btn-secondary btn-xs">420 Comments</button>
                     </div>
