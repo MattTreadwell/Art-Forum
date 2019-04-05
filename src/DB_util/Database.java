@@ -364,7 +364,7 @@ public class Database {
     public ArrayList<post> getPostChunk(int postIndex)
     {
 
-        int displayNum = 20;
+        int displayNum = 8;
         int postSize = getPostSize();
         int lastEndPlace = (postIndex-1)*displayNum;
         if (lastEndPlace >= postSize)
