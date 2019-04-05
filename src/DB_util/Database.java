@@ -165,6 +165,9 @@ public class Database {
         return np;
 
     }
+
+
+
     public user getUser(String uname)
     {
         MongoCollection userCollection = database.getCollection("users");
@@ -236,6 +239,8 @@ public class Database {
 
 
     }
+
+
 
     public void addComment(comment cm)
     {
@@ -378,7 +383,25 @@ public class Database {
 
     public ArrayList<post> searchPost(String searchString)
     {
-        return null;
+        MongoCollection postCollection = database.getCollection("posts");
+        Document regexQuery = new Document();
+        regexQuery.append("$regex", searchString);
+        Document nameQuery1 = new Document().append("PostBody.Title",regexQuery);
+        Document nameQuery2 = new Document().append("PostBody.PostContent",regexQuery);
+        ArrayList<Document> allQueries = new ArrayList<Document>();
+        allQueries.add(nameQuery1);
+        allQueries.add(nameQuery2);
+        Document findQuery = new Document("$or",allQueries);
+        FindIterable<Document> findIterable = (FindIterable<Document>)postCollection.find(findQuery);
+        ArrayList<post> MatchedPost = new ArrayList<post>();
+        for (Document doc : findIterable)
+        {
+            ObjectId mId= doc.getObjectId("_id");
+            post p = getPostById(mId);
+            MatchedPost.add(p);
+        }
+
+        return MatchedPost;
     }
     public void updateUserScore(String username, int amount)
     {
@@ -443,7 +466,7 @@ public class Database {
         post np = db.getPostById(lastPost);
         int b = 3;
         System.out.println("post size is:"+db.getPostSize());
-
+/*
         ArrayList<post> Chunk = db.getPostChunk(1);
         int c1 = 4;
 
@@ -463,6 +486,9 @@ public class Database {
 
         p = db.getLatestPost();
         b = 5;
+*/
+        ArrayList<post> testMatch = db.searchPost("9");
+        b = 6;
 
     }
 
