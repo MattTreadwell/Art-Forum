@@ -4,6 +4,7 @@
 
 <%
 
+    // TODO: QUERY IS NULL, FIX NEEDED
     String query = request.getParameter("query");
     System.out.print(query);
 
@@ -14,8 +15,10 @@
     // Make a new Database class
     Database db = new Database();
 
+
     // Get ArrayList of Posts from db by index #
-    java.util.ArrayList<DB_util.post> results = db.searchPost("JE");
+    System.out.println(query);
+    java.util.ArrayList<DB_util.post> results = db.searchPost(query);
     System.out.println("SEARCH RESULT SIZE: "+results.size());
 %>
 
