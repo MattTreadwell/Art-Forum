@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Filters.regex;
 
 
 public class Database {
@@ -386,6 +387,7 @@ public class Database {
         MongoCollection postCollection = database.getCollection("posts");
         Document regexQuery = new Document();
         regexQuery.append("$regex", searchString);
+        regexQuery.append("$options","i");
         Document nameQuery1 = new Document().append("PostBody.Title",regexQuery);
         Document nameQuery2 = new Document().append("PostBody.PostContent",regexQuery);
         ArrayList<Document> allQueries = new ArrayList<Document>();
@@ -487,8 +489,9 @@ public class Database {
         p = db.getLatestPost();
         b = 5;
 */
-        ArrayList<post> testMatch = db.searchPost("9");
+        ArrayList<post> testMatch = db.searchPost("FIRST");
         b = 6;
+
 
     }
 
