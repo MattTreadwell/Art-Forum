@@ -83,7 +83,7 @@
         <div class="col-sm-12 col-md-12 col-lg-4 offset-md-0 offset-sm-0 offset-lg-1">
             <div class="jumbotron" style="background-color: rgba(255,255,255,0.9) !important">
                 <h1>Login</h1>
-                <form action="/Login" method="post">
+                <form action="Login" method="post">
                     <div class="form-group">
                         <label for="exampleInputUsername1">Username</label>
                         <input name="username" type="text" class="form-control" id="exampleInputUsername1"
