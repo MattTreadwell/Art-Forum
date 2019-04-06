@@ -104,6 +104,7 @@ public class Database {
         ObjectId thisuserId = mappedUser.getObjectId("_id");
         Date pdate = new Date();
         newPost.append("PostDate",pdate);
+        newPost.append("PostScore",1);
         Document postBody = new Document();
         postBody.append("Title",p.Title);
         postBody.append("UserId",thisuserId);
@@ -148,6 +149,7 @@ public class Database {
         np.postContent = PostBody.getString("PostContent");
         np.link = PostBody.getString("Link");
         np.mPostType = PostBody.getInteger("PostType");
+        np.mPostScore = PostBody.getInteger("PostScore");
         //now, begin handling comments.
         np.mCommentIds = (ArrayList<ObjectId>)Post.get("CommentIDs");
         for( int i=0; i<np.mCommentIds.size(); i++)
@@ -232,6 +234,7 @@ public class Database {
             np.postContent = PostBody.getString("PostContent");
             np.link = PostBody.getString("Link");
             np.mPostType = PostBody.getInteger("PostType");
+            np.mPostScore = PostBody.getInteger("PostScore");
             u.userPosts.add(np);
         }
 
@@ -357,6 +360,13 @@ public class Database {
         Document findQuery = new Document("Username",username);
         Document updateQuery = new Document("$set", new Document("Profile.PostScore", newScore));
         userCollection.updateOne(findQuery,updateQuery);
+    }
+    public void IncPostScore(ObjectId postId, int amount)
+    {
+        MongoCollection postCollection = database.getCollection("posts");
+        Document findQuery = new Document("_id",postId);
+        Document updateQuery = new Document("$inc", new Document("PostScore", amount));
+        postCollection.updateOne(findQuery,updateQuery);
     }
     public void changePostById(ObjectId postId, String newContent)
     {
