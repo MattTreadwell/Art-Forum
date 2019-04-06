@@ -15,7 +15,8 @@
     Database db = new Database();
 
     // Get ArrayList of Posts from db by index #
-    java.util.ArrayList<DB_util.post> results = db.searchPost("FIRST");
+    java.util.ArrayList<DB_util.post> results = db.searchPost("JE");
+    System.out.println("SEARCH RESULT SIZE: "+results.size());
 %>
 
 <html>
