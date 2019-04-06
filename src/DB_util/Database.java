@@ -149,7 +149,7 @@ public class Database {
         np.postContent = PostBody.getString("PostContent");
         np.link = PostBody.getString("Link");
         np.mPostType = PostBody.getInteger("PostType");
-        np.mPostScore = PostBody.getInteger("PostScore");
+        np.mPostScore = Post.getInteger("PostScore");
         //now, begin handling comments.
         np.mCommentIds = (ArrayList<ObjectId>)Post.get("CommentIDs");
         for( int i=0; i<np.mCommentIds.size(); i++)
@@ -234,7 +234,7 @@ public class Database {
             np.postContent = PostBody.getString("PostContent");
             np.link = PostBody.getString("Link");
             np.mPostType = PostBody.getInteger("PostType");
-            np.mPostScore = PostBody.getInteger("PostScore");
+            np.mPostScore = Post.getInteger("PostScore");
             u.userPosts.add(np);
         }
 
@@ -502,6 +502,11 @@ public class Database {
         ArrayList<post> testMatch = db.searchPost("FIRST");
         b = 6;
 
+        post lp = db.getLatestPost();
+        System.out.println("Post score before updating: "+lp.mPostScore);
+        db.IncPostScore(lp._postId,2);
+        lp = db.getLatestPost();
+        System.out.println("Post score after updating: "+lp.mPostScore);
 
     }
 
