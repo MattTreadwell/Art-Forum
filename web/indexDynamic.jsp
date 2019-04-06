@@ -160,7 +160,7 @@
                         }
                     %>
                     <div class="btn-group-xs">
-                        <button class="btn btn-secondary btn-xs">420 Comments</button>
+                        <button class="btn btn-secondary btn-xs"><%=%></button>
                     </div>
                 </div>
             </div>
