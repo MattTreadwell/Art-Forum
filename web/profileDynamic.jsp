@@ -1,40 +1,32 @@
 <%@ page import="DB_util.Database" %>
+<%@ page import="DB_util.post" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    // TODO add multithreading to check for new posts and display icon
-    // clicking icon will refresh page and display new posts
+    String profile = request.getParameter("profile");
 
-    // Display success message upon user login
-    String success = (String) request.getAttribute("success");
-    if (success == null) {
-        success = "";
-    }
-
-    String retrieveNum = (String) request.getAttribute("index");
-    int index = 1;
-    if(retrieveNum != null) {
-        index = Integer.parseInt(retrieveNum);
-    }
-    // Session to check if user is logged in
-    HttpSession session1 = request.getSession();
-
-    // Make a new Database class
-    Database db = new Database();
-
-    // Get ArrayList of Posts from db by index #
-/*    java.util.ArrayList<DB_util.post> postChunk = db.getPostChunk(index);
-
-    // Check if the postChunk is null and return an error if it is
-    if(postChunk == null) {
-        request.setAttribute("error", "No more posts on page " + index);
-        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/error.jsp");
+    if(profile == null) {
+        request.setAttribute("error", "Missing user profile");
+        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("error.jsp");
         dispatcher.forward(request, response);
         return;
-    }*/
-%>
+    }
 
-<!-- THIS IS ONLY FOR TESTING DATABASE INTEGRATION -->
+    Database db = new Database();
+
+    DB_util.user userProfile = db.getUser("profile");
+
+    if(userProfile == null) {
+        request.setAttribute("error", "User " + profile + " not found.");
+        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("error.jsp");
+        dispatcher.forward(request, response);
+        return;
+    }
+
+
+
+%>
 
 <html>
 <head>
@@ -114,11 +106,24 @@
 
 <div class="container-fluid postBox">
     <div class="row">
-        <div class="col-sm-12 col-md-12 col-lg-7 col-xl-5 offset-md-0 offset-sm-0 offset-lg-1 offset-xl-3">
+        <!-- "Left" div for showing User info, location, score -->
+        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-3 offset-md-0 offset-sm-0 offset-lg-1 offset-xl-1">
+            <div class="jumbotron">
+                <div class="text-center">
+                    <h4><strong><%=userProfile.username%></strong></h4>
+                    <h5>Post Score: <%=userProfile.profile.postScore%></h5>
+                    <h5>Country: <%=userProfile.profile.country%></h5>
+                </div>
+            </div>
+        </div>
 
+        <!-- Display User Posts or Comments -->
+        <div class="col-sm-12 col-md-12 col-lg-6 col-xl-5">
+            <div class="userPosts"></div>
+            <!-- dynamic post display -->
             <%
                 // Iterate over the array of posts
-                for(DB_util.post p : postChunk) {
+                for(DB_util.post p : userProfile.userPosts) {
             %>
             <div class="jumbotron post">
                 <div class="voteButtons">
@@ -127,46 +132,43 @@
                     <span class="downvote"> </span>
                 </div>
                 <div class="postPreview">
-                    <h5 class="postTitle"><%=p.Title%> <p><%=p.OwnerName%></p></h5>
+                    <h5 class="postTitle"><%=p.Title%> <p class="postUser">by <%=p.OwnerName%></p></h5>
                     <!-- THIS IS WHAT WILL DIFFER BETWEEN TEXT TYPES (the preview) -->
-               <%--     <%
+                    <%
                         switch (p.mPostType) {
                             //
                             case 1 :
-                                %>
-                                <!-- TODO need shortener function -->
-                                <p class="postTextPreview"><%=p.postContent%></p>
-                                <%
+                    %>
+                    <!-- TODO need shortener function -->
+                    <p class="postTextPreview"><%=p.postContent%></p>
+                    <%
 
 
-                                break;
-                            case 2:
-                                %>
-                                <!-- TODO consider shortener here too -->
-                                <p class="postLinkPreview">
-                                    <a href="<%=p.link%>"><%=p.link%></a>
-                                </p>
-                                <%
-                                break;
-                            case 3:
-                                %>
-                                <!-- TODO consider also showing link -->
-                                <div class="text-center">
-                                    <img class="postImagePreview" src="<%=p.link%>"/>
-                                </div>
-                                <%
-                                break;
-                            default:
-                                // Error case: no post type (should probably skip)
-                                %>
-                                <p class="postTextPreview text-danger">ERROR: MISSING/INVALID POST TYPE</p>
-                                <%
+                            break;
+                        case 2:
+                    %>
+                    <!-- TODO consider shortener here too -->
+                    <p class="postLinkPreview">
+                        <a href="<%=p.link%>"><%=p.link%></a>
+                    </p>
+                    <%
+                            break;
+                        case 3:
+                    %>
+                    <!-- TODO consider also showing link -->
+                    <div class="text-center">
+                        <img class="postImagePreview" src="<%=p.link%>"/>
+                    </div>
+                    <%
+                            break;
+                        default:
+                            // Error case: no post type (should probably skip)
+                    %>
+                    <p class="postTextPreview text-danger">ERROR: MISSING/INVALID POST TYPE</p>
+                    <%
                                 break;
                         }
-                    %>--%>
-                    <p class="postTextPreview">What the fuck did you just fucking say about me, you little bitch? I'll
-                        have you know I graduated top of my class in the Navy Seals, and I've been involved in numerous
-                        secret raids on Al-Quaeda,</p>
+                    %>
                     <div class="btn-group-xs">
                         <button class="btn btn-secondary btn-xs">420 Comments</button>
                     </div>
@@ -220,9 +222,7 @@
                 </div>
                 <div class="postPreview">
                     <h5 class="postTitle">This is a normal 16:9 image post!</h5>
-                    <div class="text-center">
-                        <img class="postImagePreview" src="img/normalimage.jpg"/>
-                    </div>
+                    <img class="postImagePreview" src="img/normalimage.jpg"/>
 
                     <div class="btn-group-xs">
                         <button class="btn btn-secondary btn-xs">7.7k Comments</button>
@@ -299,67 +299,10 @@
                     </div>
                 </div>
             </div>
-            <!-- TODO add next page and page back buttons -->
 
-        </div>
-
-        <!-- "Right" div for showing calendar, weathers, other APIs -->
-        <div class="col-sm-0 col-md-0 col-lg-3 col-xl-2  d-none d-lg-block">
-            <div class="jumbotron">
-                <h5>NotReddit is the Front Page of CSCI201 DYNAMIC TEST PAGE</h5>
-
-                <div class="text-center">
-                    <a class="btn btn-primary" href="newPost.jsp" role="button"><strong>CREATE POST</strong></a>
-                </div>
-            </div>
         </div>
 
     </div>
 </div>
-
-<!-- script for upvote buttons -->
-<script>
-    // TODO integrate with database AND make sure post can be both upvoted and downvoted
-    // This will need to be way more complex than just toggling the 'on' class
-
-    // TODO consider merging these into one once functionality is complete
-    // Upvote button code
-    for (const btn of document.querySelectorAll('.upvote')) {
-        btn.addEventListener('click', event = > {
-            if(event.target.classList.contains("on"))
-        {
-            // Button is already activated; make this un-upvote
-            console.log("class on toggled off");
-            event.target.classList.toggle('on');
-
-        }
-    else
-        {
-            // Button isn't activated; upvote post and undo downvote if it's downvoted
-            event.target.classList.toggle('on');
-        }
-    })
-        ;
-    }
-
-    // Downvote button code (should be an inverse of the previous)
-    for (const btn of document.querySelectorAll('.downvote')) {
-        btn.addEventListener('click', event = > {
-            if(event.target.classList.contains("on"))
-        {
-            // Button is already activated; make this un-downvote
-            console.log("class on toggled off");
-            event.target.classList.toggle('on');
-
-        }
-    else
-        {
-            // Button isn't activated; upvote post and undo upvote if it's upvoted
-            event.target.classList.toggle('on');
-        }
-    })
-        ;
-    }
-</script>
 </body>
 </html>
