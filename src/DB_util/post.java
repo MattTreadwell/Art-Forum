@@ -10,6 +10,7 @@ public class post {
     public String Title;
     public String OwnerName = null;
     public String postContent;
+    public int mPostScore;
     public Date postDate;
     public int mPostType;
     public String link;
@@ -24,6 +25,7 @@ public class post {
     public post(String _Title, String _OwnerName, String _postContent, String _link,
                 int postType)
     {
+        mPostScore = 1;
         Title = _Title;
         OwnerName = _OwnerName;
         _postId = null;
