@@ -5,12 +5,6 @@
     // TODO add multithreading to check for new posts and display icon
     // clicking icon will refresh page and display new posts
 
-    // Display success message upon user login
-    String success = (String) request.getAttribute("success");
-    if (success == null) {
-        success = "";
-    }
-
     String retrieveNum = (String) request.getAttribute("index");
     int index = 1;
     if(retrieveNum != null) {
@@ -29,7 +23,7 @@
     // Check if the postChunk is null and return an error if it is
     if(postChunk == null) {
         request.setAttribute("error", "No more posts on page " + index);
-        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/error.jsp");
+        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("error.jsp");
         dispatcher.forward(request, response);
         return;
     }
@@ -91,9 +85,9 @@
         <ul class="navbar-nav w-100 justify-content-center">
             <li>
                 <!-- TODO potentially make this nicer looking -->
-                <form action="/Search" method="get" class="navbar-form zeroMargin" role="search">
+                <form action="search.jsp" method="get" class="navbar-form zeroMargin" role="search">
                     <div class="input-group">
-                        <input type="search" name="searchQuery" value="" class="form-control"
+                        <input type="search" name="query" value="" class="form-control"
                                id="searchForm"
                                aria-describedby="searchHelp" placeholder="Search">
                         <button type="submit" class="btn btn-secondary"><i class="fa fa-search"></i></button>
@@ -329,6 +323,8 @@
             // Button is already activated; make this un-upvote
             console.log("class on toggled off");
             event.target.classList.toggle('on');
+
+            //var db = new Packages.DB_util.
 
         }
     else
