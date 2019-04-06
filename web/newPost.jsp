@@ -83,10 +83,10 @@
         <div class="col-sm-12 col-md-12 col-lg-6 offset-md-0 offset-sm-0 offset-lg-3">
             <div class="jumbotron" style="background-color: rgba(255,255,255,0.9) !important">
                 <h1>New Post</h1>
-                <form action="/createPost" method="post">
+                <form action="CreatePost" method="post">
                     <div class="form-group">
                         <label for="exampleInputUsername1">Post Title</label>
-                        <input name="username" type="text" class="form-control" id="exampleInputUsername1"
+                        <input name="title" type="text" class="form-control" id="exampleInputUsername1"
                                aria-describedby="usernameHelp" placeholder="Enter Title">
                     </div>
                     <div class="form-group">
@@ -101,17 +101,17 @@
                     <!-- Text Post Form -->
                     <div class="form-group toggle" id="textForm">
                         <label for="exampleFormControlTextarea1">Text</label>
-                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                        <textarea name="text" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
                     </div>
                     <!-- Link/Image Form -->
                     <div class="form-group toggle" id="linkForm">
                         <label for="linkInput">URL</label>
-                        <input type="url" pattern="https://.*" class="form-control" id="linkInput" placeholder="https://notreddit.com">
+                        <input name="link" type="url" pattern="https://.*" class="form-control" id="linkInput" placeholder="https://notreddit.com">
                     </div>
                     <div class="toggle" id="imageForm">
                         <div class="form-group">
                             <label for="imageInput">Image Link</label>
-                            <input type="url" pattern="https://.*" class="form-control" id="imageInput" placeholder="hi.png">
+                            <input name="imagelink"type="url" pattern="https://.*" class="form-control" id="imageInput" placeholder="hi.png">
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
