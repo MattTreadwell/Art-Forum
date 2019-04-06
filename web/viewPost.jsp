@@ -54,7 +54,7 @@
         <ul class="navbar-nav w-100 justify-content-center">
             <li>
                 <!-- TODO potentially make this nicer looking -->
-                <form action="/Search" method="get" class="navbar-form zeroMargin" role="search">
+                <form action="search.jsp" method="get" class="navbar-form zeroMargin" role="search">
                     <div class="input-group">
                         <input type="search" name="searchQuery" value="" class="form-control"
                                id="searchForm"
