@@ -394,7 +394,7 @@ public class Database {
         allQueries.add(nameQuery1);
         allQueries.add(nameQuery2);
         Document findQuery = new Document("$or",allQueries);
-        FindIterable<Document> findIterable = (FindIterable<Document>)postCollection.find(findQuery);
+        FindIterable<Document> findIterable = (FindIterable<Document>)postCollection.find(findQuery).limit(8);
         ArrayList<post> MatchedPost = new ArrayList<post>();
         for (Document doc : findIterable)
         {
