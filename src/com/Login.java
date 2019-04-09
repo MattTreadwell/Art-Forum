@@ -37,9 +37,8 @@ public class Login extends HttpServlet {
             return;
         }
         password = password.trim();
-        HttpSession session = request.getSession();
-        Database database = (Database) session.getAttribute("database");
-        String mess = database.Validate(username,password.hashCode());
+        Database db = new Database();
+        String mess = db.Validate(username,password.hashCode());
         if(!mess.equals(Database.Success))
         {
             request.setAttribute("errormsg",mess);
@@ -47,7 +46,9 @@ public class Login extends HttpServlet {
             dispatch.forward(request, response);
             return;
         }
-        request.setAttribute("username",username);
+        HttpSession session1 = request.getSession(true);
+        session1.setAttribute("username", username);
+        request.setAttribute("success", "Successfully logged in as " + username);
         RequestDispatcher dispatch = getServletContext().getRequestDispatcher("/index.jsp");
         dispatch.forward(request, response);
         return;

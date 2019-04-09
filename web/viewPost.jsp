@@ -1,4 +1,21 @@
+<%@ page import="DB_util.Database" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+<%
+    // Retrieve parameter post ID
+    String id = (String) request.getParameter("id");
+
+    // Session to check if user is logged in
+    HttpSession session1 = request.getSession();
+    boolean login = null != session1.getAttribute("username");
+
+    // Make a new Database class
+    Database db = new Database();
+
+    // Check if post exists
+    db.getPostById(id);
+
+%>
 
 <html>
 <head>

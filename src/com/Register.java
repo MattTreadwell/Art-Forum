@@ -49,9 +49,8 @@ public class Register extends HttpServlet {
         }
 
         user user = new user(username,password.hashCode(),"",0,0);
-        HttpSession session = request.getSession();
-        Database database = (Database) session.getAttribute("database");
-        String mess = database.addUser(user);
+        Database db = new Database();
+        String mess = db.addUser(user);
         if(!mess.equals(Database.Success))
         {
             request.setAttribute("errormsg",mess);

@@ -27,6 +27,7 @@ public class Database {
     public static final int LINK = 2;
     public static final int IMAGE = 3;
 
+    public static final int displayNum = 8;
 
 
     // connection required variables
@@ -425,7 +426,6 @@ public class Database {
     public ArrayList<post> getPostChunk(int postIndex)
     {
 
-        int displayNum = 8;
         int postSize = getPostSize();
         int lastEndPlace = (postIndex-1)*displayNum;
         if (lastEndPlace >= postSize)

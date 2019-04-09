@@ -1,14 +1,27 @@
+<%@ page import="DB_util.Database" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    // Display success message upon user login
-    String success = (String) request.getAttribute("success");
-    if (success == null) {
-        success = "";
+    // Pagination retrieval
+    String retrieveNum = (String) request.getParameter("index");
+    int index = 1;
+    if(retrieveNum != null) {
+        index = Integer.parseInt(retrieveNum);
     }
+
     // Session to check if user is logged in
     HttpSession session1 = request.getSession();
+    boolean login = null != session1.getAttribute("username");
+
+    // Make a new Database class
+    Database db = new Database();
+
+    // Get ArrayList of Posts from db by index #
+    java.util.ArrayList<DB_util.post> postChunk = db.getPostChunk(index);
+
 %>
+
+<!-- THIS IS ONLY FOR TESTING DATABASE INTEGRATION -->
 
 <html>
 <head>
@@ -66,7 +79,7 @@
                 <!-- TODO potentially make this nicer looking -->
                 <form action="search.jsp" method="get" class="navbar-form zeroMargin" role="search">
                     <div class="input-group">
-                        <input type="search" name="searchQuery" value="" class="form-control"
+                        <input type="search" name="query" value="" class="form-control"
                                id="searchForm"
                                aria-describedby="searchHelp" placeholder="Search">
                         <button type="submit" class="btn btn-secondary"><i class="fa fa-search"></i></button>
@@ -89,6 +102,74 @@
 <div class="container-fluid postBox">
     <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-7 col-xl-5 offset-md-0 offset-sm-0 offset-lg-1 offset-xl-3">
+
+            <%
+                // Iterate over the array of posts
+                if(postChunk != null) {
+                    for(DB_util.post p : postChunk) {
+            %>
+            <div class="jumbotron post">
+                <div class="voteButtons">
+                    <span class="upvote"> </span>
+                    <p class="postScore text-center"><strong>POSTSCORE</strong></p>
+                    <span class="downvote"> </span>
+                </div>
+                <div class="postPreview">
+                    <h5 class="postTitle"><%=p.Title%> <p><%=p.OwnerName%></p></h5>
+                    <!-- THIS IS WHAT WILL DIFFER BETWEEN POST TYPES (the preview) -->
+                    <%
+                        switch (p.mPostType) {
+                            //
+                            case 1 :
+                                %>
+                                <!-- TODO need shortener function -->
+                                <p class="postTextPreview"><%=p.postContent%></p>
+                                <%
+
+
+                                break;
+                            case 2:
+                                %>
+                                <!-- TODO consider shortener here too -->
+                                <p class="postLinkPreview">
+                                    <a href="<%=p.link%>"><%=p.link%></a>
+                                </p>
+                                <%
+                                break;
+                            case 3:
+                                %>
+                                <!-- TODO consider also showing link -->
+                                <div class="text-center">
+                                    <img class="postImagePreview" src="<%=p.link%>"/>
+                                </div>
+                                <%
+                                break;
+                            default:
+                                // Error case: no post type (should probably skip)
+                                %>
+                                <p class="postTextPreview text-danger">ERROR: MISSING/INVALID POST TYPE <%=index%></p>
+                                <%
+                                break;
+                        }
+                    %>
+                    <div class="btn-group-xs">
+                        <button class="btn btn-secondary btn-xs"><%=p.mComments.size()%></button>
+                    </div>
+                </div>
+            </div>
+
+            <%
+                    }
+                } else {
+                    %>
+                    <div class="jumbotron post">
+                        <div class="text-center">
+                            <h1>No posts on this page.</h1>
+                        </div>
+                    </div>
+                    <%
+                    }
+            %>
             <!-- Text post template -->
             <div class="jumbotron post">
                 <div class="voteButtons">
@@ -99,11 +180,9 @@
                 <div class="postPreview">
                     <h5 class="postTitle">This is a text post!</h5>
                     <!-- THIS IS WHAT WILL DIFFER BETWEEN TEXT TYPES (the preview) -->
-                    <p class="postTextPreview">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vitae
-                        consectetur sapien. Sed vitae pellentesque ex. Aenean et dignissim justo. Duis maximus risus nec
-                        purus ullamcorper, non sollicitudin odio molestie.</p>
+                    <p class="postTextPreview">rip</p>
                     <div class="btn-group-xs">
-                        <button class="btn btn-secondary btn-xs">420 Comments</button>
+                        <a class="btn btn-secondary btn-xs" role="button" href="https://reddit.com">420 Comments</a>
                     </div>
                 </div>
             </div>
@@ -212,13 +291,42 @@
                     </div>
                 </div>
             </div>
+            <!-- TODO add next page and page back buttons -->
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        <%
+                            // Disable previous button for first page
+                            if(index == 1) {
+                        %>
+                        <li class="page-item disabled"><a class="page-link" href="indexDynamic.jsp?index=<%=index%>">Previous</a></li>
+                        <%
+                            } else {
+                        %>
+                        <li class="page-item"><a class="page-link" href="indexDynamic.jsp?index=<%=index-1%>">Previous</a></li>
+                        <%
+                            }
+                        %>
 
+                        <%
+                            // Check if we are on the last page
+                            if(db.getPostSize() / (index * Database.displayNum) < 1) {
+                        %>
+                        <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">Next</a></li>
+                        <%
+                        } else {
+                        %>
+                        <li class="page-item"><a class="page-link" href="indexDynamic.jsp?index=<%=index+1%>">Next</a></li>
+                        <%
+                            }
+                        %>
+                    </ul>
+                </nav>
         </div>
 
         <!-- "Right" div for showing calendar, weathers, other APIs -->
         <div class="col-sm-0 col-md-0 col-lg-3 col-xl-2  d-none d-lg-block">
             <div class="jumbotron">
-                <h5>NotReddit is the Front Page of CSCI201</h5>
+                <h5>NotReddit is the Front Page of CSCI201 DYNAMIC TEST PAGE</h5>
 
                 <div class="text-center">
                     <a class="btn btn-primary" href="newPost.jsp" role="button"><strong>CREATE POST</strong></a>
@@ -234,15 +342,17 @@
     // TODO integrate with database AND make sure post can be both upvoted and downvoted
     // This will need to be way more complex than just toggling the 'on' class
 
+    // TODO consider merging these into one once functionality is complete
     // Upvote button code
     for (const btn of document.querySelectorAll('.upvote')) {
         btn.addEventListener('click', event = > {
-            if(event.target.classList.contains("on")
-    )
+            if(event.target.classList.contains("on"))
         {
             // Button is already activated; make this un-upvote
             console.log("class on toggled off");
             event.target.classList.toggle('on');
+
+            //var db = new Packages.DB_util.
 
         }
     else
@@ -257,17 +367,16 @@
     // Downvote button code (should be an inverse of the previous)
     for (const btn of document.querySelectorAll('.downvote')) {
         btn.addEventListener('click', event = > {
-            if(event.target.classList.contains("on")
-    )
+            if(event.target.classList.contains("on"))
         {
-            // Button is already activated; make this un-upvote
+            // Button is already activated; make this un-downvote
             console.log("class on toggled off");
             event.target.classList.toggle('on');
 
         }
     else
         {
-            // Button isn't activated; upvote post and undo downvote if it's downvoted
+            // Button isn't activated; upvote post and undo upvote if it's upvoted
             event.target.classList.toggle('on');
         }
     })
