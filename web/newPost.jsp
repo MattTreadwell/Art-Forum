@@ -33,6 +33,7 @@
 
 <!-- Load JS particles -->
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<script type="text/javascript" src="./js/dropzone.js"></script>
 
 <script>
     particlesJS.load('particles-js-login', 'particles-login.json', function () {
@@ -112,9 +113,17 @@
                         <div class="form-group">
                             <label for="imageInput">Image Link</label>
                             <input name="imagelink"type="url" pattern="https://.*" class="form-control" id="imageInput" placeholder="hi.png">
+                            <div class="dropzone">
+                                <div class="fallback">
+                                    <input name="file" type="file" multiple />
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
+                    <form action="/file-upload"
+                          class="dropzone"
+                          id="my-awesome-dropzone"></form>
                 </form>
             </div>
         </div>
@@ -135,6 +144,17 @@
     });
 </script>
 
+
+<script>
+    var myDropzone = new Dropzone('.dropzone', {
+        headers: {
+            'url': "https://api.imgur.com/3/image",
+            'Authorization': 'Client-ID MY_CLIENT_ID',
+            'Cache-Control': null,
+            'X-Requested-With': null
+        }
+    });
+</script>
 
 </body>
 </html>

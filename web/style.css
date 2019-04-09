@@ -1,6 +1,6 @@
 /* CSS for fonts and libraries */
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Roboto', sans-serif !important;
 }
 
 #particles-js-login{

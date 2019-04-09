@@ -1,32 +1,4 @@
-<%@ page import="DB_util.Database" %>
-<%@ page import="DB_util.post" %>
-<%@ page import="java.util.ArrayList" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
-<%
-    String profile = request.getParameter("profile");
-
-    if(profile == null) {
-        request.setAttribute("error", "Missing user profile");
-        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("error.jsp");
-        dispatcher.forward(request, response);
-        return;
-    }
-
-    Database db = new Database();
-
-    DB_util.user userProfile = db.getUser("profile");
-
-    if(userProfile == null) {
-        request.setAttribute("error", "User " + profile + " not found.");
-        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("error.jsp");
-        dispatcher.forward(request, response);
-        return;
-    }
-
-
-
-%>
 
 <html>
 <head>
@@ -110,74 +82,15 @@
         <div class="col-sm-12 col-md-12 col-lg-4 col-xl-3 offset-md-0 offset-sm-0 offset-lg-1 offset-xl-1">
             <div class="jumbotron">
                 <div class="text-center">
-                    <h4><strong><%=userProfile.username%></strong></h4>
-                    <h5>Post Score: <%=userProfile.profile.postScore%></h5>
-                    <h5>Country: <%=userProfile.profile.country%></h5>
+                    <h4><strong>Patrick Star</strong></h4>
+                    <h5>Post Score: 570</h5>
+                    <h5>Location: Los Angeles, CA</h5>
                 </div>
             </div>
         </div>
 
         <!-- Display User Posts or Comments -->
         <div class="col-sm-12 col-md-12 col-lg-6 col-xl-5">
-            <div class="userPosts"></div>
-            <!-- dynamic post display -->
-            <%
-                // Iterate over the array of posts
-                for(DB_util.post p : userProfile.userPosts) {
-            %>
-            <div class="jumbotron post">
-                <div class="voteButtons">
-                    <span class="upvote"> </span>
-                    <p class="postScore text-center"><strong>69</strong></p>
-                    <span class="downvote"> </span>
-                </div>
-                <div class="postPreview">
-                    <h5 class="postTitle"><%=p.Title%> <p class="postUser">by <%=p.OwnerName%></p></h5>
-                    <!-- THIS IS WHAT WILL DIFFER BETWEEN TEXT TYPES (the preview) -->
-                    <%
-                        switch (p.mPostType) {
-                            //
-                            case 1 :
-                    %>
-                    <!-- TODO need shortener function -->
-                    <p class="postTextPreview"><%=p.postContent%></p>
-                    <%
-
-
-                            break;
-                        case 2:
-                    %>
-                    <!-- TODO consider shortener here too -->
-                    <p class="postLinkPreview">
-                        <a href="<%=p.link%>"><%=p.link%></a>
-                    </p>
-                    <%
-                            break;
-                        case 3:
-                    %>
-                    <!-- TODO consider also showing link -->
-                    <div class="text-center">
-                        <img class="postImagePreview" src="<%=p.link%>"/>
-                    </div>
-                    <%
-                            break;
-                        default:
-                            // Error case: no post type (should probably skip)
-                    %>
-                    <p class="postTextPreview text-danger">ERROR: MISSING/INVALID POST TYPE</p>
-                    <%
-                                break;
-                        }
-                    %>
-                    <div class="btn-group-xs">
-                        <button class="btn btn-secondary btn-xs">420 Comments</button>
-                    </div>
-                </div>
-            </div>
-
-            <%
-                }
-            %>
             <!-- Text post template -->
             <div class="jumbotron post">
                 <div class="voteButtons">
