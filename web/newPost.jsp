@@ -118,19 +118,24 @@
                             <label for="imageInput">Image Link</label>
                             <input name="imagelink" type="url" pattern="https://.*" class="form-control" id="imageInput"
                                    placeholder="hi.png">
+                            <div class="text-center">
+                                <p><strong>or</strong></p>
+                            </div>
+                            <label for="image-upload">Image Upload</label>
+                            <!-- Dropzone Imgur uploader -->
+                            <div class="dropzone needsclick" id="image-upload">
+                                <div class="dz-message needsclick">
+                                    Drop an image here or click to upload.<BR>
+                                    <span class="note needsclick">(files are uploaded to imgur)</span>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
 
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
                 </form>
-                <div class="dropzone needsclick" id="image-upload" >
-                    <div class="dz-message needsclick">
-                        Drop an image here or click to upload.<BR>
-                        <span class="note needsclick">(files are uploaded to imgur)</span>
-                    </div>
-                </div>
-                <div id="log">initial content</div>
-
 
             </div>
         </div>
@@ -156,6 +161,7 @@
     Dropzone.autoDiscover = false;
 
     var myDropzone = new Dropzone("div#image-upload", {
+        maxFiles: 1, // only allow one image per post (no albums)
         url: "https://api.imgur.com/3/image", //imgur endpoint for image upload
         paramName: "image", //important for imgur request name
         acceptedFiles: "image/*", //only allow image files to be uploaded
@@ -169,23 +175,22 @@
             this.on("success", function (file, response) {
                 // Called after the file successfully uploaded.
                 var field = document.getElementById("imageInput");
-                field.value = response.imageUrl;
-                console.log(response.link);
+                //console.log(response);
+                field.value = response.data.link;
                 console.log("uploaded image");
-                document.getElementById('log').innerHTML += '<br>Some new content!';
 
             });
             this.on("addedfile", function(file) {
-                document.getElementById('log').innerHTML += '<br> addedFile path\:' + file.fullPath;
+
             });
             this.on("sending", function(file, xhr, data) {
-                document.getElementById('log').innerHTML += '<br> sending path\:' + file.fullPath;
-                if(file.fullPath){
-                    data.append("fullPath", file.fullPath);
-                    console.log(file.fullPath);
-                }
+
             });
-        },
+            this.on("maxfilesexceeded", function(file){
+                alert("Only one image is allowed per post!");
+            });
+        }
+
 
 
     });

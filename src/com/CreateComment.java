@@ -12,7 +12,7 @@ public class CreateComment extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO finish this
         // This allows a user to make a comment
-        // First check if a user is logged in by retrieving the 'username' session variable
+        // First check if a user is logged in by retrieving the 'username' session variable (otherwise redirect to error page)
         // If an error occurs, redirect to error.jsp with attribute 'errormsg' set to the error
     }
 
