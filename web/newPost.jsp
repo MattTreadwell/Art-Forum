@@ -128,12 +128,12 @@
                     <button type="submit" class="btn btn-primary">Submit</button>
 
                 </form>
-                <form class="dropzone needsclick" id="image-upload" action="https://api.imgur.com/3/image">
+                <div class="dropzone needsclick" id="image-upload" >
                     <div class="dz-message needsclick">
                         Drop an image here or click to upload.<BR>
                         <span class="note needsclick">(files are uploaded to imgur)</span>
                     </div>
-                </form>
+                </div>
 
             </div>
         </div>
@@ -156,16 +156,7 @@
 
 
 <script>
-    var myDropzone = new Dropzone('#image-upload', {
-
-        /*        headers: {
-                    'url': "https://api.imgur.com/3/image",
-                    'Authorization': 'Client-ID MY_CLIENT_ID',
-                    'Cache-Control': null,
-                    'X-Requested-With': null
-                }*/
-    });
-    myDropzone.options.addFiles = {
+    var myDropzone = new Dropzone("div#image-upload", {
         url: "https://api.imgur.com/3/image", //imgur endpoint for image upload
         paramName: "image", //important for imgur request name
         acceptedFiles: "image/*", //only allow image files to be uploaded
@@ -173,19 +164,34 @@
         headers: {
             'Cache-Control': null, //required for cors
             'X-Requested-With': null, //required for cors
-            'Authorization': "Client-ID YOUR_CLIENT_ID" //replace YOUR_CLIENT_ID with the one obtained from imgur
+            'Authorization': "Client-ID 2f9f1077add92ee" //replace YOUR_CLIENT_ID with the one obtained from imgur
         },
         init: function () {
-            this.on("success", function (file, serverResponse) {
+            this.on("success", function (file, response) {
                 // Called after the file successfully uploaded.
                 document.getElementById("imageInput").value
                 var field = document.getElementById("imageInput");
                 field.value = serverResponse.imageUrl;
-
+                console.log(serverResponse.link);
                 console.log("uploaded image");
+                document.getElementById('log').innerHTML += '<br>Some new content!';
+
+            });
+        },
+        init: function() {
+            this.on("addedfile", function(file) {
+                document.getElementById('log').innerHTML += '<br> hihi' + file.fullPath;
+            });
+        },
+        init: function() {
+            this.on("sending", function(file, xhr, data) {
+                if(file.fullPath){
+                    data.append("fullPath", file.fullPath);
+                }
             });
         }
-    }
+
+    });
 
 
 </script>
