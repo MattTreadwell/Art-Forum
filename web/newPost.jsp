@@ -118,11 +118,6 @@
                             <label for="imageInput">Image Link</label>
                             <input name="imagelink" type="url" pattern="https://.*" class="form-control" id="imageInput"
                                    placeholder="hi.png">
-                            <div class="dropzone">
-                                <div class="fallback">
-                                    <input name="file" type="file" multiple/>
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
@@ -134,6 +129,8 @@
                         <span class="note needsclick">(files are uploaded to imgur)</span>
                     </div>
                 </div>
+                <div id="log">initial content</div>
+
 
             </div>
         </div>
@@ -156,6 +153,8 @@
 
 
 <script>
+    Dropzone.autoDiscover = false;
+
     var myDropzone = new Dropzone("div#image-upload", {
         url: "https://api.imgur.com/3/image", //imgur endpoint for image upload
         paramName: "image", //important for imgur request name
@@ -169,7 +168,6 @@
         init: function () {
             this.on("success", function (file, response) {
                 // Called after the file successfully uploaded.
-                document.getElementById("imageInput").value
                 var field = document.getElementById("imageInput");
                 field.value = serverResponse.imageUrl;
                 console.log(serverResponse.link);
@@ -177,19 +175,17 @@
                 document.getElementById('log').innerHTML += '<br>Some new content!';
 
             });
-        },
-        init: function() {
             this.on("addedfile", function(file) {
                 document.getElementById('log').innerHTML += '<br> hihi' + file.fullPath;
             });
-        },
-        init: function() {
             this.on("sending", function(file, xhr, data) {
                 if(file.fullPath){
                     data.append("fullPath", file.fullPath);
+                    console.log(file.fullPath);
                 }
             });
-        }
+        },
+
 
     });
 
