@@ -169,16 +169,17 @@
             this.on("success", function (file, response) {
                 // Called after the file successfully uploaded.
                 var field = document.getElementById("imageInput");
-                field.value = serverResponse.imageUrl;
-                console.log(serverResponse.link);
+                field.value = response.imageUrl;
+                console.log(response.link);
                 console.log("uploaded image");
                 document.getElementById('log').innerHTML += '<br>Some new content!';
 
             });
             this.on("addedfile", function(file) {
-                document.getElementById('log').innerHTML += '<br> hihi' + file.fullPath;
+                document.getElementById('log').innerHTML += '<br> addedFile path\:' + file.fullPath;
             });
             this.on("sending", function(file, xhr, data) {
+                document.getElementById('log').innerHTML += '<br> sending path\:' + file.fullPath;
                 if(file.fullPath){
                     data.append("fullPath", file.fullPath);
                     console.log(file.fullPath);
