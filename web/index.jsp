@@ -1,4 +1,5 @@
 <%@ page import="DB_util.Database" %>
+<%@ page import="com.webHelper" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -11,7 +12,8 @@
 
     // Session to check if user is logged in
     HttpSession session1 = request.getSession();
-    boolean login = null != session1.getAttribute("username");
+    String username = (String) session1.getAttribute("username");
+    boolean login = null != username;
 
     // Make a new Database class
     Database db = new Database();
@@ -90,10 +92,23 @@
         </ul>
 
         <ul class="nav navbar-nav ml-auto w-100 justify-content-end">
+            <%
+                if(login) {
+            %>
+            <li>
+                <a class="btn btn-primary" href="profile.jsp" role="button"><%=username%></a>
+                <a class="btn btn-outline-primary" href="Logout" role="button">Logout</a>
+            </li>
+            <%
+                } else {
+            %>
             <li>
                 <a class="btn btn-primary" href="login.jsp" role="button">Login</a>
                 <a class="btn btn-outline-primary" href="register.jsp" role="button">Sign Up</a>
             </li>
+            <%
+                }
+            %>
         </ul>
 
     </div>
@@ -111,11 +126,12 @@
             <div class="jumbotron post">
                 <div class="voteButtons">
                     <span class="upvote"> </span>
-                    <p class="postScore text-center"><strong>POSTSCORE</strong></p>
+                    <p class="postScore text-center"><strong><%=p.mPostScore%></strong></p>
                     <span class="downvote"> </span>
                 </div>
                 <div class="postPreview">
-                    <h5 class="postTitle"><%=p.Title%> <p><%=p.OwnerName%></p></h5>
+                    <h5 class="postTitle"><%=p.Title%> </h5>
+                    <p class="postUser">By <a href=""><%=p.OwnerName%></a></p>
                     <!-- THIS IS WHAT WILL DIFFER BETWEEN POST TYPES (the preview) -->
                     <%
                         switch (p.mPostType) {
@@ -147,13 +163,13 @@
                             default:
                                 // Error case: no post type (should probably skip)
                                 %>
-                                <p class="postTextPreview text-danger">ERROR: MISSING/INVALID POST TYPE <%=index%></p>
+                                <p class="postTextPreview text-danger">ERROR: MISSING/INVALID POST TYPE</p>
                                 <%
                                 break;
                         }
                     %>
                     <div class="btn-group-xs">
-                        <button class="btn btn-secondary btn-xs"><%=p.mComments.size()%></button>
+                        <button class="btn btn-secondary btn-xs"><%=webHelper.commentNumber(p.mComments.size())%> Comments</button>
                     </div>
                 </div>
             </div>
@@ -199,7 +215,7 @@
                         <a href="https://www.reddit.com/">https://www.reddit.com/</a>
                     </p>
                     <div class="btn-group-xs">
-                        <button class="btn btn-secondary btn-xs">5.7k Comments</button>
+                        <button class="btn btn-secondary btn-xs"><%=webHelper.commentNumber(4782)%> comments</button>
                     </div>
                 </div>
             </div>
@@ -298,11 +314,11 @@
                             // Disable previous button for first page
                             if(index == 1) {
                         %>
-                        <li class="page-item disabled"><a class="page-link" href="indexDynamic.jsp?index=<%=index%>">Previous</a></li>
+                        <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">Previous</a></li>
                         <%
                             } else {
                         %>
-                        <li class="page-item"><a class="page-link" href="indexDynamic.jsp?index=<%=index-1%>">Previous</a></li>
+                        <li class="page-item"><a class="page-link" href="index.jsp?index=<%=index-1%>">Previous</a></li>
                         <%
                             }
                         %>
@@ -315,7 +331,7 @@
                         <%
                         } else {
                         %>
-                        <li class="page-item"><a class="page-link" href="indexDynamic.jsp?index=<%=index+1%>">Next</a></li>
+                        <li class="page-item"><a class="page-link" href="index.jsp?index=<%=index+1%>">Next</a></li>
                         <%
                             }
                         %>
@@ -326,7 +342,7 @@
         <!-- "Right" div for showing calendar, weathers, other APIs -->
         <div class="col-sm-0 col-md-0 col-lg-3 col-xl-2  d-none d-lg-block">
             <div class="jumbotron">
-                <h5>NotReddit is the Front Page of CSCI201 DYNAMIC TEST PAGE</h5>
+                <h5>NotReddit is the Front Page of CSCI201</h5>
 
                 <div class="text-center">
                     <a class="btn btn-primary" href="newPost.jsp" role="button"><strong>CREATE POST</strong></a>

@@ -87,7 +87,7 @@ body {
 }
 
 .container-fluid.postBox {
-    margin-top: 10vh;
+    margin-top: 3vh;
     max-width: 1800px;
 }
 
@@ -108,6 +108,12 @@ body {
 
 .postTitle {
     font-weight: bold;
+    margin-bottom: 0;
+}
+
+.postUser {
+    font-size: small;
+    margin-bottom: 0;
 }
 
 .postTextPreview {

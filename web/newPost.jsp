@@ -11,6 +11,7 @@
 
     <!-- Load fonts, libraries, and css -->
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="dropzone.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"
           integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
@@ -25,6 +26,8 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
             integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
             crossorigin="anonymous"></script>
+    <script type="text/javascript" src="./js/dropzone.js"></script>
+
 
 </head>
 <body>
@@ -33,7 +36,6 @@
 
 <!-- Load JS particles -->
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-<script type="text/javascript" src="./js/dropzone.js"></script>
 
 <script>
     particlesJS.load('particles-js-login', 'particles-login.json', function () {
@@ -104,27 +106,35 @@
                         <label for="exampleFormControlTextarea1">Text</label>
                         <textarea name="text" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
                     </div>
-                    <!-- Link/Image Form -->
+                    <!-- Link Form -->
                     <div class="form-group toggle" id="linkForm">
                         <label for="linkInput">URL</label>
-                        <input name="link" type="url" pattern="https://.*" class="form-control" id="linkInput" placeholder="https://notreddit.com">
+                        <input name="link" type="url" pattern="https://.*" class="form-control" id="linkInput"
+                               placeholder="https://notreddit.com">
                     </div>
+                    <!-- Image Form -->
                     <div class="toggle" id="imageForm">
                         <div class="form-group">
                             <label for="imageInput">Image Link</label>
-                            <input name="imagelink"type="url" pattern="https://.*" class="form-control" id="imageInput" placeholder="hi.png">
+                            <input name="imagelink" type="url" pattern="https://.*" class="form-control" id="imageInput"
+                                   placeholder="hi.png">
                             <div class="dropzone">
                                 <div class="fallback">
-                                    <input name="file" type="file" multiple />
+                                    <input name="file" type="file" multiple/>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
-                    <form action="/file-upload"
-                          class="dropzone"
-                          id="my-awesome-dropzone"></form>
+
                 </form>
+                <form class="dropzone needsclick" id="image-upload" action="https://api.imgur.com/3/image">
+                    <div class="dz-message needsclick">
+                        Drop an image here or click to upload.<BR>
+                        <span class="note needsclick">(files are uploaded to imgur)</span>
+                    </div>
+                </form>
+
             </div>
         </div>
 
@@ -138,7 +148,7 @@
     $('.toggle').hide();//Hide all by default
 
 
-    $('select').on('change', function() {
+    $('select').on('change', function () {
         $('.toggle').hide();//Hide all
         $("#" + $(this).children("option:selected").val()).show();
     });
@@ -146,14 +156,38 @@
 
 
 <script>
-    var myDropzone = new Dropzone('.dropzone', {
-        headers: {
-            'url': "https://api.imgur.com/3/image",
-            'Authorization': 'Client-ID MY_CLIENT_ID',
-            'Cache-Control': null,
-            'X-Requested-With': null
-        }
+    var myDropzone = new Dropzone('#image-upload', {
+
+        /*        headers: {
+                    'url': "https://api.imgur.com/3/image",
+                    'Authorization': 'Client-ID MY_CLIENT_ID',
+                    'Cache-Control': null,
+                    'X-Requested-With': null
+                }*/
     });
+    myDropzone.options.addFiles = {
+        url: "https://api.imgur.com/3/image", //imgur endpoint for image upload
+        paramName: "image", //important for imgur request name
+        acceptedFiles: "image/*", //only allow image files to be uploaded
+        method: "post",
+        headers: {
+            'Cache-Control': null, //required for cors
+            'X-Requested-With': null, //required for cors
+            'Authorization': "Client-ID YOUR_CLIENT_ID" //replace YOUR_CLIENT_ID with the one obtained from imgur
+        },
+        init: function () {
+            this.on("success", function (file, serverResponse) {
+                // Called after the file successfully uploaded.
+                document.getElementById("imageInput").value
+                var field = document.getElementById("imageInput");
+                field.value = serverResponse.imageUrl;
+
+                console.log("uploaded image");
+            });
+        }
+    }
+
+
 </script>
 
 </body>
