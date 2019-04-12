@@ -52,7 +52,7 @@
 <!-- Navbar -->
 <nav class="navbar navbar-expand-md navbar-light bg-light justify-content-center">
     <img class="navIcon d-none d-md-block" src="img/icon.jpg" alt="">
-    <a href="index.jsp" class="navbar-brand d-flex w-50 mr-auto"><strong>NotReddit</strong></a>
+    <a href="index.jsp" class="navbar-brand d-flex w-50 mr-auto"><strong>Art Forum</strong></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -77,10 +77,12 @@
 
         <ul class="nav navbar-nav ml-auto w-100 justify-content-end">
             <%
-                if (login) {
+                if(login) {
             %>
-            <a class="btn btn-primary" href="profile.jsp" role="button"><%=username%>
-            </a>
+            <li>
+                <a class="btn btn-primary" href="profile.jsp" role="button"><%=username%></a>
+                <a class="btn btn-outline-primary" href="Logout" role="button">Logout</a>
+            </li>
             <%
             } else {
             %>
@@ -92,6 +94,7 @@
                 }
             %>
         </ul>
+
     </div>
 </nav>
 

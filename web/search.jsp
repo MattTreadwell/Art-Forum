@@ -4,8 +4,6 @@
 
 
 <%
-
-    // TODO: QUERY IS NULL, FIX NEEDED
     String query = (String) request.getParameter("query");
 
     // Session to check if user is logged in
@@ -66,7 +64,7 @@
 <!-- Navbar -->
 <nav class="navbar navbar-expand-md navbar-light bg-light justify-content-center">
     <img class="navIcon d-none d-md-block" src="img/icon.jpg" alt="">
-    <a href="index.jsp" class="navbar-brand d-flex w-50 mr-auto"><strong>NotReddit</strong></a>
+    <a href="index.jsp" class="navbar-brand d-flex w-50 mr-auto"><strong>Art Forum</strong></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -186,133 +184,11 @@
             <%
                 }
             %>
-            <!-- Text post template -->
-            <div class="jumbotron post">
-                <div class="voteButtons">
-                    <span class="upvote"> </span>
-                    <p class="postScore text-center"><strong>69</strong></p>
-                    <span class="downvote"> </span>
-                </div>
-                <div class="postPreview">
-                    <h5 class="postTitle">This is a text post!</h5>
-                    <!-- THIS IS WHAT WILL DIFFER BETWEEN TEXT TYPES (the preview) -->
-                    <p class="postTextPreview">rip</p>
-                    <div class="btn-group-xs">
-                        <a class="btn btn-secondary btn-xs" role="button" href="https://reddit.com">420 Comments</a>
-                    </div>
-                </div>
-            </div>
-            <!-- Link post template  -->
-            <div class="jumbotron post">
-                <div class="voteButtons">
-                    <span class="upvote"> </span>
-                    <p class="postScore text-center"><strong>1337</strong></p>
-                    <span class="downvote"> </span>
-                </div>
-                <div class="postPreview">
-                    <h5 class="postTitle">This is a link post!</h5>
-                    <p class="postLinkPreview">
-                        <a href="https://www.reddit.com/">https://www.reddit.com/</a>
-                    </p>
-                    <div class="btn-group-xs">
-                        <button class="btn btn-secondary btn-xs"><%=webHelper.commentNumber(4782)%> comments</button>
-                    </div>
-                </div>
-            </div>
-            <!-- Image post template -->
-            <div class="jumbotron post">
-                <div class="voteButtons">
-                    <span class="upvote"> </span>
-                    <p class="postScore text-center"><strong>1324</strong></p>
-                    <span class="downvote"> </span>
-                </div>
-                <div class="postPreview">
-                    <h5 class="postTitle">This is a normal 16:9 image post!</h5>
-                    <div class="text-center">
-                        <img class="postImagePreview" src="img/normalimage.jpg"/>
-                    </div>
-
-                    <div class="btn-group-xs">
-                        <button class="btn btn-secondary btn-xs">7.7k Comments</button>
-                    </div>
-                </div>
-            </div>
-            <!-- Odd image sizes -->
-            <div class="jumbotron post">
-                <div class="voteButtons">
-                    <span class="upvote"> </span>
-                    <p class="postScore text-center"><strong>1324</strong></p>
-                    <span class="downvote"> </span>
-                </div>
-                <div class="postPreview">
-                    <h5 class="postTitle">This is a (fairly) square 1:1 image post!</h5>
-                    <div class="text-center">
-                        <img class="postImagePreview" src="img/squareimage.jpg"/>
-                    </div>
-
-                    <div class="btn-group-xs">
-                        <button class="btn btn-secondary btn-xs">7.7k Comments</button>
-                    </div>
-                </div>
-            </div>
-            <div class="jumbotron post">
-                <div class="voteButtons">
-                    <span class="upvote"> </span>
-                    <p class="postScore text-center"><strong>1324</strong></p>
-                    <span class="downvote"> </span>
-                </div>
-                <div class="postPreview">
-                    <h5 class="postTitle">This is a tall image post!</h5>
-                    <div class="text-center">
-                        <img class="postImagePreview" src="img/tallimage.png"/>
-                    </div>
-
-                    <div class="btn-group-xs">
-                        <button class="btn btn-secondary btn-xs">7.7k Comments</button>
-                    </div>
-                </div>
-            </div>
-            <div class="jumbotron post">
-                <div class="voteButtons">
-                    <span class="upvote"> </span>
-                    <p class="postScore text-center"><strong>1324</strong></p>
-                    <span class="downvote"> </span>
-                </div>
-                <div class="postPreview">
-                    <h5 class="postTitle">This is a GIF post!</h5>
-                    <div class="text-center">
-                        <img class="postImagePreview" src="img/giftest.gif"/>
-                    </div>
-
-                    <div class="btn-group-xs">
-                        <button class="btn btn-secondary btn-xs">7.7k Comments</button>
-                    </div>
-                </div>
-            </div>
-            <div class="jumbotron post">
-                <div class="voteButtons">
-                    <span class="upvote"> </span>
-                    <p class="postScore text-center"><strong>1324</strong></p>
-                    <span class="downvote"> </span>
-                </div>
-                <div class="postPreview">
-                    <h5 class="postTitle">This is a broken image post!</h5>
-                    <div class="text-center">
-                        <img class="postImagePreview" src="invalid" alt="image not found"
-                             onerror="this.src='img/notfound.png'"/>
-                    </div>
-
-                    <div class="btn-group-xs">
-                        <button class="btn btn-secondary btn-xs">7.7k Comments</button>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <!-- "Right" div for showing calendar, weathers, other APIs -->
         <div class="col-sm-0 col-md-0 col-lg-3 col-xl-2  d-none d-lg-block">
             <div class="jumbotron">
-                <h5>NotReddit is the Front Page of CSCI201</h5>
+                <h5>Art Forum is the Front Page of CSCI201</h5>
 
                 <div class="text-center">
                     <a class="btn btn-primary" href="newPost.jsp" role="button"><strong>CREATE POST</strong></a>

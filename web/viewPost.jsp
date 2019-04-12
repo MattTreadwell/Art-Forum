@@ -7,19 +7,20 @@
 
     // Session to check if user is logged in
     HttpSession session1 = request.getSession();
-    boolean login = null != session1.getAttribute("username");
+    String username = (String) session1.getAttribute("username");
+    boolean login = null != username;
 
     // Make a new Database class
-    Database db = new Database();
+    //Database db = new Database();
 
     // Check if post exists
-    db.getPostById(id);
+    // db.getPostById(id);
 
 %>
 
 <html>
 <head>
-    <title>NotReddit</title>
+    <title>Art Forum</title>
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densityDpi=device-dpi"/>
     <meta name="description"
@@ -30,6 +31,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:300" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"
           integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <script src="https://unpkg.com/scrollreveal"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.js"
             integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
             crossorigin="anonymous"></script>
@@ -60,7 +62,7 @@
 <!-- Navbar -->
 <nav class="navbar navbar-expand-md navbar-light bg-light justify-content-center">
     <img class="navIcon d-none d-md-block" src="img/icon.jpg" alt="">
-    <a href="index.jsp" class="navbar-brand d-flex w-50 mr-auto"><strong>NotReddit</strong></a>
+    <a href="index.jsp" class="navbar-brand d-flex w-50 mr-auto"><strong>Art Forum</strong></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -73,7 +75,7 @@
                 <!-- TODO potentially make this nicer looking -->
                 <form action="search.jsp" method="get" class="navbar-form zeroMargin" role="search">
                     <div class="input-group">
-                        <input type="search" name="searchQuery" value="" class="form-control"
+                        <input type="search" name="query" value="" class="form-control"
                                id="searchForm"
                                aria-describedby="searchHelp" placeholder="Search">
                         <button type="submit" class="btn btn-secondary"><i class="fa fa-search"></i></button>
@@ -84,10 +86,23 @@
         </ul>
 
         <ul class="nav navbar-nav ml-auto w-100 justify-content-end">
+            <%
+                if(login) {
+            %>
+            <li>
+                <a class="btn btn-primary" href="profile.jsp" role="button"><%=username%></a>
+                <a class="btn btn-outline-primary" href="Logout" role="button">Logout</a>
+            </li>
+            <%
+            } else {
+            %>
             <li>
                 <a class="btn btn-primary" href="login.jsp" role="button">Login</a>
                 <a class="btn btn-outline-primary" href="register.jsp" role="button">Sign Up</a>
             </li>
+            <%
+                }
+            %>
         </ul>
 
     </div>
@@ -109,9 +124,20 @@
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vitae consectetur sapien. Sed
                         vitae pellentesque ex. Aenean et dignissim justo.</p>
                     <div class="btn-group-xs">
-                        <button class="btn btn-secondary btn-xs">420 Comments</button>
+                        <button class="btn btn-light btn-xs">420 Comments</button>
                     </div>
                 </div>
+
+                <div class="postSeparator"></div>
+
+                <form action="CreateComment" method="post">
+                    <div class="form-group">
+                        <textarea class="form-control" rows="5" id="comment" placeholder="Write your comment here . . ."></textarea>
+                    </div>
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
             </div>
 
             <!-- Comments go here -->
@@ -128,7 +154,9 @@
                         <p>Feelsbadman.jpg</p>
                     </div>
                 </div>
+            </div>
 
+            <div class="jumbotron post">
                 <div class="comment">
                     <div class="voteButtons">
                         <span class="upvote"> </span>
@@ -148,10 +176,10 @@
             </div>
         </div>
 
-        <!-- "Right" div for showing calendar, weathers, other APIs -->
+        <!-- "Right" div for showing other post previews from the user -->
         <div class="col-sm-0 col-md-0 col-lg-3 col-xl-2  d-none d-lg-block">
             <div class="jumbotron">
-                <h5>NotReddit is the Front Page of CSCI201</h5>
+                <h5>Art Forum is the Front Page of CSCI201</h5>
 
                 <div class="text-center">
                     <a class="btn btn-primary" href="newPost.jsp" role="button"><strong>CREATE POST</strong></a>
@@ -162,6 +190,9 @@
     </div>
 </div>
 
+<script>
+    ScrollReveal().reveal('.jumbotron', {reset: false, delay: 200});
+</script>
 
 </body>
 </html>

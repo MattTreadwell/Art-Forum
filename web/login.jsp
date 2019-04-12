@@ -1,5 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
+<%
+    // Session to check if user is logged in
+    HttpSession session1 = request.getSession();
+    String username = (String) session1.getAttribute("username");
+    boolean login = null != username;
+%>
+
 <html>
 <head>
     <title>Login</title>
@@ -43,21 +50,21 @@
 
 <!-- Navbar -->
 <nav class="navbar navbar-expand-md navbar-light bg-light justify-content-center">
-    <a href="index.jsp" class="navbar-brand d-flex w-50 mr-auto"><strong>NotReddit</strong></a>
+    <img class="navIcon d-none d-md-block" src="img/icon.jpg" alt="">
+    <a href="index.jsp" class="navbar-brand d-flex w-50 mr-auto"><strong>Art Forum</strong></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-
 
     <div class="collapse navbar-collapse w-100" id="navbarSupportedContent">
 
         <ul class="navbar-nav w-100 justify-content-center">
             <li>
                 <!-- TODO potentially make this nicer looking -->
-                <form class="navbar-form" role="search" style="margin: 0px 0px">
+                <form action="search.jsp" method="get" class="navbar-form zeroMargin" role="search">
                     <div class="input-group">
-                        <input type="search" name="searchQuery" value="" class="form-control"
+                        <input type="search" name="query" value="" class="form-control"
                                id="searchForm"
                                aria-describedby="searchHelp" placeholder="Search">
                         <button type="submit" class="btn btn-secondary"><i class="fa fa-search"></i></button>
@@ -68,10 +75,23 @@
         </ul>
 
         <ul class="nav navbar-nav ml-auto w-100 justify-content-end">
+            <%
+                if(login) {
+            %>
+            <li>
+                <a class="btn btn-primary" href="profile.jsp" role="button"><%=username%></a>
+                <a class="btn btn-outline-primary" href="Logout" role="button">Logout</a>
+            </li>
+            <%
+            } else {
+            %>
             <li>
                 <a class="btn btn-primary" href="login.jsp" role="button">Login</a>
                 <a class="btn btn-outline-primary" href="register.jsp" role="button">Sign Up</a>
             </li>
+            <%
+                }
+            %>
         </ul>
 
     </div>
