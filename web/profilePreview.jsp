@@ -2,7 +2,7 @@
 
 <html>
 <head>
-    <title>NotReddit</title>
+    <title>Art Forum</title>
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densityDpi=device-dpi"/>
     <meta name="description"
@@ -43,7 +43,7 @@
 <!-- Navbar -->
 <nav class="navbar navbar-expand-md navbar-light bg-light justify-content-center">
     <img class="navIcon d-none d-md-block" src="img/icon.jpg" alt="">
-    <a href="index.jsp" class="navbar-brand d-flex w-50 mr-auto"><strong>NotReddit</strong></a>
+    <a href="index.jsp" class="navbar-brand d-flex w-50 mr-auto"><strong>Art Forum</strong></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -101,9 +101,9 @@
                 <div class="postPreview">
                     <h5 class="postTitle">This is a text post!</h5>
                     <!-- THIS IS WHAT WILL DIFFER BETWEEN TEXT TYPES (the preview) -->
-                    <p class="postTextPreview">What the fuck did you just fucking say about me, you little bitch? I'll
-                        have you know I graduated top of my class in the Navy Seals, and I've been involved in numerous
-                        secret raids on Al-Quaeda,</p>
+                    <p class="postTextPreview">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vitae
+                        consectetur sapien. Sed vitae pellentesque ex. Aenean et dignissim justo. Duis maximus risus nec
+                        purus ullamcorper, non sollicitudin odio molestie.</p>
                     <div class="btn-group-xs">
                         <button class="btn btn-secondary btn-xs">420 Comments</button>
                     </div>

@@ -47,7 +47,7 @@ public class CreatePost extends HttpServlet {
         }
         HttpSession session = request.getSession();
         String username = (String)session.getAttribute("username");
-        Database database = (Database)session.getAttribute("database");
+        Database db = new Database();
         post post;
         if(selection.equals("textForm"))
         {
@@ -61,7 +61,7 @@ public class CreatePost extends HttpServlet {
         {
             post = new post(title,username,"",input, Database.IMAGE);
         }
-        database.addPost(post);
+        db.addPost(post);
         RequestDispatcher dispatch = getServletContext().getRequestDispatcher("/index.jsp");
         dispatch.forward(request, response);
         return;
