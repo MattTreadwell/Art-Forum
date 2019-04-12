@@ -26,7 +26,6 @@ public class Database {
     public static final int TEXT = 1;
     public static final int LINK = 2;
     public static final int IMAGE = 3;
-
     public static final int displayNum = 8;
 
 
@@ -35,12 +34,19 @@ public class Database {
     public MongoClient mongoClient;
 
     public MongoDatabase database;
+    public MongoCollection userCollection;
+    public MongoCollection postCollection;
+    public MongoCollection commentCollection;
     public Database()
     {
         uri = new MongoClientURI(
                 "mongodb+srv://csci201project:csci201project@cluster0-tprgw.mongodb.net/CSCI201?retryWrites=true");
         mongoClient = new MongoClient(uri);
         database = mongoClient.getDatabase("CSCI201");
+
+        userCollection = database.getCollection("users");
+        postCollection = database.getCollection("posts");
+        commentCollection = database.getCollection("comments");
     }
 
     public String Validate(String Username, int Password)
@@ -66,9 +72,9 @@ public class Database {
     }
     public String addUser(user u)
     {
-        MongoCollection collection = database.getCollection("users");
+
         String uname = u.username;
-        FindIterable<Document> findIterable = collection.find(eq("Username", uname));
+        FindIterable<Document> findIterable = userCollection.find(eq("Username", uname));
         ArrayList<Document> checker = new ArrayList<Document>();
         for (Document doc : findIterable)
         {
@@ -90,13 +96,11 @@ public class Database {
         uProfile.append("RegisterDate",u.profile.registerDate);
         uProfile.append("PostScore",u.profile.postScore);
         mUser.append("Profile",uProfile);
-        collection.insertOne(mUser);
+        userCollection.insertOne(mUser);
         return Success;
     }
     public void addPost(post p)
     {
-        MongoCollection userCollection = database.getCollection("users");
-        MongoCollection postCollection = database.getCollection("posts");
 
         //initialize and then push this post into posts Collection.
         Document newPost = new Document();
@@ -130,53 +134,37 @@ public class Database {
         //DEBUG:
         lastPost = thisPostId;
     }
-    public post getPostById(ObjectId mPostId)
+    public ArrayList<comment> getUserComment(String uname)
     {
-        // first ,get all the needed collections/document.
-        MongoCollection userCollection = database.getCollection("users");
-        MongoCollection postCollection = database.getCollection("posts");
-        MongoCollection commentCollection = database.getCollection("comments");
-        Document Post = (Document)postCollection.find(eq("_id",mPostId)).first();
-        Document PostBody = (Document)Post.get("PostBody");
-        ObjectId PostUserId = PostBody.getObjectId("UserId");
-        Document PostUser = (Document)userCollection.find(eq("_id",PostUserId)).first();
-        // now, begin retrieving data.
-        post np = new post();
-        np.Title = PostBody.getString("Title");
-        np.postDate = Post.getDate("PostDate");
-        np._postId = Post.getObjectId("_id");
-        np.ownerId = PostBody.getObjectId("UserId");
-        np.OwnerName = PostUser.getString("Username");
-        np.postContent = PostBody.getString("PostContent");
-        np.link = PostBody.getString("Link");
-        np.mPostType = PostBody.getInteger("PostType");
-        np.mPostScore = Post.getInteger("PostScore");
-        //now, begin handling comments.
-        np.mCommentIds = (ArrayList<ObjectId>)Post.get("CommentIDs");
-        for( int i=0; i<np.mCommentIds.size(); i++)
+        Document User;
+        try {
+            User = (Document) userCollection.find(eq("Username", uname)).first();
+        } catch (Exception e)
         {
-            Document Comment = (Document)commentCollection.find(eq("_id",np.mCommentIds.get(i))).first();
+            return null;
+        }
+
+        ArrayList<ObjectId> CommentIds = (ArrayList<ObjectId>)User.get("CommentIDs");
+        ArrayList<comment> mComment = new ArrayList<comment>();
+        for(ObjectId id : CommentIds)
+        {
+            Document Comment = (Document)commentCollection.find(eq("_id",id)).first();
             comment nc = new comment();
             nc.commentContent = Comment.getString("CommentContent");
+            nc.uname = uname;
             nc._commentId = Comment.getObjectId("_id");
             nc._userId = Comment.getObjectId("UserId");
-            Document cUser = (Document)userCollection.find(eq("_id",nc._userId)).first();
-            nc.uname = cUser.getString("Username");
             nc.postId = Comment.getObjectId("PostId");
             nc.commentDate = Comment.getDate("CommentDate");
-            np.mComments.add(nc);
+            mComment.add(nc);
         }
-        return np;
+
+        return mComment;
 
     }
-
-
-
     public user getUser(String uname)
     {
-        MongoCollection userCollection = database.getCollection("users");
-        MongoCollection postCollection = database.getCollection("posts");
-        MongoCollection commentCollection = database.getCollection("comments");
+
         Document User;
         try {
             User = (Document) userCollection.find(eq("Username", uname)).first();
@@ -210,6 +198,7 @@ public class Database {
             boolean mLinkImage;
             public String link;
          */
+        /*
         for (int i=0; i<u.mCommentIds.size(); i++)
         {
             Document Comment = (Document)commentCollection.find(eq("_id",u.mCommentIds.get(i))).first();
@@ -222,6 +211,7 @@ public class Database {
             nc.commentDate = Comment.getDate("CommentDate");
             u.userComments.add(nc);
         }
+        */
         for (int i=0; i<u.mPostIds.size(); i++)
         {
             Document Post = (Document)postCollection.find(eq("_id",u.mPostIds.get(i))).first();
@@ -250,10 +240,6 @@ public class Database {
     public void addComment(comment cm)
     {
         /****retrieve collections from MongoDB******/
-        MongoCollection userCollection = database.getCollection("users");
-        MongoCollection postCollection = database.getCollection("posts");
-        MongoCollection commentCollection = database.getCollection("comments");
-
         Document mappedUser = (Document)userCollection.find(eq("Username", cm.uname)).first();
         Document newComment = new Document();
         newComment.append("PostId",cm.postId);
@@ -279,9 +265,6 @@ public class Database {
     public void deleteCommentById(ObjectId commentId)
     {
         //prerequisite: get all collections.
-        MongoCollection userCollection = database.getCollection("users");
-        MongoCollection postCollection = database.getCollection("posts");
-        MongoCollection commentCollection = database.getCollection("comments");
 
         Document comment = (Document)commentCollection.find(eq("_id", commentId)).first();
 
@@ -305,9 +288,6 @@ public class Database {
     }
     public void deletePostById(ObjectId postId)
     {
-        MongoCollection userCollection = database.getCollection("users");
-        MongoCollection postCollection = database.getCollection("posts");
-        MongoCollection commentCollection = database.getCollection("comments");
 
         Document thisPost = (Document)postCollection.find(eq("_id", postId)).first();
         ArrayList<ObjectId> CommIds = (ArrayList<ObjectId>)thisPost.get("CommentIDs");
@@ -328,14 +308,12 @@ public class Database {
     }
     public void changeUserCountry(String username, String newCountry)
     {
-        MongoCollection userCollection = database.getCollection("users");
         Document findQuery = new Document("Username",username);
         Document updateQuery = new Document("$set", new Document("Profile.Country", newCountry));
         userCollection.updateOne(findQuery,updateQuery);
     }
     public void changeUserBanState(String username, boolean newBanState)
     {
-        MongoCollection userCollection = database.getCollection("users");
         Document findQuery = new Document("Username",username);
         Document updateQuery = new Document("$set", new Document("IsBanned", newBanState));
         userCollection.updateOne(findQuery,updateQuery);
@@ -343,42 +321,36 @@ public class Database {
 
     public void changeUserPassword(String username, int newPassWord)
     {
-        MongoCollection userCollection = database.getCollection("users");
         Document findQuery = new Document("Username",username);
         Document updateQuery = new Document("$set", new Document("Password", newPassWord));
         userCollection.updateOne(findQuery,updateQuery);
     }
     public void changeUserAge(String username, int newAge)
     {
-        MongoCollection userCollection = database.getCollection("users");
         Document findQuery = new Document("Username",username);
         Document updateQuery = new Document("$set", new Document("Profile.Age", newAge));
         userCollection.updateOne(findQuery,updateQuery);
     }
     public void changeUserScore(String username, int newScore)
     {
-        MongoCollection userCollection = database.getCollection("users");
         Document findQuery = new Document("Username",username);
         Document updateQuery = new Document("$set", new Document("Profile.PostScore", newScore));
         userCollection.updateOne(findQuery,updateQuery);
     }
     public void IncPostScore(ObjectId postId, int amount)
     {
-        MongoCollection postCollection = database.getCollection("posts");
         Document findQuery = new Document("_id",postId);
         Document updateQuery = new Document("$inc", new Document("PostScore", amount));
         postCollection.updateOne(findQuery,updateQuery);
     }
     public void changePostById(ObjectId postId, String newContent)
     {
-        MongoCollection postCollection = database.getCollection("posts");
         Document findQuery = new Document("_id",postId);
         Document updateQuery = new Document("$set", new Document("PostBody.PostContent", newContent));
         postCollection.updateOne(findQuery,updateQuery);
     }
     public post getLatestPost()
     {
-        MongoCollection postCollection = database.getCollection("posts");
         Document SortingDoc = new Document("_id",-1);
         FindIterable<Document> findIterable = (FindIterable<Document>)postCollection.find().sort(SortingDoc)
                 .limit(1);
@@ -395,7 +367,6 @@ public class Database {
 
     public ArrayList<post> searchPost(String searchString)
     {
-        MongoCollection postCollection = database.getCollection("posts");
         Document regexQuery = new Document();
         regexQuery.append("$regex", searchString);
         regexQuery.append("$options","i");
@@ -407,11 +378,25 @@ public class Database {
         Document findQuery = new Document("$or",allQueries);
         FindIterable<Document> findIterable = (FindIterable<Document>)postCollection.find(findQuery).limit(8);
         ArrayList<post> MatchedPost = new ArrayList<post>();
-        for (Document doc : findIterable)
+        for (Document Post : findIterable)
         {
-            ObjectId mId= doc.getObjectId("_id");
-            post p = getPostById(mId);
-            MatchedPost.add(p);
+            Document PostBody = (Document)Post.get("PostBody");
+            ObjectId mId= Post.getObjectId("_id");
+            ObjectId PostUserId = PostBody.getObjectId("UserId");
+            Document PostUser = (Document)userCollection.find(eq("_id",PostUserId)).first();
+            post np = new post();
+
+            np.Title = PostBody.getString("Title");
+            np.postDate = Post.getDate("PostDate");
+            np._postId = Post.getObjectId("_id");
+            np.ownerId = PostBody.getObjectId("UserId");
+
+            np.OwnerName = PostUser.getString("Username");
+            np.postContent = PostBody.getString("PostContent");
+            np.link = PostBody.getString("Link");
+            np.mPostType = PostBody.getInteger("PostType");
+            np.mPostScore = Post.getInteger("PostScore");
+            MatchedPost.add(np);
         }
 
         return MatchedPost;
@@ -425,7 +410,6 @@ public class Database {
     }
     public ArrayList<post> getPostChunk(int postIndex)
     {
-
         int postSize = getPostSize();
         int lastEndPlace = (postIndex-1)*displayNum;
         if (lastEndPlace >= postSize)
@@ -437,14 +421,64 @@ public class Database {
         FindIterable<Document> findIterable = (FindIterable<Document>)postCollection.find().sort(SortingDoc)
                 .skip(lastEndPlace).limit(displayNum);
         ArrayList<post> PostChunk = new ArrayList<post>();
-        for (Document doc : findIterable)
+        for (Document Post : findIterable)
         {
-            ObjectId mId= doc.getObjectId("_id");
-            post p = getPostById(mId);
-            PostChunk.add(p);
+            Document PostBody = (Document)Post.get("PostBody");
+            ObjectId mId= Post.getObjectId("_id");
+            ObjectId PostUserId = PostBody.getObjectId("UserId");
+            Document PostUser = (Document)userCollection.find(eq("_id",PostUserId)).first();
+            post np = new post();
+
+            np.Title = PostBody.getString("Title");
+            np.postDate = Post.getDate("PostDate");
+            np._postId = Post.getObjectId("_id");
+            np.ownerId = PostBody.getObjectId("UserId");
+
+            np.OwnerName = PostUser.getString("Username");
+            np.postContent = PostBody.getString("PostContent");
+            np.link = PostBody.getString("Link");
+            np.mPostType = PostBody.getInteger("PostType");
+            np.mPostScore = Post.getInteger("PostScore");
+            PostChunk.add(np);
         }
 
         return PostChunk;
+    }
+    public post getPostById(ObjectId mPostId)
+    {
+        // first ,get all the needed collections/document.
+        Document Post = (Document)postCollection.find(eq("_id",mPostId)).first();
+        Document PostBody = (Document)Post.get("PostBody");
+        ObjectId PostUserId = PostBody.getObjectId("UserId");
+        Document PostUser = (Document)userCollection.find(eq("_id",PostUserId)).first();
+        // now, begin retrieving data.
+        post np = new post();
+        np.Title = PostBody.getString("Title");
+        np.postDate = Post.getDate("PostDate");
+        np._postId = Post.getObjectId("_id");
+        np.ownerId = PostBody.getObjectId("UserId");
+        np.OwnerName = PostUser.getString("Username");
+        np.postContent = PostBody.getString("PostContent");
+        np.link = PostBody.getString("Link");
+        np.mPostType = PostBody.getInteger("PostType");
+        np.mPostScore = Post.getInteger("PostScore");
+        //now, begin handling comments.
+        np.mCommentIds = (ArrayList<ObjectId>)Post.get("CommentIDs");
+        for( int i=0; i<np.mCommentIds.size(); i++)
+        {
+            Document Comment = (Document)commentCollection.find(eq("_id",np.mCommentIds.get(i))).first();
+            comment nc = new comment();
+            nc.commentContent = Comment.getString("CommentContent");
+            nc._commentId = Comment.getObjectId("_id");
+            nc._userId = Comment.getObjectId("UserId");
+            Document cUser = (Document)userCollection.find(eq("_id",nc._userId)).first();
+            nc.uname = cUser.getString("Username");
+            nc.postId = Comment.getObjectId("PostId");
+            nc.commentDate = Comment.getDate("CommentDate");
+            np.mComments.add(nc);
+        }
+        return np;
+
     }
     public int getPostSize()
     {
@@ -457,27 +491,24 @@ public class Database {
     {
         Database db = new Database();
         System.out.println("Hello, World!");
-
+/*
 
         user u = new user("Lisa",123456,"China",21,0);
         System.out.println(db.addUser(u));
         System.out.println(db.addUser(u));
-
+*/
         post p = new post("CS201 FP" ,"Lisa","This is my first post for CSCI 201 Project"
         , "", TEXT);
         db.addPost(p);
 
+        /*
         comment c = new comment("ve...", "Lisa" , lastPost);
         db.addComment(c);
         comment d = new comment("va...", "Lisa", lastPost);
         db.addComment(d);
-
-        user u1 = db.getUser("Lisa");
-        int a = 2;
-
-        post np = db.getPostById(lastPost);
-        int b = 3;
-        System.out.println("post size is:"+db.getPostSize());
+    */
+        ArrayList<post> pp = db.getPostChunk(1);
+        int ve = 1;
 /*
         ArrayList<post> Chunk = db.getPostChunk(1);
         int c1 = 4;
@@ -500,8 +531,8 @@ public class Database {
         b = 5;
 */
         ArrayList<post> testMatch = db.searchPost("FIRST");
-        b = 6;
-
+        //b = 6;
+        ArrayList<comment> LisaComment = db.getUserComment("Lisa");
         post lp = db.getLatestPost();
         System.out.println("Post score before updating: "+lp.mPostScore);
         db.IncPostScore(lp._postId,2);
