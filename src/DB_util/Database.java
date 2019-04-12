@@ -15,6 +15,7 @@ import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Filters.regex;
 
 
+
 public class Database {
     // for DEBUG use ONLY:
     private static ObjectId lastPost = null;
@@ -163,6 +164,29 @@ public class Database {
         return mComment;
 
     }
+    public ArrayList<String> getImageLinks(String uname, String link)
+    {
+        Document User = (Document) userCollection.find(eq("Username", uname)).first();
+        ArrayList<ObjectId> PostIDs = (ArrayList<ObjectId>)User.get("PostIDs");
+        System.out.println("size of post id array: "+PostIDs.size());
+        ArrayList<String> ImageLinks = new ArrayList<String>();
+        for (ObjectId id : PostIDs)
+        {
+            Document Post = (Document)postCollection.find(eq("_id",id)).first();
+            Document PostBody = (Document)Post.get("PostBody");
+            int PostType = PostBody.getInteger("PostType");
+            if (PostType != IMAGE)
+            {
+                continue;
+            }
+            String imageLink = PostBody.getString("Link");
+            if (imageLink.contentEquals(link)){continue;}
+            ImageLinks.add(imageLink);
+
+        }
+        return ImageLinks;
+
+    }
     public user getUser(String uname)
     {
 
@@ -222,6 +246,7 @@ public class Database {
 
 
     }
+
 
 
 
@@ -508,8 +533,22 @@ public class Database {
         System.out.println(db.addUser(u));
         System.out.println(db.addUser(u));
 
+        post p1 = new post("test image...","Lisa","dummy content","www.google.com",IMAGE);
+        post p2 = new post("test image...","Lisa","dummy content","www.google.com",IMAGE);
+        post p3 = new post("test image...","Lisa","dummy content","www.google.com",IMAGE);
+        post p4 = new post("test image...","Lisa","dummy content","bytes.usc.edu",IMAGE);
+
+        db.addPost(p1);
+        db.addPost(p2);
+        db.addPost(p3);
+        db.addPost(p4);
+
+        ArrayList<String> testimagelink = db.getImageLinks("Lisa","www.google.com");
+
+        int va = 1;
 
 
+/*
 
         for (int i = 1; i<78; i++)
         {
@@ -528,6 +567,7 @@ public class Database {
 
         ArrayList<post> pp = db.getPostChunk(1);
         int ve = 1;
+        */
 /*
         ArrayList<post> Chunk = db.getPostChunk(1);
         int c1 = 4;
@@ -549,6 +589,7 @@ public class Database {
         p = db.getLatestPost();
         b = 5;
 */
+        /*
         ArrayList<post> testMatch = db.searchPost("HW");
         //b = 6;
         ArrayList<comment> LisaComment = db.getUserComment("Lisa");
@@ -562,8 +603,15 @@ public class Database {
 
         int cdx = 9;
         user LatestUser = db.getUser("Lisa");
+        //Checking for ObjectId:
+        String s = lastPost.toString();
+        ObjectId Oid = new ObjectId(s);
+
+        post p2 = db.getPostById(Oid);
+
 
         cdx = 10;
+*/
 
     }
 
