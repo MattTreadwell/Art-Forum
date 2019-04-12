@@ -110,7 +110,7 @@
 
 <div class="container-fluid postBox">
     <div class="row">
-        <div class="col-sm-12 col-md-12 col-lg-7 col-xl-5 offset-md-0 offset-sm-0 offset-lg-1 offset-xl-3">
+        <div class="col-sm-12 col-md-12 col-lg-7 col-xl-5 offset-md-0 offset-sm-0 offset-lg-1 offset-xl-3 postCol">
             <!-- Text post template -->
             <div class="jumbotron post">
                 <div class="voteButtons">

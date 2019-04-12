@@ -238,8 +238,9 @@
             $("#load").fadeOut();
             document.getElementById('postCol').innerHTML = xhttp.responseText;
             ScrollReveal().reveal('.jumbotron.post', {delay: 200, reset: false});
+            ScrollReveal().reveal('.pageButton', {delay: 200, reset: true});
             ScrollReveal().reveal('#sidebar', {delay: 200, reset: true});
-            ScrollReveal().init();
+            //ScrollReveal().init();
 
         };
         xhttp.send();
