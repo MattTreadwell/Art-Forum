@@ -4,7 +4,7 @@
 
 <%
     // Pagination retrieval
-    String retrieveNum = (String) request.getParameter("index");
+    String retrieveNum = request.getParameter("index");
     int index = 1;
     if(retrieveNum != null) {
         index = Integer.parseInt(retrieveNum);
@@ -27,7 +27,7 @@
 
 <html>
 <head>
-    <title>NotReddit</title>
+    <title>Art Forum</title>
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densityDpi=device-dpi"/>
     <meta name="description"
@@ -38,6 +38,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:300" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"
           integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <script src="https://unpkg.com/scrollreveal"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.js"
             integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
             crossorigin="anonymous"></script>
@@ -68,7 +69,7 @@
 <!-- Navbar -->
 <nav class="navbar navbar-expand-md navbar-light bg-light justify-content-center">
     <img class="navIcon d-none d-md-block" src="img/icon.jpg" alt="">
-    <a href="index.jsp" class="navbar-brand d-flex w-50 mr-auto"><strong>NotReddit</strong></a>
+    <a href="index.jsp" class="navbar-brand d-flex w-50 mr-auto"><strong>Art Forum</strong></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -131,7 +132,7 @@
                 </div>
                 <div class="postPreview">
                     <h5 class="postTitle"><%=p.Title%> </h5>
-                    <p class="postUser">By <a href=""><%=p.OwnerName%></a></p>
+                    <p class="postUser">By <a href="profile.jsp?user=<%=p.ownerId%>"><%=p.OwnerName%></a> <%=com.webHelper.relativeTime(p.postDate)%></p>
                     <!-- THIS IS WHAT WILL DIFFER BETWEEN POST TYPES (the preview) -->
                     <%
                         switch (p.mPostType) {
@@ -156,7 +157,8 @@
                                 %>
                                 <!-- TODO consider also showing link -->
                                 <div class="text-center">
-                                    <img class="postImagePreview" src="<%=p.link%>"/>
+                                    <img class="postImagePreview" src="<%=p.link%>" alt="image not found"
+                                         onerror="this.src='img/notfound.png'"/>
                                 </div>
                                 <%
                                 break;
@@ -169,7 +171,7 @@
                         }
                     %>
                     <div class="btn-group-xs">
-                        <button class="btn btn-secondary btn-xs"><%=webHelper.commentNumber(p.mComments.size())%> Comments</button>
+                        <a href="viewPost.jsp?postId=<%=p._postId%>" class="btn btn-secondary btn-xs" role="button"><%=webHelper.commentNumber(p.mComments.size())%> Comments</a>
                     </div>
                 </div>
             </div>
@@ -180,134 +182,12 @@
                     %>
                     <div class="jumbotron post">
                         <div class="text-center">
-                            <h1>No posts on this page.</h1>
+                            <h1>No more posts.</h1>
                         </div>
                     </div>
                     <%
                     }
             %>
-            <!-- Text post template -->
-            <div class="jumbotron post">
-                <div class="voteButtons">
-                    <span class="upvote"> </span>
-                    <p class="postScore text-center"><strong>69</strong></p>
-                    <span class="downvote"> </span>
-                </div>
-                <div class="postPreview">
-                    <h5 class="postTitle">This is a text post!</h5>
-                    <!-- THIS IS WHAT WILL DIFFER BETWEEN TEXT TYPES (the preview) -->
-                    <p class="postTextPreview">rip</p>
-                    <div class="btn-group-xs">
-                        <a class="btn btn-secondary btn-xs" role="button" href="https://reddit.com">420 Comments</a>
-                    </div>
-                </div>
-            </div>
-            <!-- Link post template  -->
-            <div class="jumbotron post">
-                <div class="voteButtons">
-                    <span class="upvote"> </span>
-                    <p class="postScore text-center"><strong>1337</strong></p>
-                    <span class="downvote"> </span>
-                </div>
-                <div class="postPreview">
-                    <h5 class="postTitle">This is a link post!</h5>
-                    <p class="postLinkPreview">
-                        <a href="https://www.reddit.com/">https://www.reddit.com/</a>
-                    </p>
-                    <div class="btn-group-xs">
-                        <button class="btn btn-secondary btn-xs"><%=webHelper.commentNumber(4782)%> comments</button>
-                    </div>
-                </div>
-            </div>
-            <!-- Image post template -->
-            <div class="jumbotron post">
-                <div class="voteButtons">
-                    <span class="upvote"> </span>
-                    <p class="postScore text-center"><strong>1324</strong></p>
-                    <span class="downvote"> </span>
-                </div>
-                <div class="postPreview">
-                    <h5 class="postTitle">This is a normal 16:9 image post!</h5>
-                    <div class="text-center">
-                        <img class="postImagePreview" src="img/normalimage.jpg"/>
-                    </div>
-
-                    <div class="btn-group-xs">
-                        <button class="btn btn-secondary btn-xs">7.7k Comments</button>
-                    </div>
-                </div>
-            </div>
-            <!-- Odd image sizes -->
-            <div class="jumbotron post">
-                <div class="voteButtons">
-                    <span class="upvote"> </span>
-                    <p class="postScore text-center"><strong>1324</strong></p>
-                    <span class="downvote"> </span>
-                </div>
-                <div class="postPreview">
-                    <h5 class="postTitle">This is a (fairly) square 1:1 image post!</h5>
-                    <div class="text-center">
-                        <img class="postImagePreview" src="img/squareimage.jpg"/>
-                    </div>
-
-                    <div class="btn-group-xs">
-                        <button class="btn btn-secondary btn-xs">7.7k Comments</button>
-                    </div>
-                </div>
-            </div>
-            <div class="jumbotron post">
-                <div class="voteButtons">
-                    <span class="upvote"> </span>
-                    <p class="postScore text-center"><strong>1324</strong></p>
-                    <span class="downvote"> </span>
-                </div>
-                <div class="postPreview">
-                    <h5 class="postTitle">This is a tall image post!</h5>
-                    <div class="text-center">
-                        <img class="postImagePreview" src="img/tallimage.png"/>
-                    </div>
-
-                    <div class="btn-group-xs">
-                        <button class="btn btn-secondary btn-xs">7.7k Comments</button>
-                    </div>
-                </div>
-            </div>
-            <div class="jumbotron post">
-                <div class="voteButtons">
-                    <span class="upvote"> </span>
-                    <p class="postScore text-center"><strong>1324</strong></p>
-                    <span class="downvote"> </span>
-                </div>
-                <div class="postPreview">
-                    <h5 class="postTitle">This is a GIF post!</h5>
-                    <div class="text-center">
-                        <img class="postImagePreview" src="img/giftest.gif"/>
-                    </div>
-
-                    <div class="btn-group-xs">
-                        <button class="btn btn-secondary btn-xs">7.7k Comments</button>
-                    </div>
-                </div>
-            </div>
-            <div class="jumbotron post">
-                <div class="voteButtons">
-                    <span class="upvote"> </span>
-                    <p class="postScore text-center"><strong>1324</strong></p>
-                    <span class="downvote"> </span>
-                </div>
-                <div class="postPreview">
-                    <h5 class="postTitle">This is a broken image post!</h5>
-                    <div class="text-center">
-                        <img class="postImagePreview" src="invalid" alt="image not found"
-                             onerror="this.src='img/notfound.png'"/>
-                    </div>
-
-                    <div class="btn-group-xs">
-                        <button class="btn btn-secondary btn-xs">7.7k Comments</button>
-                    </div>
-                </div>
-            </div>
-            <!-- TODO add next page and page back buttons -->
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-center">
                         <%
@@ -321,9 +201,7 @@
                         <li class="page-item"><a class="page-link" href="index.jsp?index=<%=index-1%>">Previous</a></li>
                         <%
                             }
-                        %>
 
-                        <%
                             // Check if we are on the last page
                             if(db.getPostSize() / (index * Database.displayNum) < 1) {
                         %>
@@ -342,7 +220,7 @@
         <!-- "Right" div for showing calendar, weathers, other APIs -->
         <div class="col-sm-0 col-md-0 col-lg-3 col-xl-2  d-none d-lg-block">
             <div class="jumbotron">
-                <h5>NotReddit is the Front Page of CSCI201</h5>
+                <h5>Art Forum is the Front Page of CSCI201</h5>
 
                 <div class="text-center">
                     <a class="btn btn-primary" href="newPost.jsp" role="button"><strong>CREATE POST</strong></a>
@@ -355,14 +233,50 @@
 
 <!-- script for upvote buttons -->
 <script>
+    $(".upvote").click(function () {
+        var upvoted = $(this).hasClass("on");
+        $(this).toggleClass("on");
+
+        console.log($(this));
+        // Need to modify associated number
+        if(upvoted) {
+
+        } else {
+
+        }
+    });
+
+    $(".downvote").click(function () {
+        var downvoted = $(this).hasClass("on");
+        $(this).toggleClass("on");
+        if(downvoted) {
+
+        } else {
+
+        }
+    })
+    
+    
+    
+/*    for (const btn of document.querySelectorAll('.upvote')) {
+        btn.addEventListener('click', event => {
+            event.target.classList.toggle('on');
+        })
+    }
+
+    for (const btn of document.querySelectorAll('.downvote')) {
+        btn.addEventListener('click', event => {
+            event.target.classList.toggle('on');
+    })
+    }*/
     // TODO integrate with database AND make sure post can be both upvoted and downvoted
     // This will need to be way more complex than just toggling the 'on' class
 
     // TODO consider merging these into one once functionality is complete
     // Upvote button code
-    for (const btn of document.querySelectorAll('.upvote')) {
+/*    for (const btn of document.querySelectorAll('.upvote')) {
         btn.addEventListener('click', event = > {
-            if(event.target.classList.contains("on"))
+            if(event.target.classList.contains("on");)
         {
             // Button is already activated; make this un-upvote
             console.log("class on toggled off");
@@ -377,13 +291,12 @@
             event.target.classList.toggle('on');
         }
     })
-        ;
     }
 
     // Downvote button code (should be an inverse of the previous)
     for (const btn of document.querySelectorAll('.downvote')) {
         btn.addEventListener('click', event = > {
-            if(event.target.classList.contains("on"))
+            if(event.target.classList.contains("on");)
         {
             // Button is already activated; make this un-downvote
             console.log("class on toggled off");
@@ -396,8 +309,11 @@
             event.target.classList.toggle('on');
         }
     })
-        ;
-    }
+    }*/
+</script>
+
+<script>
+    ScrollReveal().reveal('.jumbotron', {reset: false, delay: 200});
 </script>
 </body>
 </html>
