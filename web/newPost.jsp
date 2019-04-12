@@ -5,7 +5,16 @@
     HttpSession session1 = request.getSession();
     String username = (String) session1.getAttribute("username");
     boolean login = null != username;
-
+    if(!login)
+    {
+        RequestDispatcher dispatch = request.getRequestDispatcher("/login.jsp");
+        dispatch.forward(request, response);
+    }
+    String error = (String)request.getAttribute("errormsg");
+    if(error == null)
+    {
+        error = "";
+    }
     // Redirect users to login page
 %>
 
@@ -108,6 +117,7 @@
         <div class="col-sm-12 col-md-12 col-lg-6 offset-md-0 offset-sm-0 offset-lg-3">
             <div class="jumbotron" style="background-color: rgba(255,255,255,0.9) !important">
                 <h1>New Post</h1>
+                <p><%=error%></p>
                 <form action="CreatePost" method="post">
                     <div class="form-group">
                         <label for="exampleInputUsername1">Post Title</label>
