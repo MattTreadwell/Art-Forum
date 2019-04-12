@@ -7,6 +7,7 @@
     boolean login = null != username;
     if(!login)
     {
+        request.setAttribute("errormsg","You are not logged in.");
         RequestDispatcher dispatch = request.getRequestDispatcher("/login.jsp");
         dispatch.forward(request, response);
     }
