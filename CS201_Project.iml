@@ -23,7 +23,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="Tomcat 9.0.14" level="application_server_libraries" />
+    <orderEntry type="library" name="Tomcat 9.0.14" level="application_server_libraries" />
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
@@ -36,5 +36,6 @@
     </orderEntry>
     <orderEntry type="library" name="bootstrap" level="application" />
     <orderEntry type="library" name="jquery-3.3.1" level="application" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Tomcat 9.0.16" level="application_server_libraries" />
   </component>
 </module>
