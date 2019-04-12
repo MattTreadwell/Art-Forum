@@ -53,14 +53,14 @@ public class CreatePost extends HttpServlet {
         {
             post = new post(title,username,input,"", Database.TEXT);
         }
-        else if(selection.equals("linkForm"))
-        {
-            post = new post(title,username,"",input, Database.LINK);
+        else if(selection.equals("linkForm")) {
+            post = new post(title, username, "", input, Database.LINK);
         }
         else
         {
             post = new post(title,username,"",input, Database.IMAGE);
         }
+        System.out.println("USERNAME IS: "+username);
         db.addPost(post);
         RequestDispatcher dispatch = getServletContext().getRequestDispatcher("/index.jsp");
         dispatch.forward(request, response);
