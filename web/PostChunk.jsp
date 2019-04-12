@@ -83,3 +83,33 @@
 <%
     }
 %>
+
+<nav aria-label="Page navigation example" class="load-hidden pageButton">
+    <ul class="pagination justify-content-center">
+        <%
+            // Disable previous button for first page
+            if(index == 1) {
+        %>
+        <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">Previous</a></li>
+        <%
+        } else {
+        %>
+        <li class="page-item"><a class="page-link" href="index.jsp?index=<%=index-1%>">Previous</a></li>
+        <%
+            }
+        %>
+
+        <%
+            // Check if we are on the last page
+            if(db.getPostSize() / (index * Database.displayNum) < 1) {
+        %>
+        <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">Next</a></li>
+        <%
+        } else {
+        %>
+        <li class="page-item"><a class="page-link" href="index.jsp?index=<%=index+1%>">Next</a></li>
+        <%
+            }
+        %>
+    </ul>
+</nav>
