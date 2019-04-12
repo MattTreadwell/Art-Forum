@@ -1,5 +1,3 @@
-<%@ page import="DB_util.Database" %>
-<%@ page import="com.webHelper" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -15,10 +13,6 @@
     String username = (String) session1.getAttribute("username");
     boolean login = null != username;
 
-    // Make a new Database class
-
-    // Get ArrayList of Posts from db by index #
-    //java.util.ArrayList<DB_util.post> postChunk = db.getPostChunk(index);
 
 %>
 
@@ -33,7 +27,15 @@
           content="This is definitely not reddit">
 
 
+    <script type="text/javascript">
+        // Displays the contents of 'ins' on top of all the posts
+        function newPost (ins) {
+            // create a new div element
+            // add the newly created element and its content into the DOM
 
+            document.getElementById('postCol').insertAdjacentHTML("afterbegin", ins);
+        }
+    </script>
     <!-- Load fonts, libraries, and css -->
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300" rel="stylesheet">
@@ -167,67 +169,9 @@
 
         }
     })
-    
-    
-    
-/*    for (const btn of document.querySelectorAll('.upvote')) {
-        btn.addEventListener('click', event => {
-            event.target.classList.toggle('on');
-        })
-    }
 
-    for (const btn of document.querySelectorAll('.downvote')) {
-        btn.addEventListener('click', event => {
-            event.target.classList.toggle('on');
-    })
-    }*/
-    // TODO integrate with database AND make sure post can be both upvoted and downvoted
-    // This will need to be way more complex than just toggling the 'on' class
-
-    // TODO consider merging these into one once functionality is complete
-    // Upvote button code
-/*    for (const btn of document.querySelectorAll('.upvote')) {
-        btn.addEventListener('click', event = > {
-            if(event.target.classList.contains("on");)
-        {
-            // Button is already activated; make this un-upvote
-            console.log("class on toggled off");
-            event.target.classList.toggle('on');
-
-            //var db = new Packages.DB_util.
-
-        }
-    else
-        {
-            // Button isn't activated; upvote post and undo downvote if it's downvoted
-            event.target.classList.toggle('on');
-        }
-    })
-    }
-
-    // Downvote button code (should be an inverse of the previous)
-    for (const btn of document.querySelectorAll('.downvote')) {
-        btn.addEventListener('click', event = > {
-            if(event.target.classList.contains("on");)
-        {
-            // Button is already activated; make this un-downvote
-            console.log("class on toggled off");
-            event.target.classList.toggle('on');
-
-        }
-    else
-        {
-            // Button isn't activated; upvote post and undo upvote if it's upvoted
-            event.target.classList.toggle('on');
-        }
-    })
-    }*/
 </script>
 
-<script>
-/*    $("#sidebar").hide(0);
-    $("#postCol").hide(0);*/
-</script>
 <script type="text/javascript">
     window.onload = function loadPosts() {
 
@@ -236,7 +180,11 @@
         xhttp.open("GET", "PostChunk.jsp?index=<%=index%>");
         xhttp.onreadystatechange = function() {
             $("#load").fadeOut();
+            //$('.postCol').innerHTML(xhttp.responseText);
+            //document.getElementById('postCol').insertAdjacentHTML("beforeend", xhttp.responseText);
             document.getElementById('postCol').innerHTML = xhttp.responseText;
+            document.getElementById('postCol').insertAdjacentHTML("beforeend", xhttp.responseText);
+
             ScrollReveal().reveal('.jumbotron.post', {delay: 200, reset: false});
             ScrollReveal().reveal('.pageButton', {delay: 200, reset: true});
             ScrollReveal().reveal('#sidebar', {delay: 200, reset: true});
@@ -249,5 +197,61 @@
         return true;
     }
 </script>
+
+<%!
+    public void newpost() {
+        //System.out.println(“asdfhasdf”);
+%>
+    <script>
+        newPost("<div id='div1' style='color:blue'>multiasdfasdfasdiufhadufoiajoiasfiojfadjiosdfl</div>");
+    </script>
+<%!
+    }
+
+%>
+
+<%!
+    int data = 50;
+%>
+
+<%
+
+
+
+    class multithread extends Thread{
+
+
+
+
+        //MUST INSTANTIATE A MULTITHREAD INSTANCE IN THE INDEXDYNAMIC.JSP FILE SOMEWHERE SO ALL THIS CODE WILL RUN
+
+
+        public multithread() {
+            this.start();
+
+            //FOR CHECKING NEW NOTIFICATION
+            while(true) {
+                break;
+            }
+        }
+
+        //FOR CHECKING NEW POST
+        public void run() {
+
+
+
+            while(true) {
+
+                //IF THERE IS A NEW POST
+                newpost();
+                break;
+            }
+        }
+
+
+    }
+
+    multithread mt = new multithread();
+%>
 </body>
 </html>
