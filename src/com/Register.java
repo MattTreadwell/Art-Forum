@@ -58,13 +58,13 @@ public class Register extends HttpServlet {
             dispatch.forward(request, response);
             return;
         }
-        request.setAttribute("username",username);
+        HttpSession session = request.getSession();
+        session.setAttribute("username",username);
         RequestDispatcher dispatch = getServletContext().getRequestDispatcher("/index.jsp");
         dispatch.forward(request, response);
-        return;
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-    }
+//    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//
+//    }
 }

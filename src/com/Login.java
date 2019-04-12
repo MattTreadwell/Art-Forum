@@ -16,7 +16,7 @@ import java.io.IOException;
 public class Login extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO finish this
-        // Should check check the user's password and username if they are in the database
+        // Should check the user's password and username if they are in the database
         // On fail: return them to login.jsp with attribute 'errormsg' as the error
         // On success: return user to index.jsp with 'username' attribute set as their username
         String username = request.getParameter("username");
@@ -48,7 +48,7 @@ public class Login extends HttpServlet {
         }
         HttpSession session1 = request.getSession(true);
         session1.setAttribute("username", username);
-        request.setAttribute("success", "Successfully logged in as " + username);
+//        request.setAttribute("success", "Successfully logged in as " + username);
         RequestDispatcher dispatch = getServletContext().getRequestDispatcher("/index.jsp");
         dispatch.forward(request, response);
         return;
