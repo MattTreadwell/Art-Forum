@@ -1,6 +1,7 @@
 /* CSS for fonts and libraries */
 body {
     font-family: 'Roboto', sans-serif !important;
+    padding-top: 70px;
 }
 
 #particles-js-login{
@@ -45,11 +46,40 @@ body {
 }
 
 /* Main CSS */
+.hidden {
+    display: none;
+}
+
+html.sr .load-hidden {
+    visibility: hidden;
+}
+
 .imgBackground {
     background-image: url("img/icon.jpg");
     background-attachment: fixed;
     -webkit-background-size: cover;
     background-size: cover;
+}
+
+.loadingImage {
+    z-index: 1;
+    position: absolute;
+    background-color: white;
+    border-radius: 50%;
+    width: 250px;
+    height: 250px;
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+    border: solid white;
+    overflow: hidden;
+}
+.centered {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    /* bring your own prefixes */
+    transform: translate(-50%, -50%);
 }
 
 .navIcon {

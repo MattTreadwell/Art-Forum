@@ -54,7 +54,7 @@
 
 
 <!-- Navbar -->
-<nav class="navbar navbar-expand-md navbar-light bg-light justify-content-center">
+<nav class="navbar navbar-expand-md navbar-light bg-light justify-content-center fixed-top">
     <img class="navIcon d-none d-md-block" src="img/icon.jpg" alt="">
     <a href="index.jsp" class="navbar-brand d-flex w-50 mr-auto"><strong>Art Forum</strong></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
