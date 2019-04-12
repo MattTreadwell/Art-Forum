@@ -16,22 +16,23 @@
     boolean login = null != username;
 
     // Make a new Database class
-    Database db = new Database();
 
     // Get ArrayList of Posts from db by index #
-    java.util.ArrayList<DB_util.post> postChunk = db.getPostChunk(index);
+    //java.util.ArrayList<DB_util.post> postChunk = db.getPostChunk(index);
 
 %>
 
 <!-- THIS IS ONLY FOR TESTING DATABASE INTEGRATION -->
 
-<html>
+<html class="sr">
 <head>
     <title>Art Forum</title>
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densityDpi=device-dpi"/>
     <meta name="description"
           content="This is definitely not reddit">
+
+
 
     <!-- Load fonts, libraries, and css -->
     <link rel="stylesheet" href="style.css">
@@ -67,7 +68,7 @@
 </script>
 
 <!-- Navbar -->
-<nav class="navbar navbar-expand-md navbar-light bg-light justify-content-center">
+<nav class="navbar navbar-expand-md navbar-light bg-light justify-content-center fixed-top">
     <img class="navIcon d-none d-md-block" src="img/icon.jpg" alt="">
     <a href="index.jsp" class="navbar-brand d-flex w-50 mr-auto"><strong>Art Forum</strong></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -115,111 +116,19 @@
     </div>
 </nav>
 
+<div class="text-center no-click" id="load">
+    <img class="loadingImage centered" src="img/oragami.gif" alt="loading">
+</div>
+
 <div class="container-fluid postBox">
     <div class="row">
-        <div class="col-sm-12 col-md-12 col-lg-7 col-xl-5 offset-md-0 offset-sm-0 offset-lg-1 offset-xl-3">
+        <div class="col-sm-12 col-md-12 col-lg-7 col-xl-5 offset-md-0 offset-sm-0 offset-lg-1 offset-xl-3 load-hidden" id="postCol">
 
-            <%
-                // Iterate over the array of posts
-                if(postChunk != null) {
-                    for(DB_util.post p : postChunk) {
-            %>
-            <div class="jumbotron post">
-                <div class="voteButtons">
-                    <span class="upvote"> </span>
-                    <p class="postScore text-center"><strong><%=p.mPostScore%></strong></p>
-                    <span class="downvote"> </span>
-                </div>
-                <div class="postPreview">
-                    <h5 class="postTitle"><%=p.Title%> </h5>
-                    <p class="postUser">By <a href="profile.jsp?user=<%=p.ownerId%>"><%=p.OwnerName%></a> <%=com.webHelper.relativeTime(p.postDate)%></p>
-                    <!-- THIS IS WHAT WILL DIFFER BETWEEN POST TYPES (the preview) -->
-                    <%
-                        switch (p.mPostType) {
-                            //
-                            case 1 :
-                                %>
-                                <!-- TODO need shortener function -->
-                                <p class="postTextPreview"><%=p.postContent%></p>
-                                <%
-
-
-                                break;
-                            case 2:
-                                %>
-                                <!-- TODO consider shortener here too -->
-                                <p class="postLinkPreview">
-                                    <a href="<%=p.link%>"><%=p.link%></a>
-                                </p>
-                                <%
-                                break;
-                            case 3:
-                                %>
-                                <!-- TODO consider also showing link -->
-                                <div class="text-center">
-                                    <img class="postImagePreview" src="<%=p.link%>" alt="image not found"
-                                         onerror="this.src='img/notfound.png'"/>
-                                </div>
-                                <%
-                                break;
-                            default:
-                                // Error case: no post type (should probably skip)
-                                %>
-                                <p class="postTextPreview text-danger">ERROR: MISSING/INVALID POST TYPE</p>
-                                <%
-                                break;
-                        }
-                    %>
-                    <div class="btn-group-xs">
-                        <a href="viewPost.jsp?postId=<%=p._postId%>" class="btn btn-secondary btn-xs" role="button"><%=webHelper.commentNumber(p.mComments.size())%> Comments</a>
-                    </div>
-                </div>
-            </div>
-
-            <%
-                    }
-                } else {
-                    %>
-                    <div class="jumbotron post">
-                        <div class="text-center">
-                            <h1>No more posts.</h1>
-                        </div>
-                    </div>
-                    <%
-                    }
-            %>
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination justify-content-center">
-                        <%
-                            // Disable previous button for first page
-                            if(index == 1) {
-                        %>
-                        <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">Previous</a></li>
-                        <%
-                            } else {
-                        %>
-                        <li class="page-item"><a class="page-link" href="index.jsp?index=<%=index-1%>">Previous</a></li>
-                        <%
-                            }
-
-                            // Check if we are on the last page
-                            if(db.getPostSize() / (index * Database.displayNum) < 1) {
-                        %>
-                        <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">Next</a></li>
-                        <%
-                        } else {
-                        %>
-                        <li class="page-item"><a class="page-link" href="index.jsp?index=<%=index+1%>">Next</a></li>
-                        <%
-                            }
-                        %>
-                    </ul>
-                </nav>
         </div>
 
         <!-- "Right" div for showing calendar, weathers, other APIs -->
         <div class="col-sm-0 col-md-0 col-lg-3 col-xl-2  d-none d-lg-block">
-            <div class="jumbotron">
+            <div class="jumbotron load-hidden" id="sidebar">
                 <h5>Art Forum is the Front Page of CSCI201</h5>
 
                 <div class="text-center">
@@ -233,6 +142,9 @@
 
 <!-- script for upvote buttons -->
 <script>
+    // Consider adding custom data attributes to the buttons to identify the correct score element
+    // https://stackoverflow.com/questions/19380910/jquery-append-jquery-variable-to-a-class-name
+    // need to also make an ajax call
     $(".upvote").click(function () {
         var upvoted = $(this).hasClass("on");
         $(this).toggleClass("on");
@@ -313,7 +225,28 @@
 </script>
 
 <script>
-    ScrollReveal().reveal('.jumbotron', {reset: false, delay: 200});
+/*    $("#sidebar").hide(0);
+    $("#postCol").hide(0);*/
+</script>
+<script type="text/javascript">
+    window.onload = function loadPosts() {
+
+        console.log("calling loadPosts");
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("GET", "PostChunk.jsp?index=<%=index%>");
+        xhttp.onreadystatechange = function() {
+            $("#load").fadeOut();
+            document.getElementById('postCol').innerHTML = xhttp.responseText;
+            ScrollReveal().reveal('.jumbotron.post', {delay: 200, reset: false});
+            ScrollReveal().reveal('#sidebar', {delay: 200, reset: true});
+            ScrollReveal().init();
+
+        };
+        xhttp.send();
+        document.getElementById('postCol').innerHTML = xhttp.responseText;
+        console.log(this.responseText);
+        return true;
+    }
 </script>
 </body>
 </html>
