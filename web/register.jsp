@@ -5,6 +5,11 @@
     HttpSession session1 = request.getSession();
     String username = (String) session1.getAttribute("username");
     boolean login = null != username;
+    String error = (String)request.getAttribute("errormsg");
+    if(error == null)
+    {
+        error = "";
+    }
 %>
 
 <html>
@@ -104,6 +109,7 @@
         <div class="col-sm-12 col-md-12 col-lg-4 offset-md-0 offset-sm-0 offset-lg-1">
             <div class="jumbotron" style="background-color: rgba(255,255,255,0.9) !important">
                 <h1>Register</h1>
+                <p class="text-danger"><%= error%></p>
                 <form action="Register" method="post">
                     <div class="form-group">
                         <label for="exampleInputUsername1">Username</label>
@@ -125,6 +131,7 @@
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
+
             </div>
         </div>
 
