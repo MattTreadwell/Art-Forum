@@ -113,3 +113,28 @@
         %>
     </ul>
 </nav>
+
+<script>
+    $(".upvote").click(function () {
+        var upvoted = $(this).hasClass("on");
+        $(this).toggleClass("on");
+
+        console.log($(this));
+        // Need to modify associated number
+        if(upvoted) {
+
+        } else {
+
+        }
+    });
+
+    $(".downvote").click(function () {
+        var downvoted = $(this).hasClass("on");
+        $(this).toggleClass("on");
+        if(downvoted) {
+
+        } else {
+
+        }
+    })
+</script>

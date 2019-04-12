@@ -154,7 +154,7 @@
                         </div>
 
                     </div>
-                    <div class="text-center">
+                    <div class="text-center" id="submitbutton">
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </div>
                 </form>
@@ -170,9 +170,10 @@
 <!-- https://stackoverflow.com/questions/5692135/show-visible-hidden-not-show-hide-html-element-based-on-form-select-box-select -->
 <script>
     $('.toggle').hide();//Hide all by default
-
+    $('#submitbutton').hide();
 
     $('select').on('change', function () {
+        $('#submitbutton').fadeIn();
         $('.toggle').hide();//Hide all
         $("#" + $(this).children("option:selected").val()).show();
     });
