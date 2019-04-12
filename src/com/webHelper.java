@@ -1,4 +1,7 @@
 package com;
+import org.ocpsoft.prettytime.PrettyTime;
+
+import java.util.Date;
 
 // Functions for assisting with jsp pages
 
@@ -18,5 +21,15 @@ public class webHelper {
                 count / Math.pow(1000, exp),
                 "kMGTPE".charAt(exp-1));
 
+    }
+
+    public static String relativeTime(Date date) {
+        PrettyTime p = new PrettyTime();
+
+        return p.format(date);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(relativeTime(new Date()));
     }
 }

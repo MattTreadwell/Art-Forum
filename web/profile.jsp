@@ -13,6 +13,11 @@
         return;
     }
 
+    // Session to check if user is logged in
+    HttpSession session1 = request.getSession();
+    String username = (String) session1.getAttribute("username");
+    boolean login = null != username;
+
     Database db = new Database();
 
     DB_util.user userProfile = db.getUser("profile");
@@ -30,7 +35,7 @@
 
 <html>
 <head>
-    <title>NotReddit</title>
+    <title>Art Forum</title>
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densityDpi=device-dpi"/>
     <meta name="description"
@@ -71,7 +76,7 @@
 <!-- Navbar -->
 <nav class="navbar navbar-expand-md navbar-light bg-light justify-content-center">
     <img class="navIcon d-none d-md-block" src="img/icon.jpg" alt="">
-    <a href="index.jsp" class="navbar-brand d-flex w-50 mr-auto"><strong>NotReddit</strong></a>
+    <a href="index.jsp" class="navbar-brand d-flex w-50 mr-auto"><strong>Art Forum</strong></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -82,9 +87,9 @@
         <ul class="navbar-nav w-100 justify-content-center">
             <li>
                 <!-- TODO potentially make this nicer looking -->
-                <form action="/Search" method="get" class="navbar-form zeroMargin" role="search">
+                <form action="search.jsp" method="get" class="navbar-form zeroMargin" role="search">
                     <div class="input-group">
-                        <input type="search" name="searchQuery" value="" class="form-control"
+                        <input type="search" name="query" value="" class="form-control"
                                id="searchForm"
                                aria-describedby="searchHelp" placeholder="Search">
                         <button type="submit" class="btn btn-secondary"><i class="fa fa-search"></i></button>
@@ -95,10 +100,23 @@
         </ul>
 
         <ul class="nav navbar-nav ml-auto w-100 justify-content-end">
+            <%
+                if(login) {
+            %>
+            <li>
+                <a class="btn btn-primary" href="profile.jsp" role="button"><%=username%></a>
+                <a class="btn btn-outline-primary" href="Logout" role="button">Logout</a>
+            </li>
+            <%
+            } else {
+            %>
             <li>
                 <a class="btn btn-primary" href="login.jsp" role="button">Login</a>
                 <a class="btn btn-outline-primary" href="register.jsp" role="button">Sign Up</a>
             </li>
+            <%
+                }
+            %>
         </ul>
 
     </div>
@@ -188,9 +206,9 @@
                 <div class="postPreview">
                     <h5 class="postTitle">This is a text post!</h5>
                     <!-- THIS IS WHAT WILL DIFFER BETWEEN TEXT TYPES (the preview) -->
-                    <p class="postTextPreview">What the fuck did you just fucking say about me, you little bitch? I'll
-                        have you know I graduated top of my class in the Navy Seals, and I've been involved in numerous
-                        secret raids on Al-Quaeda,</p>
+                    <p class="postTextPreview">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vitae
+                        consectetur sapien. Sed vitae pellentesque ex. Aenean et dignissim justo. Duis maximus risus nec
+                        purus ullamcorper, non sollicitudin odio molestie.</p>
                     <div class="btn-group-xs">
                         <button class="btn btn-secondary btn-xs">420 Comments</button>
                     </div>

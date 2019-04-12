@@ -4,7 +4,7 @@
 
 <html>
 <head>
-    <title>NotReddit</title>
+    <title>Art Forum</title>
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densityDpi=device-dpi"/>
     <meta name="description"
@@ -45,7 +45,7 @@
 <!-- Navbar -->
 <nav class="navbar navbar-expand-md navbar-light bg-light justify-content-center">
     <img class="navIcon d-none d-md-block" src="img/icon.jpg" alt="">
-    <a href="index.jsp" class="navbar-brand d-flex w-50 mr-auto"><strong>NotReddit</strong></a>
+    <a href="index.jsp" class="navbar-brand d-flex w-50 mr-auto"><strong>Art Forum</strong></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -210,7 +210,7 @@
         <!-- "Right" div for showing calendar, weathers, other APIs -->
         <div class="col-sm-0 col-md-0 col-lg-3 col-xl-2  d-none d-lg-block">
             <div class="jumbotron">
-                <h5>NotReddit is the Front Page of CSCI201</h5>
+                <h5>Art Forum is the Front Page of CSCI201</h5>
 
                 <div class="text-center">
                     <a class="btn btn-primary" href="newPost.jsp" role="button"><strong>CREATE POST</strong></a>
@@ -223,48 +223,28 @@
 
 <!-- script for upvote buttons -->
 <script>
-    // TODO integrate with database AND make sure post can be both upvoted and downvoted
-    // This will need to be way more complex than just toggling the 'on' class
+    $(".upvote").click(function () {
+        var upvoted = $(this).hasClass("on");
+        $(this).toggleClass("on");
 
-    // Upvote button code
-    for (const btn of document.querySelectorAll('.upvote')) {
-        btn.addEventListener('click', event = > {
-            if(event.target.classList.contains("on")
-    )
-        {
-            // Button is already activated; make this un-upvote
-            console.log("class on toggled off");
-            event.target.classList.toggle('on');
+        console.log($(this));
+        // Need to modify associated number
+        if(upvoted) {
+
+        } else {
 
         }
-    else
-        {
-            // Button isn't activated; upvote post and undo downvote if it's downvoted
-            event.target.classList.toggle('on');
+    });
+
+    $(".downvote").click(function () {
+        var downvoted = $(this).hasClass("on");
+        $(this).toggleClass("on");
+        if(downvoted) {
+
+        } else {
+
         }
     })
-        ;
-    }
-
-    // Downvote button code (should be an inverse of the previous)
-    for (const btn of document.querySelectorAll('.downvote')) {
-        btn.addEventListener('click', event = > {
-            if(event.target.classList.contains("on")
-    )
-        {
-            // Button is already activated; make this un-upvote
-            console.log("class on toggled off");
-            event.target.classList.toggle('on');
-
-        }
-    else
-        {
-            // Button isn't activated; upvote post and undo downvote if it's downvoted
-            event.target.classList.toggle('on');
-        }
-    })
-        ;
-    }
 </script>
 </body>
 </html>
