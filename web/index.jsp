@@ -182,7 +182,7 @@
             $("#load").fadeOut();
             //$('.postCol').innerHTML(xhttp.responseText);
             //document.getElementById('postCol').insertAdjacentHTML("beforeend", xhttp.responseText);
-            document.getElementById('postCol').innerHTML = xhttp.responseText;
+            //document.getElementById('postCol').innerHTML = xhttp.responseText;
             document.getElementById('postCol').insertAdjacentHTML("beforeend", xhttp.responseText);
 
             ScrollReveal().reveal('.jumbotron.post', {delay: 200, reset: false});
@@ -192,8 +192,6 @@
 
         };
         xhttp.send();
-        document.getElementById('postCol').innerHTML = xhttp.responseText;
-        console.log(this.responseText);
         return true;
     }
 </script>
