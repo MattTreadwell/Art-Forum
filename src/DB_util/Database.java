@@ -531,7 +531,7 @@ public class Database {
 
         user u = new user("Lisa",123456,"China",21,0);
         System.out.println(db.addUser(u));
-
+/*
         post p1 = new post("test image...9","Lisa","dummy content","www.google.com",IMAGE);
         post p2 = new post("test image...10","Lisa","dummy content","www.google.com",IMAGE);
         post p3 = new post("test image...11","Lisa","dummy content","www.google.com",IMAGE);
@@ -541,13 +541,13 @@ public class Database {
         db.addPost(p2);
         db.addPost(p3);
         db.addPost(p4);
-
+*/
        // ArrayList<String> TESTPOSTCHUNK = db.getPostChunk(1);
 
       //  int va = 1;
 
 
-/*
+
 
         for (int i = 1; i<78; i++)
         {
@@ -566,7 +566,7 @@ public class Database {
 
         ArrayList<post> pp = db.getPostChunk(1);
         int ve = 1;
-        */
+
 /*
         ArrayList<post> Chunk = db.getPostChunk(1);
         int c1 = 4;
