@@ -39,8 +39,9 @@ public class Database {
     public MongoCollection commentCollection;
     public Database()
     {
+
         uri = new MongoClientURI(
-                "mongodb+srv://csci201project:csci201project@cluster0-tprgw.mongodb.net/CSCI201?retryWrites=true");
+                "mongodb://localhost:27017/CSCI201");
         mongoClient = new MongoClient(uri);
         database = mongoClient.getDatabase("CSCI201");
 
@@ -198,20 +199,7 @@ public class Database {
             boolean mLinkImage;
             public String link;
          */
-        /*
-        for (int i=0; i<u.mCommentIds.size(); i++)
-        {
-            Document Comment = (Document)commentCollection.find(eq("_id",u.mCommentIds.get(i))).first();
-            comment nc = new comment();
-            nc.commentContent = Comment.getString("CommentContent");
-            nc.uname = uname;
-            nc._commentId = Comment.getObjectId("_id");
-            nc._userId = Comment.getObjectId("UserId");
-            nc.postId = Comment.getObjectId("PostId");
-            nc.commentDate = Comment.getDate("CommentDate");
-            u.userComments.add(nc);
-        }
-        */
+
         for (int i=0; i<u.mPostIds.size(); i++)
         {
             Document Post = (Document)postCollection.find(eq("_id",u.mPostIds.get(i))).first();
@@ -396,6 +384,7 @@ public class Database {
             np.link = PostBody.getString("Link");
             np.mPostType = PostBody.getInteger("PostType");
             np.mPostScore = Post.getInteger("PostScore");
+            np.mCommentIds = (ArrayList<ObjectId>)Post.get("CommentIDs");
             MatchedPost.add(np);
         }
 
@@ -439,10 +428,32 @@ public class Database {
             np.link = PostBody.getString("Link");
             np.mPostType = PostBody.getInteger("PostType");
             np.mPostScore = Post.getInteger("PostScore");
+            np.mCommentIds = (ArrayList<ObjectId>)Post.get("CommentIDs");
             PostChunk.add(np);
         }
 
         return PostChunk;
+    }
+    public ArrayList<comment> getPostComments(ObjectId mPostId)
+    {
+        Document Post = (Document)postCollection.find(eq("_id",mPostId)).first();
+        ArrayList<ObjectId> mCommentIds = (ArrayList<ObjectId>)Post.get("CommentIDs");
+        ArrayList<comment> ans = new ArrayList<comment>();
+        for( int i=0; i<mCommentIds.size(); i++)
+        {
+            Document Comment = (Document)commentCollection.find(eq("_id",mCommentIds.get(i))).first();
+            comment nc = new comment();
+            nc.commentContent = Comment.getString("CommentContent");
+            nc._commentId = Comment.getObjectId("_id");
+            nc._userId = Comment.getObjectId("UserId");
+            Document cUser = (Document)userCollection.find(eq("_id",nc._userId)).first();
+            nc.uname = cUser.getString("Username");
+            nc.postId = Comment.getObjectId("PostId");
+            nc.commentDate = Comment.getDate("CommentDate");
+            ans.add(nc);
+        }
+
+        return ans;
     }
     public post getPostById(ObjectId mPostId)
     {
@@ -491,22 +502,30 @@ public class Database {
     {
         Database db = new Database();
         System.out.println("Hello, World!");
-/*
+
 
         user u = new user("Lisa",123456,"China",21,0);
         System.out.println(db.addUser(u));
         System.out.println(db.addUser(u));
-*/
-        post p = new post("CS201 FP" ,"Lisa","This is my first post for CSCI 201 Project"
-        , "", TEXT);
-        db.addPost(p);
 
-        /*
-        comment c = new comment("ve...", "Lisa" , lastPost);
-        db.addComment(c);
-        comment d = new comment("va...", "Lisa", lastPost);
-        db.addComment(d);
-    */
+
+
+
+        for (int i = 1; i<78; i++)
+        {
+            String Title = "CSCI201 HW"+Integer.toString(i);
+            String OwnerName = "Lisa";
+            String postContent = "The following post is the "+Integer.toString(i)+"th post";
+            post p = new post(Title,OwnerName,postContent,"",TEXT);
+            db.addPost(p);
+            comment c = new comment("ve..."+Integer.toString(i), "Lisa" , lastPost);
+            db.addComment(c);
+            comment d = new comment("va..."+Integer.toString(i), "Lisa", lastPost);
+            db.addComment(d);
+        }
+
+
+
         ArrayList<post> pp = db.getPostChunk(1);
         int ve = 1;
 /*
@@ -530,7 +549,7 @@ public class Database {
         p = db.getLatestPost();
         b = 5;
 */
-        ArrayList<post> testMatch = db.searchPost("FIRST");
+        ArrayList<post> testMatch = db.searchPost("HW");
         //b = 6;
         ArrayList<comment> LisaComment = db.getUserComment("Lisa");
         post lp = db.getLatestPost();
@@ -538,6 +557,13 @@ public class Database {
         db.IncPostScore(lp._postId,2);
         lp = db.getLatestPost();
         System.out.println("Post score after updating: "+lp.mPostScore);
+
+        ArrayList<comment> LatestPostComment = db.getPostComments(lastPost);
+
+        int cdx = 9;
+        user LatestUser = db.getUser("Lisa");
+
+        cdx = 10;
 
     }
 
