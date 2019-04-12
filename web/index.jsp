@@ -24,7 +24,7 @@
 
 <!-- THIS IS ONLY FOR TESTING DATABASE INTEGRATION -->
 
-<html>
+<html class="sr">
 <head>
     <title>Art Forum</title>
     <meta name="viewport"
@@ -68,7 +68,7 @@
 </script>
 
 <!-- Navbar -->
-<nav class="navbar navbar-expand-md navbar-light bg-light justify-content-center">
+<nav class="navbar navbar-expand-md navbar-light bg-light justify-content-center fixed-top">
     <img class="navIcon d-none d-md-block" src="img/icon.jpg" alt="">
     <a href="index.jsp" class="navbar-brand d-flex w-50 mr-auto"><strong>Art Forum</strong></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -117,18 +117,18 @@
 </nav>
 
 <div class="text-center no-click" id="load">
-    <img class="loadingImage centered" src="img/tour-optim-new-hd.gif" alt="loading">
+    <img class="loadingImage centered" src="img/oragami.gif" alt="loading">
 </div>
 
 <div class="container-fluid postBox">
     <div class="row">
-        <div class="col-sm-12 col-md-12 col-lg-7 col-xl-5 offset-md-0 offset-sm-0 offset-lg-1 offset-xl-3" id="postCol">
+        <div class="col-sm-12 col-md-12 col-lg-7 col-xl-5 offset-md-0 offset-sm-0 offset-lg-1 offset-xl-3 load-hidden" id="postCol">
 
         </div>
 
         <!-- "Right" div for showing calendar, weathers, other APIs -->
         <div class="col-sm-0 col-md-0 col-lg-3 col-xl-2  d-none d-lg-block">
-            <div class="jumbotron" id="sidebar">
+            <div class="jumbotron load-hidden" id="sidebar">
                 <h5>Art Forum is the Front Page of CSCI201</h5>
 
                 <div class="text-center">
@@ -225,21 +225,21 @@
 </script>
 
 <script>
-    $("#sidebar").hide(0);
-    $("#postCol").hide(0);
-    sr = new ScrollReveal();
+/*    $("#sidebar").hide(0);
+    $("#postCol").hide(0);*/
 </script>
 <script type="text/javascript">
     window.onload = function loadPosts() {
 
         console.log("calling loadPosts");
         var xhttp = new XMLHttpRequest();
-        xhttp.open("GET", "PostChunkStatic.jsp?index=<%=index%>");
+        xhttp.open("GET", "PostChunk.jsp?index=<%=index%>");
         xhttp.onreadystatechange = function() {
             $("#load").fadeOut();
             document.getElementById('postCol').innerHTML = xhttp.responseText;
-            $('#postCol, #sidebar').fadeIn('slow');
-
+            ScrollReveal().reveal('.jumbotron.post', {delay: 200, reset: false});
+            ScrollReveal().reveal('#sidebar', {delay: 200, reset: true});
+            ScrollReveal().init();
 
         };
         xhttp.send();

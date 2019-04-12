@@ -1,6 +1,7 @@
 /* CSS for fonts and libraries */
 body {
     font-family: 'Roboto', sans-serif !important;
+    padding-top: 70px;
 }
 
 #particles-js-login{
