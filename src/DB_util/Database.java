@@ -431,7 +431,7 @@ public class Database {
             return null;
         }
         MongoCollection postCollection = database.getCollection("posts");
-        Document SortingDoc = new Document("_id",1);
+        Document SortingDoc = new Document("PostDate",-1);
         FindIterable<Document> findIterable = (FindIterable<Document>)postCollection.find().sort(SortingDoc)
                 .skip(lastEndPlace).limit(displayNum);
         ArrayList<post> PostChunk = new ArrayList<post>();
@@ -531,21 +531,20 @@ public class Database {
 
         user u = new user("Lisa",123456,"China",21,0);
         System.out.println(db.addUser(u));
-        System.out.println(db.addUser(u));
 
-        post p1 = new post("test image...","Lisa","dummy content","www.google.com",IMAGE);
-        post p2 = new post("test image...","Lisa","dummy content","www.google.com",IMAGE);
-        post p3 = new post("test image...","Lisa","dummy content","www.google.com",IMAGE);
-        post p4 = new post("test image...","Lisa","dummy content","bytes.usc.edu",IMAGE);
+        post p1 = new post("test image...9","Lisa","dummy content","www.google.com",IMAGE);
+        post p2 = new post("test image...10","Lisa","dummy content","www.google.com",IMAGE);
+        post p3 = new post("test image...11","Lisa","dummy content","www.google.com",IMAGE);
+        post p4 = new post("test image...12","Lisa","dummy content","bytes.usc.edu",IMAGE);
 
         db.addPost(p1);
         db.addPost(p2);
         db.addPost(p3);
         db.addPost(p4);
 
-        ArrayList<String> testimagelink = db.getImageLinks("Lisa","www.google.com");
+       // ArrayList<String> TESTPOSTCHUNK = db.getPostChunk(1);
 
-        int va = 1;
+      //  int va = 1;
 
 
 /*
