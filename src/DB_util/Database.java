@@ -21,7 +21,7 @@ public class Database {
     private static ObjectId lastPost = null;
     // success/errorMsg constants
     public static final String Success = "Success!";
-    public static final String Register_unameTaken = "The user name has been taken. Try an new one.";
+    public static final String Register_unameTaken = "The user name has been taken. Try a new one.";
     public static final String Signin_nouname = "The username doesn't exist";
     public static final String Signin_pwerror = "Password is not correct.";
     public static final int TEXT = 1;
