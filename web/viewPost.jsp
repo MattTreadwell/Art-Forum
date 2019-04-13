@@ -130,6 +130,9 @@
 
                 <div class="postSeparator"></div>
 
+                <%
+                    if(login) {
+                %>
                 <form action="CreateComment" method="post">
                     <div class="form-group">
                         <textarea class="form-control" rows="5" id="comment" placeholder="Write your comment here . . ."></textarea>
@@ -137,8 +140,19 @@
                     <div class="text-right">
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </div>
-                    
                 </form>
+                <%
+                    } else {
+                %>
+                    <div class="text-center">
+                        <h3>Want to comment?</h3>
+                        <a class="btn btn-primary" href="login.jsp" role="button">Login</a>
+                        <p>OR</p>
+                        <a class="btn btn-outline-primary" href="register.jsp" role="button">Sign Up</a>
+                    </div>
+                <%
+                    }
+                %>
             </div>
 
             <!-- Comments go here -->

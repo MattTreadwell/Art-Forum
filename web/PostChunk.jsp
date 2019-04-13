@@ -19,7 +19,7 @@
     if(postChunk != null) {
         for(DB_util.post p : postChunk) {
 %>
-<div class="jumbotron post">
+<div class="jumbotron post" data-title="<%=p.Title%>">
     <div class="voteButtons">
         <span class="upvote"> </span>
         <p class="postScore text-center"><strong><%=p.mPostScore%></strong></p>

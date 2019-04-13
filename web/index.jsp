@@ -28,13 +28,27 @@
 
 
     <script type="text/javascript">
-        // Displays the contents of 'ins' on top of all the posts
-        function newPost (ins) {
-            // create a new div element
-            // add the newly created element and its content into the DOM
+        function newPost() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.open("GET", "PostChunkLatest.jsp");
+            xhttp.onreadystatechange = function() {
 
-            document.getElementById('postCol').insertAdjacentHTML("afterbegin", ins);
+                console.log(xhttp.responseText);
+                var s = xhttp.responseText;
+                var t = $('#postCol').children[0].data-title;
+                console.log(s);
+                console.log(t);
+                if(s.includes(t) {
+                    document.getElementById("postCol").insertAdjacentHTML("afterbegin", xhttp.responseText);
+                    ScrollReveal().reveal('.jumbotron.post', {delay: 200, reset: false});
+                }
+
+            }
+            xhttp.send();
+            setTimeout(newPost, 5000);
+
         }
+
     </script>
     <!-- Load fonts, libraries, and css -->
     <link rel="stylesheet" href="style.css">
@@ -51,8 +65,12 @@
             integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
             crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-            crossorigin="anonymous"></script>
+            integrity="sha384-JjSm
+
+Vgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous
+"></script>
+
 
 </head>
 <body>
@@ -195,21 +213,19 @@
         return true;
     }
 </script>
-
+<%--
 <%!
     public void newpost() {
-        //System.out.println(“asdfhasdf”);
+        System.out.println("Calling newpost() in java");
+        if(true) {
 %>
     <script>
-        newPost("<div id='div1' style='color:blue'>multiasdfasdfasdiufhadufoiajoiasfiojfadjiosdfl</div>");
+        newPost();
     </script>
 <%!
     }
+    }
 
-%>
-
-<%!
-    int data = 50;
 %>
 
 <%
@@ -237,19 +253,30 @@
         public void run() {
 
 
-
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             while(true) {
-
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 //IF THERE IS A NEW POST
                 newpost();
-                break;
             }
         }
 
 
     }
 
-    multithread mt = new multithread();
-%>
+    //multithread mt = new multithread();
+%>--%>
 </body>
+
+<script>
+    newPost();
+</script>
 </html>
