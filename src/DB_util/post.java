@@ -14,6 +14,7 @@ public class post {
     public Date postDate;
     public int mPostType;
     public String link;
+    public int mStatus;
     public ArrayList<comment> mComments;
     /*******the following variables are for internal use****/
     public ObjectId _postId;
@@ -32,6 +33,7 @@ public class post {
         ownerId = null;
         mCommentIds = null;
         mComments = null;
+        mStatus = 0;
         postContent = _postContent;
         if (_link.trim().isEmpty())
         {

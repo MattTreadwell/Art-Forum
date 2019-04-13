@@ -28,6 +28,10 @@ public class Database {
     public static final int LINK = 2;
     public static final int IMAGE = 3;
     public static final int displayNum = 8;
+    public static final int processing = 0;
+    public static final int nsfw = 1;
+    public static final int safe = 2;
+    public static final int unsure = 3;
 
 
     // connection required variables
@@ -112,6 +116,7 @@ public class Database {
         Date pdate = new Date();
         newPost.append("PostDate",pdate);
         newPost.append("PostScore",1);
+        newPost.append("PostStatus",p.mStatus);
         Document postBody = new Document();
         postBody.append("Title",p.Title);
         postBody.append("UserId",thisuserId);
@@ -232,6 +237,7 @@ public class Database {
             np.Title = PostBody.getString("Title");
             np.postDate = Post.getDate("PostDate");
             np._postId = Post.getObjectId("_id");
+            np.mStatus = Post.getInteger("PostStatus");
             np.ownerId = PostBody.getObjectId("UserId");
             np.OwnerName = uname;
             np.postContent = PostBody.getString("PostContent");
@@ -362,6 +368,12 @@ public class Database {
         Document updateQuery = new Document("$set", new Document("PostBody.PostContent", newContent));
         postCollection.updateOne(findQuery,updateQuery);
     }
+    public void changePostStatus(ObjectId postId, int newStatus)
+    {
+        Document findQuery = new Document("_id",postId);
+        Document updateQuery = new Document("$set", new Document("PostStatus",newStatus));
+        postCollection.updateOne(findQuery,updateQuery);
+    }
     public post getLatestPost()
     {
         Document SortingDoc = new Document("_id",-1);
@@ -389,7 +401,8 @@ public class Database {
         allQueries.add(nameQuery1);
         allQueries.add(nameQuery2);
         Document findQuery = new Document("$or",allQueries);
-        FindIterable<Document> findIterable = (FindIterable<Document>)postCollection.find(findQuery).limit(8);
+        Document SortingDoc = new Document("PostDate",-1);
+        FindIterable<Document> findIterable = (FindIterable<Document>)postCollection.find(findQuery).sort(SortingDoc).limit(8);
         ArrayList<post> MatchedPost = new ArrayList<post>();
         for (Document Post : findIterable)
         {
@@ -403,7 +416,7 @@ public class Database {
             np.postDate = Post.getDate("PostDate");
             np._postId = Post.getObjectId("_id");
             np.ownerId = PostBody.getObjectId("UserId");
-
+            np.mStatus = Post.getInteger("PostStatus");
             np.OwnerName = PostUser.getString("Username");
             np.postContent = PostBody.getString("PostContent");
             np.link = PostBody.getString("Link");
@@ -447,7 +460,7 @@ public class Database {
             np.postDate = Post.getDate("PostDate");
             np._postId = Post.getObjectId("_id");
             np.ownerId = PostBody.getObjectId("UserId");
-
+            np.mStatus = Post.getInteger("PostStatus");
             np.OwnerName = PostUser.getString("Username");
             np.postContent = PostBody.getString("PostContent");
             np.link = PostBody.getString("Link");
@@ -496,6 +509,7 @@ public class Database {
         np.OwnerName = PostUser.getString("Username");
         np.postContent = PostBody.getString("PostContent");
         np.link = PostBody.getString("Link");
+        np.mStatus = Post.getInteger("PostStatus");
         np.mPostType = PostBody.getInteger("PostType");
         np.mPostScore = Post.getInteger("PostScore");
         //now, begin handling comments.
@@ -567,7 +581,7 @@ public class Database {
         ArrayList<post> pp = db.getPostChunk(1);
         int ve = 1;
 
-/*
+
         ArrayList<post> Chunk = db.getPostChunk(1);
         int c1 = 4;
 
@@ -584,11 +598,11 @@ public class Database {
       //  db.deletePostById(lastPost);
 
         System.out.println("Testing Validation:"+db.Validate("Lisas",999000));
+        post dummy = db.getPostById(lastPost);
+        post p = db.getLatestPost();
+        int b = 5;
 
-        p = db.getLatestPost();
-        b = 5;
-*/
-        /*
+
         ArrayList<post> testMatch = db.searchPost("HW");
         //b = 6;
         ArrayList<comment> LisaComment = db.getUserComment("Lisa");
@@ -608,9 +622,14 @@ public class Database {
 
         post p2 = db.getPostById(Oid);
 
+        post pBefore = db.getPostById(lastPost);
+        System.out.println("status before: "+pBefore.mStatus);
+        db.changePostStatus(lastPost,unsure);
+        post pAfter = db.getPostById(lastPost);
+        System.out.println("status After: "+pAfter.mStatus);
 
         cdx = 10;
-*/
+
 
     }
 
