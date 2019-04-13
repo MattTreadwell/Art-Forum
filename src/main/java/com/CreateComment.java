@@ -1,5 +1,6 @@
 package com;
 
+import DB_util.Database;
 import DB_util.comment;
 import org.bson.types.ObjectId;
 
@@ -29,9 +30,12 @@ public class CreateComment extends HttpServlet {
             return;
         }
         String temp = request.getParameter("postId");
-        ObjectId postId = new ObjectId(temp);
         String comment = request.getParameter("comment");
-        DB_util.comment cm = new comment(comment,username,postId);
+        DB_util.comment cm = new comment(comment,username,new ObjectId(temp));
+        Database db = new Database();
+        db.addComment(cm);
+
+        response.sendRedirect("viewPost.jsp?postId=" + temp);
 
     }
 

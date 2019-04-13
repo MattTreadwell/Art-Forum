@@ -1,3 +1,4 @@
+<%@ page import="DB_util.Database" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -12,8 +13,7 @@
     HttpSession session1 = request.getSession();
     String username = (String) session1.getAttribute("username");
     boolean login = null != username;
-
-
+    Database db = new Database();
 %>
 
 <!-- THIS IS ONLY FOR TESTING DATABASE INTEGRATION -->
@@ -26,30 +26,6 @@
     <meta name="description"
           content="This is definitely not reddit">
 
-
-    <script type="text/javascript">
-        function newPost() {
-            var xhttp = new XMLHttpRequest();
-            xhttp.open("GET", "PostChunkLatest.jsp");
-            xhttp.onreadystatechange = function() {
-
-                console.log(xhttp.responseText);
-                var s = xhttp.responseText;
-                var t = $('#postCol').children[0].data-title;
-                console.log(s);
-                console.log(t);
-                if(s.includes(t) {
-                    document.getElementById("postCol").insertAdjacentHTML("afterbegin", xhttp.responseText);
-                    ScrollReveal().reveal('.jumbotron.post', {delay: 200, reset: false});
-                }
-
-            }
-            xhttp.send();
-            setTimeout(newPost, 5000);
-
-        }
-
-    </script>
     <!-- Load fonts, libraries, and css -->
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300" rel="stylesheet">
@@ -65,11 +41,8 @@
             integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
             crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-            integrity="sha384-JjSm
-
-Vgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-            crossorigin="anonymous
-"></script>
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
 
 
 </head>
@@ -115,14 +88,15 @@ Vgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
 
         <ul class="nav navbar-nav ml-auto w-100 justify-content-end">
             <%
-                if(login) {
+                if (login) {
             %>
             <li>
-                <a class="btn btn-primary" href="profile.jsp" role="button"><%=username%></a>
+                <a class="btn btn-primary" href="profile.jsp?username=<%=username%>" role="button"><%=username%>
+                </a>
                 <a class="btn btn-outline-primary" href="Logout" role="button">Logout</a>
             </li>
             <%
-                } else {
+            } else {
             %>
             <li>
                 <a class="btn btn-primary" href="login.jsp" role="button">Login</a>
@@ -137,7 +111,7 @@ Vgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
 </nav>
 
 <div class="text-center no-click" id="load">
-    <img class="loadingImage centered" src="img/oragami.gif" alt="loading">
+    <img class="loadingImage centered" src="img/origami.gif" alt="loading">
 </div>
 
 <div class="container-fluid postBox">
@@ -160,123 +134,20 @@ Vgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
     </div>
 </div>
 
-<!-- script for upvote buttons -->
-<script>
-    // Consider adding custom data attributes to the buttons to identify the correct score element
-    // https://stackoverflow.com/questions/19380910/jquery-append-jquery-variable-to-a-class-name
-    // need to also make an ajax call
-    $(".upvote").click(function () {
-        var upvoted = $(this).hasClass("on");
-        $(this).toggleClass("on");
-
-        console.log($(this));
-        // Need to modify associated number
-        if(upvoted) {
-
-        } else {
-
-        }
-    });
-
-    $(".downvote").click(function () {
-        var downvoted = $(this).hasClass("on");
-        $(this).toggleClass("on");
-        if(downvoted) {
-
-        } else {
-
-        }
-    })
-
-</script>
-
 <script type="text/javascript">
-    window.onload = function loadPosts() {
-
-        console.log("calling loadPosts");
-        var xhttp = new XMLHttpRequest();
-        xhttp.open("GET", "PostChunk.jsp?index=<%=index%>");
-        xhttp.onreadystatechange = function() {
-            $("#load").fadeOut();
-            //$('.postCol').innerHTML(xhttp.responseText);
-            //document.getElementById('postCol').insertAdjacentHTML("beforeend", xhttp.responseText);
-            //document.getElementById('postCol').innerHTML = xhttp.responseText;
-            document.getElementById('postCol').insertAdjacentHTML("beforeend", xhttp.responseText);
-
-            ScrollReveal().reveal('.jumbotron.post', {delay: 200, reset: false});
-            ScrollReveal().reveal('.pageButton', {delay: 200, reset: true});
-            ScrollReveal().reveal('#sidebar', {delay: 200, reset: true});
-            //ScrollReveal().init();
-
-        };
-        xhttp.send();
-        return true;
-    }
+        $.ajax({
+            url: "PostChunk.jsp?index=<%=index%>",
+            type: "GET",
+            async: true,
+            success: function (response) {
+                $("#load").fadeOut();
+                $("#postCol").prepend(response);
+                ScrollReveal().reveal('.jumbotron.post', {delay: 200, reset: false});
+                ScrollReveal().reveal('.pageButton', {delay: 200, reset: false});
+                ScrollReveal().reveal('#sidebar', {delay: 200, reset: true});
+            }
+        })
 </script>
-<%--
-<%!
-    public void newpost() {
-        System.out.println("Calling newpost() in java");
-        if(true) {
-%>
-    <script>
-        newPost();
-    </script>
-<%!
-    }
-    }
 
-%>
-
-<%
-
-
-
-    class multithread extends Thread{
-
-
-
-
-        //MUST INSTANTIATE A MULTITHREAD INSTANCE IN THE INDEXDYNAMIC.JSP FILE SOMEWHERE SO ALL THIS CODE WILL RUN
-
-
-        public multithread() {
-            this.start();
-
-            //FOR CHECKING NEW NOTIFICATION
-            while(true) {
-                break;
-            }
-        }
-
-        //FOR CHECKING NEW POST
-        public void run() {
-
-
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            while(true) {
-                try {
-                    Thread.sleep(10000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                //IF THERE IS A NEW POST
-                newpost();
-            }
-        }
-
-
-    }
-
-    //multithread mt = new multithread();
-%>--%>
 </body>
-
-<script>
-    newPost();
-</script>
 </html>

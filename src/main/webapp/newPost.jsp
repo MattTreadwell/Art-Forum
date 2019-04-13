@@ -7,15 +7,13 @@
     boolean login = null != username;
     if(!login)
     {
-        RequestDispatcher dispatch = request.getRequestDispatcher("/login.jsp");
-        dispatch.forward(request, response);
+        response.sendRedirect("login.jsp");
     }
     String error = (String)request.getAttribute("errormsg");
     if(error == null)
     {
         error = "";
     }
-    // Redirect users to login page
 %>
 
 <html>
@@ -90,10 +88,11 @@
 
         <ul class="nav navbar-nav ml-auto w-100 justify-content-end">
             <%
-                if(login) {
+                if (login) {
             %>
             <li>
-                <a class="btn btn-primary" href="profile.jsp" role="button"><%=username%></a>
+                <a class="btn btn-primary" href="profile.jsp?username=<%=username%>" role="button"><%=username%>
+                </a>
                 <a class="btn btn-outline-primary" href="Logout" role="button">Logout</a>
             </li>
             <%

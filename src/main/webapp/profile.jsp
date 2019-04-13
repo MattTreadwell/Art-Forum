@@ -4,7 +4,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    String profile = request.getParameter("profile");
+    String profile = request.getParameter("username");
 
     if(profile == null) {
         request.setAttribute("error", "Missing user profile");
@@ -64,15 +64,6 @@
 <div id="particles-js-main"></div>
 
 
-<!-- Load JS particles -->
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-
-<script>
-    particlesJS.load('particles-js-main', 'particles-main.json', function () {
-        console.log('particles.json loaded...')
-    })
-</script>
-
 <!-- Navbar -->
 <nav class="navbar navbar-expand-md navbar-light bg-light justify-content-center fixed-top">
     <img class="navIcon d-none d-md-block" src="img/icon.jpg" alt="">
@@ -101,10 +92,11 @@
 
         <ul class="nav navbar-nav ml-auto w-100 justify-content-end">
             <%
-                if(login) {
+                if (login) {
             %>
             <li>
-                <a class="btn btn-primary" href="profile.jsp" role="button"><%=username%></a>
+                <a class="btn btn-primary" href="profile.jsp?username=<%=username%>" role="button"><%=username%>
+                </a>
                 <a class="btn btn-outline-primary" href="Logout" role="button">Logout</a>
             </li>
             <%

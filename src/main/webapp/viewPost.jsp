@@ -1,9 +1,14 @@
 <%@ page import="DB_util.Database" %>
+<%@ page import="org.bson.types.ObjectId" %>
+<%@ page import="DB_util.post" %>
+<%@ page import="com.webHelper" %>
+<%@ page import="DB_util.comment" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
     // Retrieve parameter post ID
-    String id = (String) request.getParameter("id");
+    String id = (String) request.getParameter("postId");
 
     // Session to check if user is logged in
     HttpSession session1 = request.getSession();
@@ -11,11 +16,19 @@
     boolean login = null != username;
 
     // Make a new Database class
-    //Database db = new Database();
+    Database db = new Database();
 
     // Check if post exists
-    // db.getPostById(id);
+    post p = db.getPostById(new ObjectId(id));
 
+    if (p == null) {
+        request.setAttribute("errormsg", "Post not found.");
+        RequestDispatcher dispatch = getServletContext().getRequestDispatcher("/error.jsp");
+        dispatch.forward(request, response);
+        return;
+    }
+
+    ArrayList<comment> comments = p.mComments;
 %>
 
 <html>
@@ -87,10 +100,11 @@
 
         <ul class="nav navbar-nav ml-auto w-100 justify-content-end">
             <%
-                if(login) {
+                if (login) {
             %>
             <li>
-                <a class="btn btn-primary" href="profile.jsp" role="button"><%=username%></a>
+                <a class="btn btn-primary" href="profile.jsp?username=<%=username%>" role="button"><%=username%>
+                </a>
                 <a class="btn btn-outline-primary" href="Logout" role="button">Logout</a>
             </li>
             <%
@@ -112,85 +126,117 @@
     <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-7 col-xl-5 offset-md-0 offset-sm-0 offset-lg-1 offset-xl-3 postCol">
             <!-- Text post template -->
-            <div class="jumbotron post">
+            <div class="jumbotron post" data-title="<%=p.Title%>">
                 <div class="voteButtons">
                     <span class="upvote"> </span>
-                    <p class="postScore text-center"><strong>69</strong></p>
+                    <p class="postScore text-center" id="score<%=p.mPostScore%>"><strong><%=p.mPostScore%>
+                    </strong></p>
                     <span class="downvote"> </span>
                 </div>
                 <div class="postPreview">
-                    <h5 class="postTitle">This is a text post!</h5>
-                    <!-- THIS IS WHAT WILL DIFFER BETWEEN TEXT TYPES (the preview) -->
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vitae consectetur sapien. Sed
-                        vitae pellentesque ex. Aenean et dignissim justo.</p>
+                    <h5 class="postTitle"><%=p.Title%>
+                    </h5>
+                    <p class="postUser">By <a href="profile.jsp?username=<%=p.OwnerName%>"><%=p.OwnerName%>
+                    </a> <%=webHelper.relativeTime(p.postDate)%>
+                    </p>
+                    <!-- THIS IS WHAT WILL DIFFER BETWEEN POST TYPES (the preview) -->
+                    <%
+                        switch (p.mPostType) {
+                            //
+                            case 1:
+                    %>
+                    <h5><%=p.postContent%>
+                    </h5>
+                    <%
+
+
+                            break;
+                        case 2:
+                    %>
+                    <p class="postLinkPreview">
+                        <a href="<%=p.link%>"><%=p.link%>
+                        </a>
+                    </p>
+                    <%
+                            break;
+                        case 3:
+                    %>
+                    <!-- TODO consider also showing link -->
+                    <div class="text-center">
+                        <img class="postImagePreview" src="<%=p.link%>" alt="image not found"
+                             onerror="this.src='img/notfound.png'"/>
+                    </div>
+                    <%
+                            break;
+                        default:
+                            // Error case: no post type (should probably skip)
+                    %>
+                    <p class="postTextPreview text-danger">ERROR: MISSING/INVALID POST TYPE</p>
+                    <%
+                                break;
+                        }
+                    %>
                     <div class="btn-group-xs">
-                        <button class="btn btn-light btn-xs">420 Comments</button>
+                        <a href="viewPost.jsp?postId=<%=p._postId%>" class="btn btn-secondary btn-xs"
+                           role="button"><%=webHelper.commentNumber(p.mCommentIds.size())%> Comments</a>
                     </div>
                 </div>
-
                 <div class="postSeparator"></div>
 
                 <%
-                    if(login) {
+                    if (login) {
                 %>
                 <form action="CreateComment" method="post">
+                    <input type="hidden" name="postId" value="<%=id%>"/>
                     <div class="form-group">
-                        <textarea class="form-control" rows="5" id="comment" placeholder="Write your comment here . . ."></textarea>
+                        <textarea class="form-control" rows="5" name="comment"
+                                  placeholder="Write your comment here . . ."></textarea>
                     </div>
                     <div class="text-right">
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </div>
                 </form>
                 <%
-                    } else {
+                } else {
                 %>
-                    <div class="text-center">
-                        <h3>Want to comment?</h3>
-                        <a class="btn btn-primary" href="login.jsp" role="button">Login</a>
-                        <p>OR</p>
-                        <a class="btn btn-outline-primary" href="register.jsp" role="button">Sign Up</a>
-                    </div>
+                <div class="text-center">
+                    <h3>Want to comment?</h3>
+                    <a class="btn btn-primary" href="login.jsp" role="button">Login</a>
+                    <p>OR</p>
+                    <a class="btn btn-outline-primary" href="register.jsp" role="button">Sign Up</a>
+                </div>
                 <%
                     }
                 %>
             </div>
-
             <!-- Comments go here -->
+            <%
+                if (!comments.isEmpty()) {
+                    for (comment c : comments) {
+            %>
             <div class="jumbotron post">
                 <div class="comment">
-                    <div class="voteButtons">
-                        <span class="upvote"> </span>
-                        <p class="postScore text-center"><strong>69</strong></p>
-                        <span class="downvote"> </span>
-                    </div>
-
-                    <div class="commentContent">
-                        <a href="profile.jsp">Patrick Star</a>
-                        <p>Feelsbadman.jpg</p>
-                    </div>
+                    <a href="profile.jsp"><a href="profile.jsp?username=<%=c.uname%>"><%=c.uname%>
+                    </a> <%=webHelper.relativeTime(p.postDate)%>
+                    </a>
+                    <h5><%=c.commentContent%>
+                    </h5>
                 </div>
             </div>
-
+            <%
+                }
+            } else {
+            %>
             <div class="jumbotron post">
-                <div class="comment">
-                    <div class="voteButtons">
-                        <span class="upvote"> </span>
-                        <p class="postScore text-center"><strong>382</strong></p>
-                        <span class="downvote"> </span>
-                    </div>
-
-                    <div class="commentContent">
-                        <a href="profile.jsp">Spongebobu</a>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vitae euismod lorem. Vestibulum
-                            iaculis finibus augue laoreet imperdiet. Interdum et malesuada fames ac ante ipsum primis in
-                            faucibus. Etiam eu diam risus. Pellentesque nibh orci, efficitur eu dignissim eget,
-                            elementum non sapien. Nam tempor diam id nisl rutrum hendrerit. Nunc sagittis sit amet
-                            mauris elementum aliquet. Donec fermentum molestie leo ut sodales.</p>
-                    </div>
+                <div class="text-center">
+                    <h1>No comments :(</h1>
                 </div>
             </div>
+            <%
+                }
+            %>
+
         </div>
-
         <!-- "Right" div for showing other post previews from the user -->
         <div class="col-sm-0 col-md-0 col-lg-3 col-xl-2  d-none d-lg-block">
             <div class="jumbotron">
@@ -201,8 +247,9 @@
                 </div>
             </div>
         </div>
-
     </div>
+
+
 </div>
 
 <script>
