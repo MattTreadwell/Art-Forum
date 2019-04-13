@@ -1,5 +1,6 @@
 package com;
 
+import DB_util.Database;
 import DB_util.comment;
 import org.bson.types.ObjectId;
 
@@ -19,26 +20,22 @@ public class CreateComment extends HttpServlet {
         // This allows a user to make a comment
         // First check if a user is logged in by retrieving the 'username' session variable (otherwise redirect to error page)
         // If an error occurs, redirect to error.jsp with attribute 'errormsg' set to the error
-        String comment = request.getParameter("comment");
-        if(comment == null ||comment.trim().length()==0)
+        HttpSession session = request.getSession();
+        String username = (String)session.getAttribute("username");
+        if(username==null)
         {
-            request.setAttribute("errormsg","The comment is empty.");
+            request.setAttribute("errormsg","You are not logged in.");
             RequestDispatcher dispatch = getServletContext().getRequestDispatcher("/error.jsp");
             dispatch.forward(request, response);
             return;
         }
-        HttpSession session = request.getSession();
-        String username = (String)session.getAttribute("username");
-//        if(username==null)
-//        {
-//            request.setAttribute("errormsg","You are not logged in.");
-//            RequestDispatcher dispatch = getServletContext().getRequestDispatcher("/error.jsp");
-//            dispatch.forward(request, response);
-//            return;
-//        }
         String temp = request.getParameter("postId");
-        ObjectId postId = new ObjectId(temp);
-        DB_util.comment cm = new comment(comment,username,postId);
+        String comment = request.getParameter("comment");
+        DB_util.comment cm = new comment(comment,username,new ObjectId(temp));
+        Database db = new Database();
+        db.addComment(cm);
+
+        response.sendRedirect("viewPost.jsp?postId=" + temp);
 
     }
 

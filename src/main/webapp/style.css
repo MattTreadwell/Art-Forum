@@ -121,6 +121,11 @@ html.sr .load-hidden {
     max-width: 1800px;
 }
 
+.container-fluid.searchBox {
+    margin-top: 0vh;
+    max-width: 1800px;
+}
+
 .zeroMargin {
     margin: 0px 0px;
 }

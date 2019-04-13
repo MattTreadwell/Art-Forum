@@ -9,15 +9,12 @@
     if(retrieveNum != null) {
         index = Integer.parseInt(retrieveNum);
     }
-
     // Make a new Database class
     Database db = new Database();
-
+    db.getPostSize();
     // Get ArrayList of Posts from db by index #
-    java.util.ArrayList<DB_util.post> postChunk = db.getPostChunk(index);
-    // Iterate over the array of posts
-    if(postChunk != null) {
-        for(DB_util.post p : postChunk) {
+    DB_util.post p = db.getLatestPost();
+    if(p!=null) {
 %>
 <div class="jumbotron post" data-title="<%=p.Title%>">
     <div class="voteButtons">
@@ -26,7 +23,7 @@
         <span class="downvote"> </span>
     </div>
     <div class="postPreview">
-        <h5 class="postTitle"><%=p.Title%> </h5>
+        <h5 class="postTitle"><%=p.Title%> MULTITHREAD</h5>
         <p class="postUser">By <a href="profile.jsp?user=<%=p.ownerId%>"><%=p.OwnerName%></a> <%=com.webHelper.relativeTime(p.postDate)%></p>
         <!-- THIS IS WHAT WILL DIFFER BETWEEN POST TYPES (the preview) -->
         <%
@@ -37,8 +34,6 @@
         <!-- TODO need shortener function -->
         <p class="postTextPreview"><%=p.postContent%></p>
         <%
-
-
                 break;
             case 2:
         %>
@@ -72,7 +67,7 @@
 </div>
 
 <%
-    }
+    
 } else {
 %>
 <div class="jumbotron post">
@@ -84,57 +79,22 @@
     }
 %>
 
-<nav aria-label="Page navigation example" class="load-hidden pageButton">
-    <ul class="pagination justify-content-center">
-        <%
-            // Disable previous button for first page
-            if(index == 1) {
-        %>
-        <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">Previous</a></li>
-        <%
-        } else {
-        %>
-        <li class="page-item"><a class="page-link" href="index.jsp?index=<%=index-1%>">Previous</a></li>
-        <%
-            }
-        %>
-
-        <%
-            // Check if we are on the last page
-            if(db.getPostSize() / (index * Database.displayNum) < 1) {
-        %>
-        <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">Next</a></li>
-        <%
-        } else {
-        %>
-        <li class="page-item"><a class="page-link" href="index.jsp?index=<%=index+1%>">Next</a></li>
-        <%
-            }
-        %>
-    </ul>
-</nav>
 
 <script>
     $(".upvote").click(function () {
         var upvoted = $(this).hasClass("on");
         $(this).toggleClass("on");
-
         console.log($(this));
         // Need to modify associated number
         if(upvoted) {
-
         } else {
-
         }
     });
-
     $(".downvote").click(function () {
         var downvoted = $(this).hasClass("on");
         $(this).toggleClass("on");
         if(downvoted) {
-
         } else {
-
         }
     })
 </script>

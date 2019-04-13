@@ -1,6 +1,7 @@
 package com;
 
 import DB_util.Database;
+import ML.ImageProcess;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -20,35 +21,32 @@ public class Login extends HttpServlet {
         // On fail: return them to login.jsp with attribute 'errormsg' as the error
         // On success: return user to index.jsp with 'username' attribute set as their username
         String username = request.getParameter("username");
-        if(username == null||username.trim().length()==0)
-        {
-            request.setAttribute("errormsg","Username is blank.");
+        if (username == null || username.trim().length() == 0) {
+            request.setAttribute("errormsg", "Username is blank.");
             RequestDispatcher dispatch = getServletContext().getRequestDispatcher("/login.jsp");
             dispatch.forward(request, response);
             return;
         }
         username = username.trim();
         String password = request.getParameter("password");
-        if(password == null||password.trim().length()==0)
-        {
-            request.setAttribute("errormsg","Password is blank.");
+        if (password == null || password.trim().length() == 0) {
+            request.setAttribute("errormsg", "Password is blank.");
             RequestDispatcher dispatch = getServletContext().getRequestDispatcher("/login.jsp");
             dispatch.forward(request, response);
             return;
         }
         password = password.trim();
         Database db = new Database();
-        String mess = db.Validate(username,password.hashCode());
-        if(!mess.equals(Database.Success))
-        {
-            request.setAttribute("errormsg",mess);
+        String mess = db.Validate(username, password.hashCode());
+        if (!mess.equals(Database.Success)) {
+            request.setAttribute("errormsg", mess);
             RequestDispatcher dispatch = getServletContext().getRequestDispatcher("/login.jsp");
             dispatch.forward(request, response);
             return;
         }
         HttpSession session1 = request.getSession(true);
         session1.setAttribute("username", username);
-//        request.setAttribute("success", "Successfully logged in as " + username);
+        session1.setAttribute("ip", new ImageProcess());
         RequestDispatcher dispatch = getServletContext().getRequestDispatcher("/index.jsp");
         dispatch.forward(request, response);
         return;

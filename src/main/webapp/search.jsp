@@ -11,17 +11,9 @@
     String username = (String) session1.getAttribute("username");
     boolean login = null != username;
 
-    // Make a new Database class
-    Database db = new Database();
-
-
-    // Get ArrayList of Posts from db by index #
-    System.out.println(query);
-    java.util.ArrayList<DB_util.post> results = db.searchPost(query);
-    System.out.println("SEARCH RESULT SIZE: "+results.size());
 %>
 
-<html>
+<html class="sr">
 <head>
     <title>Search Results</title>
     <meta name="viewport"
@@ -34,6 +26,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:300" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"
           integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <script src="https://unpkg.com/scrollreveal"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.js"
             integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
             crossorigin="anonymous"></script>
@@ -89,10 +82,11 @@
 
         <ul class="nav navbar-nav ml-auto w-100 justify-content-end">
             <%
-                if(login) {
+                if (login) {
             %>
             <li>
-                <a class="btn btn-primary" href="profile.jsp" role="button"><%=username%></a>
+                <a class="btn btn-primary" href="profile.jsp?username=<%=username%>" role="button"><%=username%>
+                </a>
                 <a class="btn btn-outline-primary" href="Logout" role="button">Logout</a>
             </li>
             <%
@@ -110,93 +104,32 @@
     </div>
 </nav>
 
+<div class="text-center no-click" id="load">
+    <img class="loadingImage centered" src="img/origami.gif" alt="loading">
+</div>
 
-<div class="container-fluid postBox">
-    <h1 class="text-white">Search results for <%=query%></h1>
+<div class="container-fluid searchBox">
     <div class="row">
-        <div class="col-sm-12 col-md-12 col-lg-7 col-xl-5 offset-md-0 offset-sm-0 offset-lg-1 offset-xl-3">
+        <div class="col-sm-12 col-md-12 col-lg-8 col-xl-6 offset-md-0 offset-sm-0 offset-lg-2 offset-xl-3" id="postCol">
+            <h1 class="text-white">Search results for <%=query%></h1>
 
-            <%
-                // Iterate over the array of posts
-                if(!results.isEmpty()) {
-                    for(DB_util.post p : results) {
-            %>
-            <div class="jumbotron post">
-                <div class="voteButtons">
-                    <span class="upvote"> </span>
-                    <p class="postScore text-center"><strong><%=p.mPostScore%></strong></p>
-                    <span class="downvote"> </span>
-                </div>
-                <div class="postPreview">
-                    <h5 class="postTitle"><%=p.Title%> </h5>
-                    <p class="postUser">By <a href=""><%=p.OwnerName%></a></p>
-                    <!-- THIS IS WHAT WILL DIFFER BETWEEN POST TYPES (the preview) -->
-                    <%
-                        switch (p.mPostType) {
-                            //
-                            case 1 :
-                    %>
-                    <!-- TODO need shortener function -->
-                    <p class="postTextPreview"><%=p.postContent%></p>
-                    <%
-
-
-                            break;
-                        case 2:
-                    %>
-                    <!-- TODO consider shortener here too -->
-                    <p class="postLinkPreview">
-                        <a href="<%=p.link%>"><%=p.link%></a>
-                    </p>
-                    <%
-                            break;
-                        case 3:
-                    %>
-                    <!-- TODO consider also showing link -->
-                    <div class="text-center">
-                        <img class="postImagePreview" src="<%=p.link%>"/>
-                    </div>
-                    <%
-                            break;
-                        default:
-                            // Error case: no post type (should probably skip)
-                    %>
-                    <p class="postTextPreview text-danger">ERROR: MISSING/INVALID POST TYPE</p>
-                    <%
-                                break;
-                        }
-                    %>
-                    <div class="btn-group-xs">
-                        <button class="btn btn-secondary btn-xs"><%=webHelper.commentNumber(p.mComments.size())%> Comments</button>
-                    </div>
-                </div>
-            </div>
-
-            <%
-                }
-            } else {
-            %>
-            <div class="jumbotron post">
-                <div class="text-center">
-                    <h1>No matching posts found.</h1>
-                </div>
-            </div>
-            <%
-                }
-            %>
-
-        <!-- "Right" div for showing calendar, weathers, other APIs -->
-        <div class="col-sm-0 col-md-0 col-lg-3 col-xl-2  d-none d-lg-block">
-            <div class="jumbotron">
-                <h5>Art Forum is the Front Page of CSCI201</h5>
-
-                <div class="text-center">
-                    <a class="btn btn-primary" href="newPost.jsp" role="button"><strong>CREATE POST</strong></a>
-                </div>
-            </div>
         </div>
 
     </div>
 </div>
+
+<script type="text/javascript">
+    $.ajax({
+        url: "PostSearch.jsp?query=<%=query%>",
+        type: "GET",
+        async: true,
+        success: function (response) {
+            $("#load").fadeOut();
+            $("#postCol").append(response);
+            ScrollReveal().reveal('.jumbotron.post', {delay: 200, reset: false});
+        }
+    })
+</script>
+
 </body>
 </html>
