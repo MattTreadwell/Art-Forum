@@ -16,6 +16,13 @@ public class post {
     public String link;
     public int mStatus;
     public ArrayList<comment> mComments;
+
+    // Post status final variables
+    public static final int PROCESSING = 0;
+    public static final int ERROR = 1;
+    public static final int UNSURE = 2;
+    public static final int NSFW = 3;
+    public static final int SAFE = 4;
     /*******the following variables are for internal use****/
     public ObjectId _postId;
     public ObjectId ownerId;

@@ -206,6 +206,9 @@ public class Database {
         {
             return null;
         }
+        if (User == null) {
+            return null;
+        }
         user u = new user();
         // first, fill out the basic information excluding arrays;
         u.username = uname;
@@ -543,12 +546,12 @@ public class Database {
     // Driver/Test code
     public static void main(String [] args)
     {
-        Database db = new Database();
+/*        Database db = new Database();
         System.out.println("Hello, World!");
 
 
         user u = new user("Lisa",123456,"China",21,0);
-        System.out.println(db.addUser(u));
+        System.out.println(db.addUser(u));*/
 /*
         post p1 = new post("test image...9","Lisa","dummy content","www.google.com",IMAGE);
         post p2 = new post("test image...10","Lisa","dummy content","www.google.com",IMAGE);
@@ -564,10 +567,13 @@ public class Database {
 
       //  int va = 1;
 
+        Database db = new Database();
 
+        if(db.getUser("bob") == null) {
+            System.out.println("couldn't find bob");
+        }
 
-
-        for (int i = 1; i<78; i++)
+/*        for (int i = 1; i<78; i++)
         {
             String Title = "CSCI201 HW"+Integer.toString(i);
             String OwnerName = "Lisa";
@@ -580,8 +586,10 @@ public class Database {
             db.addComment(d);
         }
 
+        db.addPost(new post());*/
 
 
+/*
         ArrayList<post> pp = db.getPostChunk(1);
         int ve = 1;
 
@@ -632,7 +640,7 @@ public class Database {
         post pAfter = db.getPostById(lastPost);
         System.out.println("status After: "+pAfter.mStatus);
 
-        cdx = 10;
+        cdx = 10;*/
 
 
     }

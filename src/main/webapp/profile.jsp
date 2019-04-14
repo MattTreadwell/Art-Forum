@@ -19,7 +19,7 @@
     boolean login = null != username;
 
     Database db = new Database();
-
+    System.out.println("getting profile of user: " + profile);
     DB_util.user userProfile = db.getUser("profile");
 
     if(userProfile == null) {
