@@ -1,6 +1,8 @@
 <%@ page import="DB_util.Database" %>
 <%@ page import="DB_util.post" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="static org.apache.logging.log4j.web.WebLoggerContextUtils.getServletContext" %>
+<%@ page import="com.webHelper" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -20,7 +22,7 @@
 
     Database db = new Database();
     System.out.println("getting profile of user: " + profile);
-    DB_util.user userProfile = db.getUser("profile");
+    DB_util.user userProfile = db.getUser(profile);
 
     if(userProfile == null) {
         request.setAttribute("error", "User " + profile + " not found.");
@@ -62,6 +64,15 @@
 <body>
 
 <div id="particles-js-main"></div>
+
+<!-- Load JS particles -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+<script>
+    particlesJS.load('particles-js-main', 'particles-main.json', function () {
+        console.log('particles.json loaded...')
+    })
+</script>
 
 
 <!-- Navbar -->
@@ -122,7 +133,9 @@
                 <div class="text-center">
                     <h4><strong><%=userProfile.username%></strong></h4>
                     <h5>Post Score: <%=userProfile.profile.postScore%></h5>
+<%--
                     <h5>Country: <%=userProfile.profile.country%></h5>
+--%>
                 </div>
             </div>
         </div>
@@ -135,15 +148,16 @@
                 // Iterate over the array of posts
                 for(DB_util.post p : userProfile.userPosts) {
             %>
-            <div class="jumbotron post">
+            <div class="jumbotron post" data-title="<%=p.Title%>">
                 <div class="voteButtons">
-                    <span class="upvote"> </span>
-                    <p class="postScore text-center"><strong>69</strong></p>
-                    <span class="downvote"> </span>
+                    <span class="upvote" data-index="<%=p._postId%>"> </span>
+                    <p class="postScore text-center" id="score<%=p.mPostScore%>"><strong><%=p.mPostScore%></strong></p>
+                    <span class="downvote" data-index="<%=p._postId%>"> </span>
                 </div>
                 <div class="postPreview">
-                    <h5 class="postTitle"><%=p.Title%> <p class="postUser">by <%=p.OwnerName%></p></h5>
-                    <!-- THIS IS WHAT WILL DIFFER BETWEEN TEXT TYPES (the preview) -->
+                    <h5 class="postTitle"><%=p.Title%> </h5>
+                    <p class="postUser">By <a href="profile.jsp?username=<%=p.OwnerName%>"><%=p.OwnerName%></a> <%=webHelper.relativeTime(p.postDate)%></p>
+                    <!-- THIS IS WHAT WILL DIFFER BETWEEN POST TYPES (the preview) -->
                     <%
                         switch (p.mPostType) {
                             //
@@ -167,7 +181,17 @@
                     %>
                     <!-- TODO consider also showing link -->
                     <div class="text-center">
-                        <img class="postImagePreview" src="<%=p.link%>"/>
+                        <%
+                            if(p.mStatus == Database.NSFW) {
+                        %>
+                        <img class="postImagePreview postImageBlur" src="<%=p.link%>" alt="image not found" onerror="this.src='img/notfound.png'"/>
+                        <%
+                        } else {
+                        %>
+                        <img class="postImagePreview" src="<%=p.link%>" alt="image not found" onerror="this.src='img/notfound.png'"/>
+                        <%
+                            }
+                        %>
                     </div>
                     <%
                             break;
@@ -180,7 +204,41 @@
                         }
                     %>
                     <div class="btn-group-xs">
-                        <button class="btn btn-secondary btn-xs">420 Comments</button>
+                        <a href="viewPost.jsp?postId=<%=p._postId%>" class="btn btn-secondary btn-xs" role="button"><%=webHelper.commentNumber(p.mCommentIds.size())%> Comments</a>
+                        <%
+                            if(p.mPostType == Database.IMAGE) {
+                                switch (p.mStatus) {
+                                    case post.NSFW:
+                        %>
+                        <button class="btn btn-danger" type="submit">NSFW</button>
+
+                        <%
+                                break;
+                            case post.SAFE:
+                        %>
+                        <button class="btn btn-success" type="submit">Certified ART</button>
+                        <%
+                                break;
+                            case post.UNSURE:
+                        %>
+                        <button class="btn btn-secondary" type="submit">Unsure</button>
+
+                        <%
+                                break;
+                            case post.PROCESSING:
+                        %>
+                        <button class="btn btn-warning" type="submit">processing</button>
+
+                        <%
+                                break;
+                            case post.ERROR:
+                        %>
+                        <button class="btn btn-danger" type="submit">ERROR</button>
+
+                        <%
+                                }
+                            }
+                        %>
                     </div>
                 </div>
             </div>
@@ -188,127 +246,6 @@
             <%
                 }
             %>
-            <!-- Text post template -->
-            <div class="jumbotron post">
-                <div class="voteButtons">
-                    <span class="upvote"> </span>
-                    <p class="postScore text-center"><strong>69</strong></p>
-                    <span class="downvote"> </span>
-                </div>
-                <div class="postPreview">
-                    <h5 class="postTitle">This is a text post!</h5>
-                    <!-- THIS IS WHAT WILL DIFFER BETWEEN TEXT TYPES (the preview) -->
-                    <p class="postTextPreview">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vitae
-                        consectetur sapien. Sed vitae pellentesque ex. Aenean et dignissim justo. Duis maximus risus nec
-                        purus ullamcorper, non sollicitudin odio molestie.</p>
-                    <div class="btn-group-xs">
-                        <button class="btn btn-secondary btn-xs">420 Comments</button>
-                    </div>
-                </div>
-            </div>
-            <!-- Link post template  -->
-            <div class="jumbotron post">
-                <div class="voteButtons">
-                    <span class="upvote"> </span>
-                    <p class="postScore text-center"><strong>1337</strong></p>
-                    <span class="downvote"> </span>
-                </div>
-                <div class="postPreview">
-                    <h5 class="postTitle">This is a link post!</h5>
-                    <p class="postLinkPreview">
-                        <a href="https://www.reddit.com/">https://www.reddit.com/</a>
-                    </p>
-                    <div class="btn-group-xs">
-                        <button class="btn btn-secondary btn-xs">5.7k Comments</button>
-                    </div>
-                </div>
-            </div>
-            <!-- Image post template -->
-            <div class="jumbotron post">
-                <div class="voteButtons">
-                    <span class="upvote"> </span>
-                    <p class="postScore text-center"><strong>1324</strong></p>
-                    <span class="downvote"> </span>
-                </div>
-                <div class="postPreview">
-                    <h5 class="postTitle">This is a normal 16:9 image post!</h5>
-                    <img class="postImagePreview" src="img/normalimage.jpg"/>
-
-                    <div class="btn-group-xs">
-                        <button class="btn btn-secondary btn-xs">7.7k Comments</button>
-                    </div>
-                </div>
-            </div>
-            <!-- Odd image sizes -->
-            <div class="jumbotron post">
-                <div class="voteButtons">
-                    <span class="upvote"> </span>
-                    <p class="postScore text-center"><strong>1324</strong></p>
-                    <span class="downvote"> </span>
-                </div>
-                <div class="postPreview">
-                    <h5 class="postTitle">This is a (fairly) square 1:1 image post!</h5>
-                    <div class="text-center">
-                        <img class="postImagePreview" src="img/squareimage.jpg"/>
-                    </div>
-
-                    <div class="btn-group-xs">
-                        <button class="btn btn-secondary btn-xs">7.7k Comments</button>
-                    </div>
-                </div>
-            </div>
-            <div class="jumbotron post">
-                <div class="voteButtons">
-                    <span class="upvote"> </span>
-                    <p class="postScore text-center"><strong>1324</strong></p>
-                    <span class="downvote"> </span>
-                </div>
-                <div class="postPreview">
-                    <h5 class="postTitle">This is a tall image post!</h5>
-                    <div class="text-center">
-                        <img class="postImagePreview" src="img/tallimage.png"/>
-                    </div>
-
-                    <div class="btn-group-xs">
-                        <button class="btn btn-secondary btn-xs">7.7k Comments</button>
-                    </div>
-                </div>
-            </div>
-            <div class="jumbotron post">
-                <div class="voteButtons">
-                    <span class="upvote"> </span>
-                    <p class="postScore text-center"><strong>1324</strong></p>
-                    <span class="downvote"> </span>
-                </div>
-                <div class="postPreview">
-                    <h5 class="postTitle">This is a GIF post!</h5>
-                    <div class="text-center">
-                        <img class="postImagePreview" src="img/giftest.gif"/>
-                    </div>
-
-                    <div class="btn-group-xs">
-                        <button class="btn btn-secondary btn-xs">7.7k Comments</button>
-                    </div>
-                </div>
-            </div>
-            <div class="jumbotron post">
-                <div class="voteButtons">
-                    <span class="upvote"> </span>
-                    <p class="postScore text-center"><strong>1324</strong></p>
-                    <span class="downvote"> </span>
-                </div>
-                <div class="postPreview">
-                    <h5 class="postTitle">This is a broken image post!</h5>
-                    <div class="text-center">
-                        <img class="postImagePreview" src="invalid" alt="image not found"
-                             onerror="this.src='img/notfound.png'"/>
-                    </div>
-
-                    <div class="btn-group-xs">
-                        <button class="btn btn-secondary btn-xs">7.7k Comments</button>
-                    </div>
-                </div>
-            </div>
 
         </div>
 

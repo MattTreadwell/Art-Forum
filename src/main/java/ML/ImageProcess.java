@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import static DB_util.Database.IMAGE;
-import static org.slf4j.event.Level.TRACE;
 
 public class ImageProcess {
     // This class links up with the servlet and will run the computer vision on a post when given an image
@@ -17,7 +16,8 @@ public class ImageProcess {
     private ArrayList<ProcessQueue> pqs;
 
     // Select number of threads (each thread is a process queue)
-    public static final int J = 4;
+    // Just use the amount of threads/cores on the cpu
+    private static final int J = Runtime.getRuntime().availableProcessors();
 
 
     public ImageProcess(String modelPath) {
@@ -91,6 +91,7 @@ public class ImageProcess {
         post p4 = new post("test image...12","Lisa","dummy content","https://i.imgur.com/0lkxCY2.jpg",IMAGE);
         ip.queuePost(p4);
 
+        System.out.println(Runtime.getRuntime().availableProcessors());
     }
 
 

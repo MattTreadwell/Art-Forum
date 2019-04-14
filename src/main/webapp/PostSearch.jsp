@@ -1,5 +1,6 @@
 <%@ page import="com.webHelper" %>
 <%@ page import="DB_util.Database" %>
+<%@ page import="DB_util.post" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 
@@ -14,15 +15,15 @@
     if(!results.isEmpty()) {
         for(DB_util.post p : results) {
 %>
-<div class="jumbotron post">
+<div class="jumbotron post" data-title="<%=p.Title%>">
     <div class="voteButtons">
-        <span class="upvote"> </span>
-        <p class="postScore text-center"><strong><%=p.mPostScore%></strong></p>
-        <span class="downvote"> </span>
+        <span class="upvote" data-index="<%=p._postId%>"> </span>
+        <p class="postScore text-center" id="score<%=p.mPostScore%>"><strong><%=p.mPostScore%></strong></p>
+        <span class="downvote" data-index="<%=p._postId%>"> </span>
     </div>
     <div class="postPreview">
         <h5 class="postTitle"><%=p.Title%> </h5>
-        <p class="postUser">By <a href="profile.jsp?username=<%=p.OwnerName%>"><%=p.OwnerName%></a></p>
+        <p class="postUser">By <a href="profile.jsp?username=<%=p.OwnerName%>"><%=p.OwnerName%></a> <%=webHelper.relativeTime(p.postDate)%></p>
         <!-- THIS IS WHAT WILL DIFFER BETWEEN POST TYPES (the preview) -->
         <%
             switch (p.mPostType) {
@@ -47,7 +48,17 @@
         %>
         <!-- TODO consider also showing link -->
         <div class="text-center">
-            <img class="postImagePreview" src="<%=p.link%>"/>
+            <%
+                if(p.mStatus == Database.NSFW) {
+            %>
+            <img class="postImagePreview postImageBlur" src="<%=p.link%>" alt="image not found" onerror="this.src='img/notfound.png'"/>
+            <%
+            } else {
+            %>
+            <img class="postImagePreview" src="<%=p.link%>" alt="image not found" onerror="this.src='img/notfound.png'"/>
+            <%
+                }
+            %>
         </div>
         <%
                 break;
@@ -60,7 +71,41 @@
             }
         %>
         <div class="btn-group-xs">
-            <button class="btn btn-secondary btn-xs"><%=webHelper.commentNumber(p.mComments.size())%> Comments</button>
+            <a href="viewPost.jsp?postId=<%=p._postId%>" class="btn btn-secondary btn-xs" role="button"><%=webHelper.commentNumber(p.mCommentIds.size())%> Comments</a>
+            <%
+                if(p.mPostType == Database.IMAGE) {
+                    switch (p.mStatus) {
+                        case post.NSFW:
+            %>
+            <button class="btn btn-danger" type="submit">NSFW</button>
+
+            <%
+                    break;
+                case post.SAFE:
+            %>
+            <button class="btn btn-success" type="submit">Certified ART</button>
+            <%
+                    break;
+                case post.UNSURE:
+            %>
+            <button class="btn btn-secondary" type="submit">Unsure</button>
+
+            <%
+                    break;
+                case post.PROCESSING:
+            %>
+            <button class="btn btn-warning" type="submit">processing</button>
+
+            <%
+                    break;
+                case post.ERROR:
+            %>
+            <button class="btn btn-danger" type="submit">ERROR</button>
+
+            <%
+                    }
+                }
+            %>
         </div>
     </div>
 </div>

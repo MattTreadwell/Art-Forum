@@ -18,13 +18,13 @@
     java.util.ArrayList<DB_util.post> postChunk = db.getPostChunk(index);
     // Iterate over the array of posts
     if(postChunk != null) {
-        for (int i = 0, postChunkSize = postChunk.size(); i < postChunkSize; i++){ DB_util.post p = postChunk.get(i);
+        for (post p : postChunk){
         %>
         <div class="jumbotron post" data-title="<%=p.Title%>">
             <div class="voteButtons">
-                <span class="upvote" data-index="<%=i%>"> </span>
+                <span class="upvote" data-index="<%=p._postId%>"> </span>
                 <p class="postScore text-center" id="score<%=p.mPostScore%>"><strong><%=p.mPostScore%></strong></p>
-                <span class="downvote" data-index="<%=i%>"> </span>
+                <span class="downvote" data-index="<%=p._postId%>"> </span>
             </div>
             <div class="postPreview">
                 <h5 class="postTitle"><%=p.Title%> </h5>
@@ -53,8 +53,17 @@
                 %>
                 <!-- TODO consider also showing link -->
                 <div class="text-center">
-                    <img class="postImagePreview" src="<%=p.link%>" alt="image not found"
-                         onerror="this.src='img/notfound.png'"/>
+                    <%
+                        if(p.mStatus == Database.NSFW) {
+                    %>
+                        <img class="postImagePreview postImageBlur" src="<%=p.link%>" alt="image not found" onerror="this.src='img/notfound.png'"/>
+                    <%
+                        } else {
+                    %>
+                        <img class="postImagePreview" src="<%=p.link%>" alt="image not found" onerror="this.src='img/notfound.png'"/>
+                    <%
+                        }
+                    %>
                 </div>
                 <%
                         break;

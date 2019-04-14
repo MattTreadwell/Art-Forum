@@ -162,6 +162,11 @@ html.sr .load-hidden {
     padding-bottom: 5px;
 }
 
+.postImageBlur {
+    -webkit-filter: blur(10px); /* Safari 6.0 - 9.0 */
+    filter: blur(10px);
+}
+
 .postLinkPreview {
 
 }

@@ -4,6 +4,7 @@
 <%@ page import="com.webHelper" %>
 <%@ page import="DB_util.comment" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="static org.apache.logging.log4j.web.WebLoggerContextUtils.getServletContext" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
