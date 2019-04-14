@@ -28,10 +28,12 @@ public class Database {
     public static final int LINK = 2;
     public static final int IMAGE = 3;
     public static final int displayNum = 8;
-    public static final int processing = 0;
-    public static final int nsfw = 1;
-    public static final int safe = 2;
-    public static final int unsure = 3;
+    // Post status final variables
+    public static final int PROCESSING = 0;
+    public static final int ERROR = 1;
+    public static final int UNSURE = 2;
+    public static final int NSFW = 3;
+    public static final int SAFE = 4;
 
 
     // connection required variables
@@ -44,7 +46,6 @@ public class Database {
     public MongoCollection commentCollection;
     public Database()
     {
-
         uri = new MongoClientURI(
                 "mongodb://localhost:27017/CSCI201");
         mongoClient = new MongoClient(uri);
@@ -105,7 +106,7 @@ public class Database {
         userCollection.insertOne(mUser);
         return Success;
     }
-    public void addPost(post p)
+    public ObjectId addPost(post p)
     {
 
         //initialize and then push this post into posts Collection.
@@ -137,9 +138,10 @@ public class Database {
         Document updateQuery = new Document("$push",listItem);
         Document findQuery = new Document("Username",p.OwnerName);
         userCollection.updateOne(findQuery,updateQuery);
-
         //DEBUG:
         lastPost = thisPostId;
+
+        return thisPostId;
     }
     public ArrayList<comment> getUserComment(String uname)
     {
@@ -204,9 +206,6 @@ public class Database {
         }
         if (User == null)
         {
-            return null;
-        }
-        if (User == null) {
             return null;
         }
         user u = new user();
@@ -377,6 +376,7 @@ public class Database {
     }
     public void changePostStatus(ObjectId postId, int newStatus)
     {
+        System.out.println("Changing post " + postId + " to " + newStatus);
         Document findQuery = new Document("_id",postId);
         Document updateQuery = new Document("$set", new Document("PostStatus",newStatus));
         postCollection.updateOne(findQuery,updateQuery);
@@ -546,34 +546,30 @@ public class Database {
     // Driver/Test code
     public static void main(String [] args)
     {
-/*        Database db = new Database();
+        Database db = new Database();
         System.out.println("Hello, World!");
 
 
         user u = new user("Lisa",123456,"China",21,0);
-        System.out.println(db.addUser(u));*/
+        System.out.println(db.addUser(u));
 /*
         post p1 = new post("test image...9","Lisa","dummy content","www.google.com",IMAGE);
         post p2 = new post("test image...10","Lisa","dummy content","www.google.com",IMAGE);
         post p3 = new post("test image...11","Lisa","dummy content","www.google.com",IMAGE);
         post p4 = new post("test image...12","Lisa","dummy content","bytes.usc.edu",IMAGE);
-
         db.addPost(p1);
         db.addPost(p2);
         db.addPost(p3);
         db.addPost(p4);
 */
-       // ArrayList<String> TESTPOSTCHUNK = db.getPostChunk(1);
+        // ArrayList<String> TESTPOSTCHUNK = db.getPostChunk(1);
 
-      //  int va = 1;
+        //  int va = 1;
 
-        Database db = new Database();
 
-        if(db.getUser("bob") == null) {
-            System.out.println("couldn't find bob");
-        }
 
-/*        for (int i = 1; i<78; i++)
+
+ /*       for (int i = 1; i<78; i++)
         {
             String Title = "CSCI201 HW"+Integer.toString(i);
             String OwnerName = "Lisa";
@@ -584,12 +580,12 @@ public class Database {
             db.addComment(c);
             comment d = new comment("va..."+Integer.toString(i), "Lisa", lastPost);
             db.addComment(d);
-        }
+        }*/
 
-        db.addPost(new post());*/
+        ObjectId lastPost = db.getLatestPost()._postId;
 
 
-/*
+
         ArrayList<post> pp = db.getPostChunk(1);
         int ve = 1;
 
@@ -600,14 +596,14 @@ public class Database {
         db.changeUserPassword("Lisa", 999000);
         int c2 = 5;
         db.changeUserAge("Lisa",19);
-       // db.updateUserScore("Lisa",100);
+        // db.updateUserScore("Lisa",100);
         db.changeUserScore("Lisa",101);
         db.changeUserCountry("Lisa","United States");
         db.changePostById(lastPost,"JEEEEEEEEE");
         db.changeUserBanState("Lisa",true);
 
         db.getPostChunk(1);
-      //  db.deletePostById(lastPost);
+        //  db.deletePostById(lastPost);
 
         System.out.println("Testing Validation:"+db.Validate("Lisas",999000));
         post dummy = db.getPostById(lastPost);
@@ -636,11 +632,11 @@ public class Database {
 
         post pBefore = db.getPostById(lastPost);
         System.out.println("status before: "+pBefore.mStatus);
-        db.changePostStatus(lastPost,unsure);
+        db.changePostStatus(lastPost,UNSURE);
         post pAfter = db.getPostById(lastPost);
         System.out.println("status After: "+pAfter.mStatus);
 
-        cdx = 10;*/
+        cdx = 10;
 
 
     }

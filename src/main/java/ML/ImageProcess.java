@@ -1,42 +1,97 @@
 package ML;
 
-import java.io.IOException;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+import DB_util.post;
 
-public class ImageProcess extends Thread {
+import java.io.IOException;
+import java.util.ArrayList;
+
+import static DB_util.Database.IMAGE;
+import static org.slf4j.event.Level.TRACE;
+
+public class ImageProcess {
     // This class links up with the servlet and will run the computer vision on a post when given an image
     // If the post is an image and it doesn't exist, set to error status
     // This should start running once a user logs in so they can avoid waiting for the model to load (15-20s wait time)
-    private Lock processLock;
-    private Condition cond;
-    private VG16ForNSFW vg16;
+    private ML.VG16ForNSFW vg16;
+
+    private ArrayList<ProcessQueue> pqs;
 
     // Select number of threads (each thread is a process queue)
-    public static final int J = 2;
+    public static final int J = 4;
 
 
-    public ImageProcess() {
+    public ImageProcess(String modelPath) {
+        // Initialize the CNN
+        System.out.println("Created new ImageProcess");
+        System.out.println("Attempting to build/load VGG16 Neural Net");
         try {
-            this.vg16 = new VG16ForNSFW();
+            this.vg16 = new VG16ForNSFW(modelPath);
+            System.out.println("Finish build/load VGG16 Neural Net");
+            System.out.println("Start loading ProcessQueues");
+            pqs = new ArrayList<ProcessQueue>();
+            for(int i = 0; i < J; i++) {
+                pqs.add(new ProcessQueue(vg16));
+                //pqs.get(i).start();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        System.out.println("Starting new ImageProcess");
-        processLock = new ReentrantLock();
-        cond = processLock.newCondition();
-
-        this.start();
+        System.out.println("Finish build/load VGG16 Neural Net");
+        System.out.println("Start loading ProcessQueues");
+        pqs = new ArrayList<ProcessQueue>();
+        for(int i = 0; i < J; i++) {
+            pqs.add(new ProcessQueue(vg16));
+        }
     }
 
-    public void queuePost(DB_util.post p) {
-        System.out.println("adding post to processQueue");
-    }
-
-    public void run() {
+    public ImageProcess() {
         // Initialize the CNN
+        System.out.println("Created new ImageProcess");
+        System.out.println("Attempting to build/load VGG16 Neural Net");
+        try {
+            this.vg16 = new VG16ForNSFW();
+            System.out.println("Finish build/load VGG16 Neural Net");
+            System.out.println("Start loading ProcessQueues");
+            pqs = new ArrayList<ProcessQueue>();
+            for(int i = 0; i < J; i++) {
+                pqs.add(new ProcessQueue(vg16));
+                //pqs.get(i).start();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Finish build/load VGG16 Neural Net");
+        System.out.println("Start loading ProcessQueues");
+        pqs = new ArrayList<ProcessQueue>();
+        for(int i = 0; i < J; i++) {
+            pqs.add(new ProcessQueue(vg16));
+        }
+    }
+
+    public synchronized void queuePost(DB_util.post p) {
+        System.out.println("ImageProcess adding post to least busy processQueue");
+
+        int size = pqs.get(0).queueSize();
+        ProcessQueue best = pqs.get(0);
+        for(ProcessQueue pq : pqs) {
+            if(pq.queueSize() < size) {
+                size = pq.queueSize();
+                best = pq;
+            }
+        }
+
+        System.out.println("ImageProcess adding post to processQueue of size " + size);
+        best.addPostToQueue(p);
+        best.WakeUpProcess();
+    }
+
+    // Driver code
+    public static void main(String[] args) {
+        ImageProcess ip = new ImageProcess();
+        post p4 = new post("test image...12","Lisa","dummy content","https://i.imgur.com/0lkxCY2.jpg",IMAGE);
+        ip.queuePost(p4);
 
     }
+
+
 }

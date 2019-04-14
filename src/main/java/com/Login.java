@@ -46,7 +46,6 @@ public class Login extends HttpServlet {
         }
         HttpSession session1 = request.getSession(true);
         session1.setAttribute("username", username);
-        session1.setAttribute("ip", new ImageProcess());
         RequestDispatcher dispatch = getServletContext().getRequestDispatcher("/index.jsp");
         dispatch.forward(request, response);
         return;

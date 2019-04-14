@@ -1,4 +1,3 @@
-<%@ page import="DB_util.Database" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -13,10 +12,8 @@
     HttpSession session1 = request.getSession();
     String username = (String) session1.getAttribute("username");
     boolean login = null != username;
-    Database db = new Database();
-%>
 
-<!-- THIS IS ONLY FOR TESTING DATABASE INTEGRATION -->
+%>
 
 <html class="sr">
 <head>

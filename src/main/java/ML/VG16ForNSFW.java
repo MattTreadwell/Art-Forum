@@ -15,10 +15,15 @@ public class VG16ForNSFW {
     // Implementation of a VGG16 CNN for NSFW image recognition
     // Originally from https://github.com/klevis/CatAndDogRecognizer
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(TrainImageNetVG16.class);
-    private static final String TRAINED_PATH_MODEL = TrainImageNetVG16.DATA_PATH + "/model.zip";
+    private static String TRAINED_PATH_MODEL = TrainImageNetVG16.DATA_PATH + "/model.zip";
     private static ComputationGraph computationGraph;
 
     public VG16ForNSFW() throws IOException {
+        computationGraph = loadModel();
+    }
+
+    public VG16ForNSFW(String modelPath) throws IOException {
+        TRAINED_PATH_MODEL = modelPath;
         computationGraph = loadModel();
     }
 

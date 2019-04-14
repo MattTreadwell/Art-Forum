@@ -68,6 +68,40 @@
                 %>
                 <div class="btn-group-xs">
                     <a href="viewPost.jsp?postId=<%=p._postId%>" class="btn btn-secondary btn-xs" role="button"><%=webHelper.commentNumber(p.mCommentIds.size())%> Comments</a>
+                    <%
+                        if(p.mPostType == Database.IMAGE) {
+                            switch (p.mStatus) {
+                                case post.NSFW:
+                    %>
+                    <button class="btn btn-danger" type="submit">NSFW</button>
+
+                    <%
+                                    break;
+                                case post.SAFE:
+                    %>
+                    <button class="btn btn-success" type="submit">Certified ART</button>
+                    <%
+                                    break;
+                                case post.UNSURE:
+                    %>
+                    <button class="btn btn-secondary" type="submit">Unsure</button>
+
+                    <%
+                                    break;
+                                case post.PROCESSING:
+                    %>
+                    <button class="btn btn-warning" type="submit">processing</button>
+
+                    <%
+                                    break;
+                                case post.ERROR:
+                    %>
+                    <button class="btn btn-danger" type="submit">ERROR</button>
+
+                    <%
+                            }
+                        }
+                    %>
                 </div>
             </div>
         </div>

@@ -3,6 +3,7 @@ package com;
 import DB_util.Database;
 import DB_util.post;
 import ML.ImageProcess;
+import org.bson.types.ObjectId;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -49,13 +50,14 @@ public class CreatePost extends HttpServlet {
         } else {
             post = new post(title, username, "", input, Database.IMAGE);
         }
-        System.out.println("USERNAME IS: " + username);
-        db.addPost(post);
+        // Need to retrieve the ID of the post from database (otherwise it's null)
+        ObjectId id = db.addPost(post);
         // Invoke Multi-threaded call to computer vision code
         if (post.mPostType == Database.IMAGE) {
-            ImageProcess ip = (ImageProcess) session.getAttribute("ip");
+            System.out.println("Post ID: " + post._postId);
+            ImageProcess ip = (ImageProcess) getServletContext().getAttribute("ip");
 
-            ip.queuePost(post);
+            ip.queuePost(db.getPostById(id));
         }
 
         response.sendRedirect("/index.jsp");

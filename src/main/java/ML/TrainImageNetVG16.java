@@ -34,6 +34,8 @@ import java.net.URL;
 import java.util.Random;
 import java.util.zip.Adler32;
 
+import static org.apache.logging.log4j.web.WebLoggerContextUtils.getServletContext;
+
 public class TrainImageNetVG16 {
     // Class to create training data for the VGG16NSFW CNN (not necessary for the web app)
     // Relies on having training data placed in the resources folder
@@ -54,7 +56,7 @@ public class TrainImageNetVG16 {
 
     private static final int SAVING_INTERVAL = 100;
 
-    public static String DATA_PATH = "resources";
+    public static String DATA_PATH = System.getProperty("user.dir") + "resources";
     public static final String TRAIN_FOLDER = DATA_PATH + "/train_both";
     public static final String TEST_FOLDER = DATA_PATH + "/test_both";
     private static final String SAVING_PATH = DATA_PATH + "/saved/modelIteration_";
