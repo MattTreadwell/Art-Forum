@@ -202,6 +202,10 @@ public class Database {
         {
             return null;
         }
+        if (User == null)
+        {
+            return null;
+        }
         user u = new user();
         // first, fill out the basic information excluding arrays;
         u.username = uname;
@@ -615,7 +619,7 @@ public class Database {
         ArrayList<comment> LatestPostComment = db.getPostComments(lastPost);
 
         int cdx = 9;
-        user LatestUser = db.getUser("Lisa");
+        db.getUser("Lisad");
         //Checking for ObjectId:
         String s = lastPost.toString();
         ObjectId Oid = new ObjectId(s);
