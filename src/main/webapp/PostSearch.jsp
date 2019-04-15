@@ -17,9 +17,9 @@
 %>
 <div class="jumbotron post" data-title="<%=p.Title%>">
     <div class="voteButtons">
-        <span class="upvote" data-index="<%=p._postId%>"> </span>
-        <p class="postScore text-center" id="score<%=p.mPostScore%>"><strong><%=p.mPostScore%></strong></p>
-        <span class="downvote" data-index="<%=p._postId%>"> </span>
+        <span class="upvote" data-id="<%=p._postId%>"> </span>
+        <p class="postScore text-center" id="<%=p._postId%>"><strong><%=p.mPostScore%></strong></p>
+        <span class="downvote" data-id="<%=p._postId%>"> </span>
     </div>
     <div class="postPreview">
         <h5 class="postTitle"><%=p.Title%> </h5>
@@ -108,7 +108,7 @@
             %>
         </div>
     </div>
-</div>
+</div></div>
 
 <%
     }
@@ -122,3 +122,6 @@
 <%
     }
 %>
+
+<!-- script for upvote buttons -->
+<script src="js/vote.js" type="text/javascript"></script>

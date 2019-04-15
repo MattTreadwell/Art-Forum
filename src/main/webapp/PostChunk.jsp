@@ -22,9 +22,9 @@
         %>
         <div class="jumbotron post" data-title="<%=p.Title%>">
             <div class="voteButtons">
-                <span class="upvote" data-index="<%=p._postId%>"> </span>
-                <p class="postScore text-center" id="score<%=p.mPostScore%>"><strong><%=p.mPostScore%></strong></p>
-                <span class="downvote" data-index="<%=p._postId%>"> </span>
+                <span class="upvote" data-id="<%=p._postId%>"> </span>
+                <p class="postScore text-center" id="<%=p._postId%>"><strong><%=p.mPostScore%></strong></p>
+                <span class="downvote" data-id="<%=p._postId%>"> </span>
             </div>
             <div class="postPreview">
                 <h5 class="postTitle"><%=p.Title%> </h5>
@@ -159,33 +159,4 @@
 </nav>
 
 <!-- script for upvote buttons -->
-<script>
-    // Consider adding custom data attributes to the buttons to identify the correct score element
-    // https://stackoverflow.com/questions/19380910/jquery-append-jquery-variable-to-a-class-name
-    // need to also make an ajax call
-    $(".upvote").click(function () {
-        var upvoted = $(this).hasClass("on");
-        $(this).toggleClass("on");
-        console.log($(this).data('index'));
-
-        $(this).find(':last').innerHTML = "bobob";
-
-        // Need to modify associated number
-        if(upvoted) {
-            $("#score" + $(this).data('index')).innerHTML = "arosien";
-        } else {
-            console.log($('#score' + $(this).data('index')));
-        }
-    });
-
-    $(".downvote").click(function () {
-        var downvoted = $(this).hasClass("on");
-        $(this).toggleClass("on");
-        if(downvoted) {
-
-        } else {
-
-        }
-    })
-
-</script>
+<script src="js/vote.js" type="text/javascript"></script>

@@ -362,11 +362,18 @@ public class Database {
         Document updateQuery = new Document("$set", new Document("Profile.PostScore", newScore));
         userCollection.updateOne(findQuery,updateQuery);
     }
+    public void IncUserScore(String username, int amount)
+    {
+        Document findQuery = new Document("Username",username);
+        Document updateQuery = new Document("$inc", new Document("Profile.PostScore", amount));
+        userCollection.updateOne(findQuery,updateQuery);
+    }
     public void IncPostScore(ObjectId postId, int amount)
     {
         Document findQuery = new Document("_id",postId);
         Document updateQuery = new Document("$inc", new Document("PostScore", amount));
         postCollection.updateOne(findQuery,updateQuery);
+        IncUserScore(this.getPostById(postId).OwnerName, amount);
     }
     public void changePostById(ObjectId postId, String newContent)
     {

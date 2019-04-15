@@ -129,10 +129,9 @@
             <!-- Text post template -->
             <div class="jumbotron post" data-title="<%=p.Title%>">
                 <div class="voteButtons">
-                    <span class="upvote"> </span>
-                    <p class="postScore text-center" id="score<%=p.mPostScore%>"><strong><%=p.mPostScore%>
-                    </strong></p>
-                    <span class="downvote"> </span>
+                    <span class="upvote" data-id="<%=p._postId%>"> </span>
+                    <p class="postScore text-center" id="<%=p._postId%>"><strong><%=p.mPostScore%></strong></p>
+                    <span class="downvote" data-id="<%=p._postId%>"> </span>
                 </div>
                 <div class="postPreview">
                     <h5 class="postTitle"><%=p.Title%>
@@ -247,6 +246,47 @@
                     <a class="btn btn-primary" href="newPost.jsp" role="button"><strong>CREATE POST</strong></a>
                 </div>
             </div>
+            <%
+                if(p.mPostType == Database.IMAGE) {
+            %>
+            <div class="jumbotron">
+                <div class="text-center">
+                    <h5>Computer Vision</h5>
+            <%
+                    switch (p.mStatus) {
+                        case post.NSFW:
+            %>
+            <button class="btn btn-danger btn-large" type="submit">NSFW</button>
+
+            <%
+                    break;
+                case post.SAFE:
+            %>
+            <button class="btn btn-success btn-large" type="submit">Certified ART</button>
+            <%
+                    break;
+                case post.UNSURE:
+            %>
+            <button class="btn btn-secondary btn-large" type="submit">Unsure</button>
+
+            <%
+                    break;
+                case post.PROCESSING:
+            %>
+            <button class="btn btn-warning btn-large" type="submit">processing</button>
+
+            <%
+                    break;
+                case post.ERROR:
+            %>
+            <button class="btn btn-danger btn-large" type="submit">ERROR</button>
+
+            <%
+                    }
+                }
+            %>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -257,5 +297,7 @@
     ScrollReveal().reveal('.jumbotron', {reset: false, delay: 200});
 </script>
 
+<!-- script for upvote buttons -->
+<script src="js/vote.js" type="text/javascript"></script>
 </body>
 </html>
