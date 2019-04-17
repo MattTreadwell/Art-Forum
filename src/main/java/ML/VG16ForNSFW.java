@@ -54,7 +54,7 @@ public class VG16ForNSFW {
     // Driver code
     public static void main(String[] args) throws IOException {
         VG16ForNSFW test = new VG16ForNSFW();
-        System.out.println(test.detectNSFW("https://i.imgur.com/0lkxCY2.jpg", 0.7));
+        System.out.println(test.detectNSFW("https://i.imgur.com/ivPRIxh.mp4", 0.7));
     }
 }
 

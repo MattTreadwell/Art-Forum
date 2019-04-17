@@ -91,7 +91,6 @@ public class ImageProcess {
         post p4 = new post("test image...12","Lisa","dummy content","https://i.imgur.com/0lkxCY2.jpg",IMAGE);
         ip.queuePost(p4);
 
-        System.out.println(Runtime.getRuntime().availableProcessors());
     }
 
 

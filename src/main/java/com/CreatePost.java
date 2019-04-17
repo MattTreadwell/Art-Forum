@@ -54,7 +54,6 @@ public class CreatePost extends HttpServlet {
         ObjectId id = db.addPost(post);
         // Invoke Multi-threaded call to computer vision code
         if (post.mPostType == Database.IMAGE) {
-            System.out.println("Post ID: " + post._postId);
             ImageProcess ip = (ImageProcess) getServletContext().getAttribute("ip");
 
             ip.queuePost(db.getPostById(id));

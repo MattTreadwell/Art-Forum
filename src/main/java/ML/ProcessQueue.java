@@ -51,9 +51,7 @@ public class ProcessQueue extends Thread {
         while(true) {
             while(!postQueue.isEmpty()) {
                 post p = postQueue.remove(0);
-                if( p== null) {
-                    System.out.println("THE POST IS null");
-                }
+
                 // Update database with status
                 Database db = new Database();
                 System.out.println("Running Computer Vision on post: " + p.Title);

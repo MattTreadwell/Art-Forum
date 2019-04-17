@@ -198,7 +198,7 @@
         maxFiles: 1, // only allow one image per post (no albums)
         url: "https://api.imgur.com/3/image", //imgur endpoint for image upload
         paramName: "image", //important for imgur request name
-        acceptedFiles: "image/*", //only allow image files to be uploaded
+        acceptedFiles: "image/jpeg,image/png", //only allow image files to be uploaded
         method: "post",
         headers: {
             'Cache-Control': null, //required for cors

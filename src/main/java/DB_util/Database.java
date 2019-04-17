@@ -133,7 +133,6 @@ public class Database {
 
         //now, add this post into owning user's post history.
         ObjectId thisPostId = (ObjectId)newPost.get( "_id" );
-        System.out.println(thisPostId);
         Document listItem = new Document("PostIDs", thisPostId);
         Document updateQuery = new Document("$push",listItem);
         Document findQuery = new Document("Username",p.OwnerName);
@@ -212,13 +211,10 @@ public class Database {
         // first, fill out the basic information excluding arrays;
         u.username = uname;
         u.password = User.getInteger("Password");
-        System.out.println(u.password);
         u.profile = new userProfile();
         Document UserProfile = (Document)User.get("Profile");
         u.profile.country = UserProfile.getString("Country");
-        System.out.println(u.profile.country);
         u.profile.age = UserProfile.getInteger("Age");
-        System.out.println(u.profile.age);
         u.profile.postScore = UserProfile.getInteger("PostScore");
         u.profile.registerDate = UserProfile.getDate("RegisterDate");
         u.IsBanned = User.getBoolean("IsBanned");
@@ -383,7 +379,6 @@ public class Database {
     }
     public void changePostStatus(ObjectId postId, int newStatus)
     {
-        System.out.println("Changing post " + postId + " to " + newStatus);
         Document findQuery = new Document("_id",postId);
         Document updateQuery = new Document("$set", new Document("PostStatus",newStatus));
         postCollection.updateOne(findQuery,updateQuery);

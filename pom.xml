@@ -96,14 +96,21 @@
         </dependency>
 
         <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>cuda</artifactId>
+            <version>10.0-7.3-1.4.3</version>
+            <classifier>linux-x86_64-redist</classifier>
+        </dependency>
+
+        <dependency>
             <groupId>org.deeplearning4j</groupId>
-            <artifactId>deeplearning4j-core</artifactId>
+            <artifactId>deeplearning4j-cuda-10.0</artifactId>
             <version>1.0.0-beta3</version>
         </dependency>
 
         <dependency>
             <groupId>org.nd4j</groupId>
-            <artifactId>nd4j-native-platform</artifactId>
+            <artifactId>nd4j-cuda-10.0</artifactId>
             <version>1.0.0-beta3</version>
         </dependency>
 

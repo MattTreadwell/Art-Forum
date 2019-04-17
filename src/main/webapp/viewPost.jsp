@@ -202,7 +202,7 @@
                 <div class="text-center">
                     <h3>Want to comment?</h3>
                     <a class="btn btn-primary" href="login.jsp" role="button">Login</a>
-                    <p>OR</p>
+                    <p style="margin-bottom: 0">OR</p>
                     <a class="btn btn-outline-primary" href="register.jsp" role="button">Sign Up</a>
                 </div>
                 <%

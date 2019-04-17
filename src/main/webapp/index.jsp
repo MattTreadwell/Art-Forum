@@ -90,6 +90,7 @@
             <li>
                 <a class="btn btn-primary" href="profile.jsp?username=<%=username%>" role="button"><%=username%>
                 </a>
+                <a class="btn btn-primary d-md-none" href="newPost.jsp" role="button"><strong>CREATE POST</strong></a>
                 <a class="btn btn-outline-primary" href="Logout" role="button">Logout</a>
             </li>
             <%

@@ -56,7 +56,7 @@ public class TrainImageNetVG16 {
 
     private static final int SAVING_INTERVAL = 100;
 
-    public static String DATA_PATH = System.getProperty("user.dir") + "resources";
+    public static String DATA_PATH = System.getProperty("user.dir") + "/resources";
     public static final String TRAIN_FOLDER = DATA_PATH + "/train_both";
     public static final String TEST_FOLDER = DATA_PATH + "/test_both";
     private static final String SAVING_PATH = DATA_PATH + "/saved/modelIteration_";
