@@ -1,5 +1,5 @@
 <component name="ArtifactManager">
-  <artifact type="exploded-war" name="CS201_Project:war exploded">
+  <artifact type="exploded-war" name="Art_Forum:war exploded">
     <output-path>$PROJECT_DIR$/target/CS201_Project-1.0-SNAPSHOT</output-path>
     <properties id="maven-jee-properties">
       <options>
@@ -11,7 +11,7 @@
     <root id="root">
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
-          <element id="module-output" name="CS201_Project" />
+          <element id="module-output" name="ArtForum" />
         </element>
         <element id="directory" name="lib">
           <element id="library" level="project" name="Maven: org.deeplearning4j:deeplearning4j-ui-components:1.0.0-beta3" />
@@ -151,7 +151,7 @@
       <element id="directory" name="META-INF">
         <element id="file-copy" path="$PROJECT_DIR$/target/CS201_Project-1.0-SNAPSHOT/META-INF/MANIFEST.MF" />
       </element>
-      <element id="javaee-facet-resources" facet="CS201_Project/web/Web" />
+      <element id="javaee-facet-resources" facet="ArtForum/web/Web" />
     </root>
   </artifact>
 </component>

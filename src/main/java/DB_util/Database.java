@@ -549,12 +549,9 @@ public class Database {
     public static void main(String [] args)
     {
         Database db = new Database();
-        System.out.println("Hello, World!");
-
 
         user u = new user("Lisa",123456,"China",21,0);
         System.out.println(db.addUser(u));
-/*
         post p1 = new post("test image...9","Lisa","dummy content","www.google.com",IMAGE);
         post p2 = new post("test image...10","Lisa","dummy content","www.google.com",IMAGE);
         post p3 = new post("test image...11","Lisa","dummy content","www.google.com",IMAGE);
@@ -563,82 +560,6 @@ public class Database {
         db.addPost(p2);
         db.addPost(p3);
         db.addPost(p4);
-*/
-        // ArrayList<String> TESTPOSTCHUNK = db.getPostChunk(1);
-
-        //  int va = 1;
-
-
-
-
- /*       for (int i = 1; i<78; i++)
-        {
-            String Title = "CSCI201 HW"+Integer.toString(i);
-            String OwnerName = "Lisa";
-            String postContent = "The following post is the "+Integer.toString(i)+"th post";
-            post p = new post(Title,OwnerName,postContent,"",TEXT);
-            db.addPost(p);
-            comment c = new comment("ve..."+Integer.toString(i), "Lisa" , lastPost);
-            db.addComment(c);
-            comment d = new comment("va..."+Integer.toString(i), "Lisa", lastPost);
-            db.addComment(d);
-        }*/
-
-        ObjectId lastPost = db.getLatestPost()._postId;
-
-
-
-        ArrayList<post> pp = db.getPostChunk(1);
-        int ve = 1;
-
-
-        ArrayList<post> Chunk = db.getPostChunk(1);
-        int c1 = 4;
-
-        db.changeUserPassword("Lisa", 999000);
-        int c2 = 5;
-        db.changeUserAge("Lisa",19);
-        // db.updateUserScore("Lisa",100);
-        db.changeUserScore("Lisa",101);
-        db.changeUserCountry("Lisa","United States");
-        db.changePostById(lastPost,"JEEEEEEEEE");
-        db.changeUserBanState("Lisa",true);
-
-        db.getPostChunk(1);
-        //  db.deletePostById(lastPost);
-
-        System.out.println("Testing Validation:"+db.Validate("Lisas",999000));
-        post dummy = db.getPostById(lastPost);
-        post p = db.getLatestPost();
-        int b = 5;
-
-
-        ArrayList<post> testMatch = db.searchPost("HW");
-        //b = 6;
-        ArrayList<comment> LisaComment = db.getUserComment("Lisa");
-        post lp = db.getLatestPost();
-        System.out.println("Post score before updating: "+lp.mPostScore);
-        db.IncPostScore(lp._postId,2);
-        lp = db.getLatestPost();
-        System.out.println("Post score after updating: "+lp.mPostScore);
-
-        ArrayList<comment> LatestPostComment = db.getPostComments(lastPost);
-
-        int cdx = 9;
-        db.getUser("Lisad");
-        //Checking for ObjectId:
-        String s = lastPost.toString();
-        ObjectId Oid = new ObjectId(s);
-
-        post p2 = db.getPostById(Oid);
-
-        post pBefore = db.getPostById(lastPost);
-        System.out.println("status before: "+pBefore.mStatus);
-        db.changePostStatus(lastPost,UNSURE);
-        post pAfter = db.getPostById(lastPost);
-        System.out.println("status After: "+pAfter.mStatus);
-
-        cdx = 10;
 
 
     }

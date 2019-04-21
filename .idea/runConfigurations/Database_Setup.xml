@@ -1,0 +1,15 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Database Setup" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="DB_util.Database" />
+    <module name="ArtForum" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="DB_util.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

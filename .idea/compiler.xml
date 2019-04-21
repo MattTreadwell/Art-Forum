@@ -6,11 +6,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="CS201_Project" />
+        <module name="ArtForum" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="CS201_Project" target="6" />
+      <module name="ArtForum" target="6" />
     </bytecodeTargetLevel>
   </component>
 </project>

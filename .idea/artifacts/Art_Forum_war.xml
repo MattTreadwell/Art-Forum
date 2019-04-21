@@ -1,5 +1,5 @@
 <component name="ArtifactManager">
-  <artifact type="war" name="CS201_Project:war">
+  <artifact type="war" name="Art_Forum:war">
     <output-path>$PROJECT_DIR$/target</output-path>
     <properties id="maven-jee-properties">
       <options>
@@ -8,7 +8,7 @@
       </options>
     </properties>
     <root id="archive" name="CS201_Project-1.0-SNAPSHOT.war">
-      <element id="artifact" artifact-name="CS201_Project:war exploded" />
+      <element id="artifact" artifact-name="Art_Forum:war exploded" />
     </root>
   </artifact>
 </component>
